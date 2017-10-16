@@ -1,0 +1,77 @@
+/* Styles specific to the edit page */
+
+#col-left {
+	left: 0;
+
+	width: 20%;
+
+	background-color: #eee;
+}
+
+#col-right {
+	left: 20%;
+
+	width: 80%;
+
+	background-color: #fff;
+}
+
+#playlist {
+	position: relative;
+	padding: 0.5em;
+
+	width: calc(100% - 3em);
+}
+
+.col {
+	position: absolute;
+	top: 10%;
+	height: 80%;
+	display: inline-block;
+}
+
+.col-content {
+	margin: 1em;
+	border-radius: 0.5em;
+}
+
+/* A text item that lives in a rounded bubble */
+.tagged-item {
+	padding: 0 0.25em 0 0.25em;
+	border-radius: 0.25em;
+}
+
+/* Styles within the show details section */
+.show-section {
+	margin: 1em 0 0 0;
+}
+
+.show-dj-name {
+	background-color: rgba(255, 100, 50, 0.5);
+}
+
+.show-genre-name {
+	background-color: rgba(50, 100, 50, 0.5);
+	font-style: bold;
+}
+
+.show-subgenre-name {
+	background-color: rgba(100, 255, 100, 0.5);
+}
+
+/* Styles within the playlist editor */
+.playlist-item {
+	position: relative;
+	padding: 0.2em;
+	width: 100%;
+	border-bottom: 1px solid rgba(100,100,100,0.2);
+}
+
+.playlist-cell {
+	display: inline-block;
+	width: 33%;
+}
+
+.playlist-artist-name {
+	background-color: rgba(50, 100, 255, 0.2);
+}

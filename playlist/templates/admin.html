@@ -1,0 +1,41 @@
+{# admin.html #}
+{# this is the base template for all playlist backend pages #}
+{% load static %}
+<html>
+<head>
+{% block styles %}
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'playlist/css/reset.css' %}">
+	<link rel="stylesheet" href="{% static 'playlist/css/style.css' %}">
+{% endblock styles %}
+</head>
+<body>
+	<div id="header" class="page-section bar-section">
+		Here is some text in the header
+	</div>
+
+	<div id="content" class="page-section">
+		{% block content %}
+			This is a template.  Generate real pages based on this template by including the line
+			{% verbatim %} {% extends "admin.html" %} {% endverbatim %}
+			at the top of the file.
+		{% endblock content %}
+	</div>
+	<div id="footer" class="page-section bar-section">
+		<div id="copyright-holder">
+			<span class="copyright bar-text">&copy; name of our thing goes here</span>
+		</div>
+	</div>
+
+	{% block scripts %}
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		window.jQuery || document.write('<script src="{% static "lib/jquery.min.js" %}">\x3C/script>');
+	</script>
+	<script type="text/javascript"></script>
+	<script type="text/javascript">
+		window.d3 || document.write('<script src="{% static "lib/d3.v4.min.js" %}"\x3C/script>');
+	</script>
+	{% endblock scripts %}
+</body>
+</html>

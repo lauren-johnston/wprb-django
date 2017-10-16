@@ -1,0 +1,51 @@
+{% extends "admin.html" %}
+{% load static %}
+
+{% block styles %}
+	{{ block.super }}
+	<link rel="stylesheet" href="{% static 'playlist/css/edit.css' %}">
+{% endblock styles %}
+
+{% block content %}
+	<div id="col-left" class="col">
+		<div id="show" class="col-content">
+			<div class="show-title show-section">
+				<h2 class="show-title-text">{{show.title}}</h2>
+				<h3 class="show-subtitle-text">{{show.subtitle}}</h3>
+			</div>
+			<div class="show-dj show-section">
+				{% for dj in show.dj %}
+					<span class="show-dj-name tagged-item">{{dj}}</span>
+				{% endfor %}
+			</div>
+			<div class="show-desc show-section">
+				<p class="show-desc-text">
+					{{show.desc}}
+				</p>
+			</div>
+			<div class="show-genre show-section">
+				<span class="show-genre-name tagged-item">{{show.genre}}</span>
+			</div>
+			<div class="show-subgenre show-section">
+				{% for subgenre in show.subgenre %}
+					<span class="show-subgenre-name tagged-item">{{subgenre}}</span>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	<div id="col-right" class="col">
+		<div id="playlist" class="col-content">
+			{% for track in spins %}
+				<div class="playlist-item">
+					<div class="playlist-cell playlist-artist">
+						{% for artist in track.artist %}
+							<span class="playlist-artist-name tagged-item">{{artist}}</span>
+						{% endfor %}
+					</div>
+					<div class="playlist-cell playlist-title">{{track.title}}</div>
+					<div class="playlist-cell playlist-album">{{track.album}}</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock content %}

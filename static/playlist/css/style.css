@@ -1,0 +1,36 @@
+/* Common styles for the Snob App */
+body {
+	font-family: 'Montserrat', sans-serif;
+}
+
+h2 {
+	font-size: 1.5em;
+}
+
+h3 {
+	font-size: 1.25em;
+}
+
+#header {
+	height: 10%;
+}
+
+#footer {
+	bottom: 0;
+	background-color: #dfd;
+}
+
+#content {
+	top: 10%;
+}
+
+.page-section {
+	position: absolute;
+	width: 100%;
+}
+
+.bar-section {
+	height: 10%;
+	width: 90%;
+	padding: 1em 5% 1em 5%;
+}
