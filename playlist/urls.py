@@ -11,6 +11,8 @@ from django.contrib import admin
 
 from . import views
 
+playlist_id = r'^(?P<playlist_id>[0-9]+)/'
+
 urlpatterns = [
-	url(r'^edit/', views.edit)
+	url(playlist_id + '$', views.edit_playlist, name='edit-playlist'),
 ]
