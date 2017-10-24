@@ -7,6 +7,7 @@ music being played.
 """
 
 from django.db import models
+from datetime import datetime
 
 #******************************************************************************
 # Song Information
@@ -17,11 +18,11 @@ class Artist(models.Model):
 	"""
 	name = models.CharField(max_length=100)
 
-	genre = models.ManyToManyField('Genre')
-	subgenre = models.ManyToManyField('Subgenre')
+	genre = models.ManyToManyField('Genre', blank=True)
+	subgenre = models.ManyToManyField('Subgenre', blank=True)
 	info = models.CharField(max_length=1500, blank=True)
-
-	playcount = models.IntegerField()
+ 
+	playcount = models.IntegerField(default=0, editable=False)
 
 class Song(models.Model):
 	""" A song, with a name, and many other things
@@ -29,24 +30,26 @@ class Song(models.Model):
 	name = models.CharField(max_length=100)
 	info = models.CharField(max_length=1500, blank=True)
 
-	artist = models.ManyToManyField('Artist')
-	album = models.ForeignKey('Album', on_delete=models.PROTECT)
-	genre = models.ManyToManyField('Genre')
-	subgenre = models.ManyToManyField('Subgenre')
+	artist = models.ManyToManyField('Artist', blank=True)
+	# TODO: Replace blank=True with a default value for "Unknown Album"
+	album = models.ForeignKey('Album', on_delete=models.PROTECT, null=True, blank=True)
+	genre = models.ManyToManyField('Genre', blank=True)
+	subgenre = models.ManyToManyField('Subgenre', blank=True)
 
-	playcount = models.IntegerField()
+	playcount = models.IntegerField(default=0, editable=False)
 
 class Album(models.Model):
 	""" An album, which has a name, and was released in a year on a label.
 	"""
 	name = models.CharField(max_length=100)
-	year = models.IntegerField(default=0)
+	year = models.IntegerField(default=datetime.now().year)
 	info = models.CharField(max_length=1500, blank=True)
 
-	label = models.ForeignKey('Label', on_delete=models.PROTECT)
-	artist = models.ForeignKey('Artist', on_delete=models.PROTECT)
+	# TODO: Replace blank=True with a default value for "Unknown Label"
+	label = models.ForeignKey('Label', on_delete=models.PROTECT, null=True, blank=True)
+	artist = models.ForeignKey('Artist', on_delete=models.PROTECT, null=True, blank=True)
 
-	playcount = models.IntegerField()
+	playcount = models.IntegerField(default=0, editable=False)
 
 class Label(models.Model):
 	""" A record label, which has a name and maybe a location.
