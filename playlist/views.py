@@ -3,7 +3,7 @@ from django.shortcuts import render
 from .models import *
 
 
-def edit(request):
+def edit_playlist(request, playlist_id):
 	""" Serve the page for editing a single playlist.
 	"""
 
@@ -15,10 +15,10 @@ def edit(request):
 
 	show = {
 		'title'  	: 'A Cool Show',
-		'subtitle'	: 'with a subtitle',
+		'subtitle'	: 'with a subtitle: ' + playlist_id,
 		'dj'		: ['One DJ', 'And Another'],
 		'genre'		: 'The Main genre',
-		'subgenre'	: ['A mike genre', 'shit-slop funk bass', 'another mike genre'],
+		'subgenre'	: ['A mike genre', 'shit-slop funk bass', 'fruit loops'],
 		'desc'		: 'Here you can talk about this episode of your show. Anything in particular you want to say?'
 	}
 
