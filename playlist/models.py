@@ -57,8 +57,8 @@ class Playlist(models.Model):
 	date = models.DateField()
 
 	# This playlist might have genres and subgenres different from the show in general
-	genre = models.ManyToManyField('music.Genre')
-	subgenre = models.ManyToManyField('music.Subgenre')
+	genre = models.ManyToManyField('music.Genre', blank=True)
+	subgenre = models.ManyToManyField('music.Subgenre', blank=True)
 
 	# When did it get added ?
 	timestamp = models.DateTimeField(auto_now_add=True)
@@ -90,10 +90,10 @@ class Show(models.Model):
 	"""
 	name = models.CharField(max_length=100)
 	dj = models.ManyToManyField('DJ')
-	genre = models.ManyToManyField('music.Genre')
-	subgenre = models.ManyToManyField('music.Subgenre')
+	genre = models.ManyToManyField('music.Genre', blank=True)
+	subgenre = models.ManyToManyField('music.Subgenre', blank=True)
 
-	desc = models.CharField(max_length=1000)
+	desc = models.CharField(max_length=1000, blank=True)
 
 
 class Settings(models.Model):
