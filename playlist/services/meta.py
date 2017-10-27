@@ -5,19 +5,18 @@
 	Implements server side API for meta-playlist operations.
 '''
 
-def title(plistId, title):
+def title(request, playlist_id):
 	''' Updates the title of the specified playlist.'''
 	pass
 
-def desc(plistId, desc):
+def desc(request, playlist_id):
 	''' Updates the description of the specified playlist.'''
 	pass
 
-def genre(plistId, genre):
+def genre(request, playlist_id):
 	''' Updates the genre of the specified playlist.'''
 	pass
 
-def subgenre(plistId, subgenre):
+def subgenre(request, playlist_id):
 	''' Updates the subgenre of the specified playlist.'''
-	# Do we want 
 	pass
