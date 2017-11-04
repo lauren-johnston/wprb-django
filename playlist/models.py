@@ -100,7 +100,7 @@ class Comment(models.Model):
 	"""
 
 	text = models.CharField(max_length=500)
-	author = models.OneToOneField('User')
+	author = models.OneToOneField('User', blank=True, null=True)
 	playlist = models.ForeignKey('Playlist')
 	spin = models.ForeignKey('Spin', blank=True, null=True)
 
