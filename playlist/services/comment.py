@@ -37,7 +37,7 @@ def new(request, playlist_id):
 
 @login_required
 @require_http_methods(['PUT'])
-def update(request, playlist_id):
+def edit(request, playlist_id):
 	""" Update the text of a given comment.
 
 	"""
