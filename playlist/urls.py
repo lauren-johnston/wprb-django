@@ -30,8 +30,8 @@ urlpatterns = [
 	url( playlist_id + 'meta/subgenre/$',  services.meta.subgenre,  name='meta-subgenre'),
 
 	# Comments
-	url(playlist_id + 'comment/new', services.comment.new, name='comment-new'),
-	url(playlist_id + 'comment/edit', services.comment.edit, name='comment-edit'),
-	url(playlist_id + 'comment/delete', services.comment.delete, name='comment-delete'),
+	url( playlist_id + 'comment/new',      services.comment.new,    name='comment-new'),
+	url( playlist_id + 'comment/edit',     services.comment.edit,   name='comment-edit'),
+	url( playlist_id + 'comment/delete',   services.comment.delete, name='comment-delete'),
 
 ]
