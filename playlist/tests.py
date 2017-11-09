@@ -1,4 +1,5 @@
-from django.test import TestCase
+from django.test import TestCase, Client
+from .services import entry, meta
 
 class PlaylistModelTests(TestCase):
 
@@ -9,12 +10,20 @@ class PlaylistModelTests(TestCase):
 		Playlist(desc="__testing__").save()
 
 		# Retrieve the object from the database with the new metadata attached
-		plist = Playlist.objects.filter(desc="__testing__").first()
+		playlist = Playlist.objects.filter(desc="__testing__").first()
+		url_base = '/playlist/' + playlist_id + '/entry/'
 
 		# Do some stuff with plist and the entry api, e.g....
-		entry.add(plist.id, someTitle, someAuthor, someAlbum, someLabel, somePosition)
+		client = Client()
+
+		add_response = client.post(url_base + 'add', {'title':'test',
+													  'artist':'test', 
+													  'album':'test', 
+													  'label':'test'})
+		
+
 		# and then use asserts to validate what you did...
-		self.assertIs(plist.some_length_method(), 1)
+		self.assertIs(playlist.some_length_method(), 1)
 		# and so on...
 
 		# and at the end, delete our test object
@@ -25,8 +34,10 @@ class PlaylistModelTests(TestCase):
 		# See above
 		Playlist(desc="__testing__").save()
 		plist = Playlist.objects.filter(desc="__testing__").first()
-
-		meta.title(plist.id, someTitle)
+		#MAKE A REQUEST OBJECT
+		#Try it...
+		meta.title()
+		#Test it...
 		self.assertIs(plist.some_title_method(), someTitle)
 		# and so on...
 
