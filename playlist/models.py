@@ -52,18 +52,11 @@ class Spin(models.Model):
 
 
 class Playlist(models.Model):
-<<<<<<< Updated upstream
 	""" An ordered list of spins that happened at a particular time, by at least one DJ.
 	"""
 	dj = models.ManyToManyField('DJ')
 	desc = models.CharField(max_length=250)
 	subtitle = models.CharField(max_length=250)
-=======
-    """ An ordered list of spins that happened at a particular time, by at least one DJ.
-    """
-    show = models.ForeignKey('Show')
-    desc = models.CharField(max_length=250)
->>>>>>> Stashed changes
 
     # When did it happen ?
     time_start = models.CharField(max_length=4, choices=TIMES, blank=True)
