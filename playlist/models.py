@@ -95,6 +95,16 @@ class Show(models.Model):
 
 	desc = models.CharField(max_length=1000, blank=True)
 
+class Comment(models.Model):
+	""" A comment that is made on a playlist, or playlist entry.
+	"""
+
+	text = models.CharField(max_length=500)
+	author = models.OneToOneField('User', blank=True, null=True)
+	playlist = models.ForeignKey('Playlist')
+	spin = models.ForeignKey('Spin', blank=True, null=True)
+
+	timestamp = models.DateTimeField(auto_now_add=True)
 
 class Settings(models.Model):
 	""" A collection of options that the DJ can set.
@@ -105,4 +115,3 @@ class Settings(models.Model):
 	"""
 	# Whose settings are these ?
 	owner = models.OneToOneField('DJ', blank=True, null=True)
-
