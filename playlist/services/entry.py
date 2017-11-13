@@ -27,7 +27,7 @@ def add(request, playlist_id):
 		index  = int(request.POST['index'])
 	except Playlist.DoesNotExist:
 		return error('Invalid URI')
-	except KeyError, ValueError:
+	except (KeyError, ValueError):
 		return error('Invalid request')
 
 	if invalid_array_index(spins, index-1):
@@ -76,7 +76,7 @@ def move(request, playlist_id):
 		target_spin  = spins.get(pk=args['spin_pk'])
 		old_index    = spin.index
 		new_index    = int(args['index'])
-	except KeyError, ValueError:
+	except (KeyError, ValueError):
 		return error('Invalid request')
 	except Spin.DoesNotExist:
 		return error('No matching spin')

@@ -30,9 +30,9 @@ class Spin(models.Model):
     """
     # The song that got played
     song = models.ForeignKey('music.Song')
-	# Matt: What if we store the songID? That way we can do a lookup to
-	# find all info included below. SongID provides easy querying into th3
-	# big Song Database
+    # Matt: What if we store the songID? That way we can do a lookup to
+    # find all info included below. SongID provides easy querying into th3
+    # big Song Database
 
     # potentially memoize title/artist/album/label to save joins?
     # title = models.CharField(max_length=100, blank=True)
@@ -52,11 +52,11 @@ class Spin(models.Model):
 
 
 class Playlist(models.Model):
-	""" An ordered list of spins that happened at a particular time, by at least one DJ.
-	"""
-	dj = models.ManyToManyField('DJ')
-	desc = models.CharField(max_length=250)
-	subtitle = models.CharField(max_length=250)
+    """ An ordered list of spins that happened at a particular time, by at least one DJ.
+    """
+    dj = models.ManyToManyField('DJ')
+    desc = models.CharField(max_length=250)
+    subtitle = models.CharField(max_length=250)
 
     # When did it happen ?
     time_start = models.CharField(max_length=4, choices=TIMES, blank=True)
@@ -105,22 +105,22 @@ class Show(models.Model):
     desc = models.CharField(max_length=1000, blank=True)
 
 class Comment(models.Model):
-	""" A comment that is made on a playlist, or playlist entry.
-	"""
+    """ A comment that is made on a playlist, or playlist entry.
+    """
 
-	text = models.CharField(max_length=500)
-	author = models.OneToOneField(User, blank=True, null=True)
-	playlist = models.ForeignKey('Playlist')
-	spin = models.ForeignKey('Spin', blank=True, null=True)
+    text = models.CharField(max_length=500)
+    author = models.OneToOneField(User, blank=True, null=True)
+    playlist = models.ForeignKey('Playlist')
+    spin = models.ForeignKey('Spin', blank=True, null=True)
 
-	timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
 class Settings(models.Model):
-	""" A collection of options that the DJ can set.
+    """ A collection of options that the DJ can set.
 
-	Unsure exactly what these might be, but it could be useful to keep 
-	track of some sort of DJ-specific behavior.  Examples could include
-	customizing layout options/names (as classical DJs prefer different layouts)
-	"""
-	# Whose settings are these ?
-	owner = models.OneToOneField('DJ', blank=True, null=True)
+    Unsure exactly what these might be, but it could be useful to keep 
+    track of some sort of DJ-specific behavior.  Examples could include
+    customizing layout options/names (as classical DJs prefer different layouts)
+    """
+    # Whose settings are these ?
+    owner = models.OneToOneField('DJ', blank=True, null=True)
