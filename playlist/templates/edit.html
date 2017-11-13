@@ -16,6 +16,7 @@
 			<div class="show-dj show-section">
 				{% for dj in show.dj %}
 					<span class="show-dj-name tagged-item">{{dj}}</span>
+					<br>
 				{% endfor %}
 			</div>
 			<div class="show-desc show-section">
@@ -24,26 +25,41 @@
 				</p>
 			</div>
 			<div class="show-genre show-section">
+				<div class="genre-heading">Genre</div>
 				<span class="show-genre-name tagged-item">{{show.genre}}</span>
 			</div>
 			<div class="show-subgenre show-section">
+				<span class="genre-heading">Sub-genre Tags</span>
+				<div id="subgenre-input">New Sub-genre</div>
+				<div class="subgenre-add-button">ADD</div>
 				{% for subgenre in show.subgenre %}
-					<span class="show-subgenre-name tagged-item">{{subgenre}}</span>
+					<div class="show-subgenre-name tagged-item">{{subgenre}}</div>
 				{% endfor %}
 			</div>
 		</div>
 	</div>
 	<div id="col-right" class="col">
 		<div id="playlist" class="col-content">
+			<span class="playlist-numbering playlist-heading"> </span>
+			<span class="playlist-numbering playlist-heading"> </span>
+			<span class="playlist-text-cell playlist-heading"> TITLE </span>
+			<span class="playlist-text-cell playlist-heading"> ARTIST </span>
+			<span class="playlist-text-cell playlist-heading"> ALBUM </span>
+			<span class="playlist-text-cell playlist-heading"> RECORD LABEL </span>
+			<span class="playlist-numbering playlist-heading"> </span>
 			{% for track in spins %}
 				<div class="playlist-item">
-					<div class="playlist-cell playlist-artist">
+					<div class="playlist-movetab"> </div>
+					<div class="playlist-numbering">{{forloop.counter}}</div>
+					<div class="playlist-text-cell playlist-artist">
 						{% for artist in track.artist %}
 							<span class="playlist-artist-name tagged-item">{{artist}}</span>
 						{% endfor %}
 					</div>
-					<div class="playlist-cell playlist-title">{{track.title}}</div>
-					<div class="playlist-cell playlist-album">{{track.album}}</div>
+					<div class="playlist-text-cell playlist-title">{{track.title}}</div>
+					<div class="playlist-text-cell playlist-album">{{track.album}}</div>
+					<div class="playlist-text-cell playlist-recordlabel"></div>
+					<div class="playlist-comment"> </div>
 				</div>
 			{% endfor %}
 		</div>
