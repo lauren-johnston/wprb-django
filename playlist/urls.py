@@ -10,6 +10,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 from . import views, services
+from .views import edit_playlist
+from .services import entry, meta, comment
 
 playlist_id = r'^(?P<playlist_id>[0-9]+)/'
 
@@ -24,11 +26,12 @@ urlpatterns = [
 	url( playlist_id + 'entry/complete/$', services.entry.complete, name='entry-complete'),
 
 	# Meta-Playlist services
-	url( playlist_id + 'meta/title/$',     services.meta.title,     name='meta-title'),
-	url( playlist_id + 'meta/desc/$',      services.meta.desc,      name='meta-desc'),
-	url( playlist_id + 'meta/genre/$',     services.meta.genre,     name='meta-genre'),
-	url( playlist_id + 'meta/subgenre/$',  services.meta.subgenre,  name='meta-subgenre'),
-
+	url( playlist_id + 'meta/desc/$',          services.meta.desc,          name='meta-desc'),
+	url( playlist_id + 'meta/genre/$',         services.meta.genre,         name='meta-genre'),
+	url( playlist_id + 'meta/subtitle/$',      services.meta.subtitle,      name='meta-title'),
+	url( playlist_id + 'meta/add_subgenre/$',  services.meta.add_subgenre,  name='meta-add_subgenre'),
+	url( playlist_id + 'meta/del_subgenre/$',  services.meta.del_subgenre,  name='meta-del_subgenre'),
+	
 	# Comments
 	url( playlist_id + 'comment/new',      services.comment.new,    name='comment-new'),
 	url( playlist_id + 'comment/edit',     services.comment.edit,   name='comment-edit'),

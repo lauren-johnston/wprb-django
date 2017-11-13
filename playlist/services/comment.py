@@ -3,7 +3,8 @@ Services pertaining to playlist comments.
 
 Add, update, and delete comments on playlists.
 """
-from django.views.decorators.http import require_http_methods, login_required
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 from django.http import QueryDict, JsonResponse
 
 from ..models import Spin, Comment, Playlist
