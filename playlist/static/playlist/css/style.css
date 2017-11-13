@@ -1,23 +1,52 @@
 /* Common styles for the Snob App */
 body {
-	font-family: 'Montserrat', sans-serif;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	color: white;
+    background-image: url("media/background.gif");
+    background-size: cover;
+}
+
+h1 {
+	font-size: 1.5em;
+	font-style: normal;
+	font-weight: 100;
 }
 
 h2 {
 	font-size: 1.5em;
+	margin: 0;
 }
 
 h3 {
 	font-size: 1.25em;
+	margin: 0;
 }
 
 #header {
-	height: 10%;
+	top: 0;
+	height: 5%;
+	left: 0;
+	right:0;
+	background-color: #2a2a2a
+}
+
+#header-title {
+	margin: 0;
+}
+
+#header-subtitle {
+	margin: 0;
+	margin-left: 8.5em;
+	font-size: 0.8em;
 }
 
 #footer {
+	font-size: 0.8em;
+	height: 5%;
+	left: 0;
 	bottom: 0;
-	background-color: #dfd;
+	right:0;
+	background-color: #2a2a2a;
 }
 
 #content {
@@ -27,6 +56,7 @@ h3 {
 .page-section {
 	position: absolute;
 	width: 100%;
+	font-color: white;
 }
 
 .bar-section {
