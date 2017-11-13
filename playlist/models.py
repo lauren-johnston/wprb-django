@@ -50,6 +50,7 @@ class Playlist(models.Model):
 	"""
 	dj = models.ManyToManyField('DJ')
 	desc = models.CharField(max_length=250)
+	subtitle = models.CharField(max_length=250)
 
 	# When did it happen ?
 	time_start = models.CharField(max_length=4, choices=TIMES, blank=True)
@@ -100,7 +101,7 @@ class Comment(models.Model):
 	"""
 
 	text = models.CharField(max_length=500)
-	author = models.OneToOneField('User', blank=True, null=True)
+	author = models.OneToOneField(User, blank=True, null=True)
 	playlist = models.ForeignKey('Playlist')
 	spin = models.ForeignKey('Spin', blank=True, null=True)
 
