@@ -24,7 +24,6 @@ FORMATS = (
     ('O', 'Other')
 )
 
-
 class Spin(models.Model):
     """ An instance of a single song being played; an entry in a playlist.
     """
@@ -56,7 +55,7 @@ class Playlist(models.Model):
     """
     dj = models.ManyToManyField('DJ')
     desc = models.CharField(max_length=250)
-    subtitle = models.CharField(max_length=250)
+    subtitle = models.CharField(max_length=250, blank=True, null=True)
 
     # When did it happen ?
     time_start = models.CharField(max_length=4, choices=TIMES, blank=True)
