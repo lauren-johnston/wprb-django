@@ -4,9 +4,14 @@
 {% block styles %}
 	{{ block.super }}
 	<link rel="stylesheet" href="{% static 'playlist/css/edit.css' %}">
+	<!-- <link type="text/javascript" href="{% static 'playlist/js/edit.js' %}"> -->
 {% endblock styles %}
 
 {% block content %}
+	<script type="text/javascript" src="{% static 'playlist/js/edit.js' %}"/>
+	<script type="text/javascript">
+		var gucci = "hello";
+	</script>
 	<div id="col-left" class="col">
 		<div id="show" class="col-content">
 			<div class="show-title show-section">
@@ -51,17 +56,48 @@
 				<div class="playlist-item">
 					<div class="playlist-movetab"> </div>
 					<div class="playlist-numbering">{{forloop.counter}}</div>
+					<div class="playlist-text-cell playlist-title">{{track.title}}</div>
 					<div class="playlist-text-cell playlist-artist">
 						{% for artist in track.artist %}
 							<span class="playlist-artist-name tagged-item">{{artist}}</span>
 						{% endfor %}
 					</div>
-					<div class="playlist-text-cell playlist-title">{{track.title}}</div>
 					<div class="playlist-text-cell playlist-album">{{track.album}}</div>
 					<div class="playlist-text-cell playlist-recordlabel"></div>
 					<div class="playlist-comment"> </div>
 				</div>
 			{% endfor %}
+				<form class="entry-add-form" id='add-form' onsubmit='tryAddEntry' method="POST">
+					<div class="playlist-item" id="new-entry">
+						<div class="playlist-movetab"> 
+						</div>
+						<div class="playlist-numbering">
+							{{ spins|length|add:1}}
+						</div>
+						<div class="playlist-text-cell playlist-title">
+							<input type="text" name="title" placeholder="Entry Title"> 
+							</input>
+						</div>
+						<div class="playlist-text-cell playlist-artist">
+								<span class="playlist-artist-name tagged-item">
+									<input type="text" name="artist" placeholder="Entry Artist"> 
+									</input>
+								</span>
+						</div>
+						<div class="playlist-text-cell playlist-album">
+							<input type="text" name="album" placeholder="Entry Album"> 
+							</input>
+						</div>
+						<div class="playlist-text-cell playlist-recordlabel">
+							<input type="text" name="label" placeholder="Entry Label">
+							</input>
+						</div>
+						<!-- FOR WHEN WE HAVE A PLUS GIF 
+							<div class="playlist-plus" id="add-submit"> </div>
+						-->
+						<input type="submit" value="Add it!">
+					</div>
+				</form>
 		</div>
 	</div>
 {% endblock content %}
