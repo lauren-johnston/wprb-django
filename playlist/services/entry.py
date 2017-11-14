@@ -10,7 +10,7 @@ from ..models import Spin, Playlist
 from music.models import Song, Artist, Album, Label, Genre, Subgenre
 from ..common import * 
 
-@login_required
+#@login_required
 @require_http_methods(["POST"])
 def add(request, playlist_id):
 	""" Adds the song specified by the provided title, artist,
@@ -24,7 +24,7 @@ def add(request, playlist_id):
 		artist_name = request.POST['artist']
 		album_name  = request.POST['album']
 		label_name  = request.POST['label']
-		spin_index  = int(request.POST['index'])
+		spin_index  = spins.count() + 1
 	except Playlist.DoesNotExist:
 		return error('Invalid URI')
 	except (KeyError, ValueError):
@@ -67,7 +67,7 @@ def add(request, playlist_id):
 	return success()
 
 
-@login_required
+#@login_required
 @require_http_methods(["PUT"])
 def move(request, playlist_id):
 	""" Moves the spin specified by the given 'spin_pk' to the index
@@ -108,7 +108,7 @@ def move(request, playlist_id):
 
 	return success()
 
-@login_required
+#@login_required
 @require_http_methods(["DELETE"])
 def delete(request, playlist_id):
 	""" Deletes the spin specified by the given pk from the 
@@ -149,7 +149,7 @@ def delete(request, playlist_id):
 
 	return success()
 
-@login_required
+#@login_required
 @require_http_methods(["PUT"])
 def update(request, playlist_id):
 	""" Updates the specified entry with the information provided. 
