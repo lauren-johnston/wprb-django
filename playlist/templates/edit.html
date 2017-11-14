@@ -1,17 +1,17 @@
 {% extends "admin.html" %}
 {% load static %}
 
+<script type="text/javascript" src="{% static 'playlist/lib/jquery.min.js' %}"> </script>
+<script type="text/javascript" src="{% static 'playlist/js/common.js' %}"></script>
+<script type="text/javascript" src="{% static 'playlist/js/edit.js' %}"></script>
+<script type="text/javascript"> console.log("hello"); </script>
+
 {% block styles %}
 	{{ block.super }}
 	<link rel="stylesheet" href="{% static 'playlist/css/edit.css' %}">
-	<!-- <link type="text/javascript" href="{% static 'playlist/js/edit.js' %}"> -->
 {% endblock styles %}
 
 {% block content %}
-	<script type="text/javascript" src="{% static 'playlist/js/edit.js' %}"/>
-	<script type="text/javascript">
-		var gucci = "hello";
-	</script>
 	<div id="col-left" class="col">
 		<div id="show" class="col-content">
 			<div class="show-title show-section">
@@ -67,7 +67,8 @@
 					<div class="playlist-comment"> </div>
 				</div>
 			{% endfor %}
-				<form class="entry-add-form" id='add-form' onsubmit='tryAddEntry' method="POST">
+				<form class="entry-add-form" name='add-form' id="add-form" onsubmit='return tryAddEntry()' method="POST">
+					{% csrf_token %}
 					<div class="playlist-item" id="new-entry">
 						<div class="playlist-movetab"> 
 						</div>

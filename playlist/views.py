@@ -1,7 +1,7 @@
+from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from django.shortcuts import render
 
 from .models import *
-
 
 def edit_playlist(request, playlist_id):
 	""" Serve the page for editing a single playlist.
