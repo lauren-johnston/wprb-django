@@ -7,7 +7,7 @@ def error(message):
 	return JsonResponse({'error': message})
 
 def success():
-	return JsonResponse({'success':True})
+	return JsonResponse({'success': True})
 
 def invalid_array_index(array, index):
 	if (index < 0) or (index >= len(array)):
