@@ -19,3 +19,5 @@ tests/report/
 db.sqlite3
 venv
 pyenv/
+
+*/migrations/*
