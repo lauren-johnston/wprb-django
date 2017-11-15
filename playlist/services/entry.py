@@ -52,8 +52,39 @@ def add(request, playlist_id):
 	# 	spin.index = spin.index + 1
 	# 	spin.save()
 
-	return success()
+	# Hacky, forgive me
+	response = {
+		"success": True,
+		"index": new_spin.index,
+		'title':song_title,
+		'artist':artist_name,
+		'album':album_name
+	}
+	if label_name is not None:
+		response['label'] = label_name
 
+	return JsonResponse(response)
+
+@require_http_methods(["GET"])
+def get_playlist_spins(request, playlist_id):
+	''' A helper method. Does what it says. 
+	'''
+	try:
+		playlist = Playlist.objects.get(pk=playlist_id)
+		spins    = Spin.objects.filter(playlist__pk=playlist_id)
+	except Playlist.DoesNotExist:
+		return error('Invalid URI')
+
+	# Hacky, to get around serialization issues
+	list_of_spin_dicts = []
+	for spin in spins:
+		list_of_spin_dicts.append({
+			'index':spin.index,
+			'title':spin.song.name,
+			'artist':spin.artist.name,
+			'album':spin.album.name,
+			})
+	return to_return
 
 #@login_required
 @require_http_methods(["PUT"])

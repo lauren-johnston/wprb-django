@@ -18,13 +18,34 @@ var addEntry = function addEntry() {
 	};
 
 	$.post("entry/add/", entry, function(data) {
-		console.log(data);
+		if (data.success != null) {
+			// Add the new spin
+			$("#add-form").before(' \
+				<div class="playlist-item"> \
+					<div class="playlist-movetab"> </div> \
+					<div class="playlist-numbering">' + data.index + '</div> \
+					<div class="playlist-text-cell playlist-title">' + data.title + '</div> \
+					<div class="playlist-text-cell playlist-artist"> \
+						<span class="playlist-artist-name tagged-item">' + data.artist + '</span> \ \
+					</div> \
+					<div class="playlist-text-cell playlist-album">' + data.album + '</div> \
+					<div class="playlist-text-cell playlist-recordlabel">' + data.label + '</div> \
+					<div class="playlist-comment"> </div> \
+				</div>'
+				);
+
+			// Clear the form values
+			$("form#add-form input[type=text]").each(function() {
+				$(this).val('');
+			});
+
+			// Update the submission number
+			$("#new-entry-number").html(data.index+1);
+		}
+		else {
+			alert("You got problems, buddy!");
+		}
 	});
-
-	// Convert the submitted data to static page data
-	// TODO
-
-	// Add a new submit section
 }
 
 /**

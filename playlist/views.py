@@ -1,7 +1,9 @@
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie, csrf_exempt
+from django.http import JsonResponse
 from django.shortcuts import render
 
 from .models import *
+from .common import *
 
 #@login_required
 def new_playlist(request):
@@ -19,8 +21,11 @@ def new_playlist(request):
 def edit_playlist(request, playlist_id):
 	""" Serve the page for editing a single playlist.
 	"""
+	try: 
+		playlist = Playlist.objects.get(pk=playlist_id)
+	except Playlist.DoesNotExist:
+		return error("No such playlist")
 
-	playlist = Playlist.objects.get(pk=playlist_id)
 
 	showdetails = {
 		'title'  	: playlist.show.name,
