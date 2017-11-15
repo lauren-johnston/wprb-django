@@ -7,6 +7,7 @@ DJs, who play the music at particular times.
 
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 
 # Integer/string tuple representation of times of day
 TIMES = [
@@ -53,14 +54,14 @@ class Spin(models.Model):
 class Playlist(models.Model):
     """ An ordered list of spins that happened at a particular time, by at least one DJ.
     """
-    dj = models.ManyToManyField('DJ')
+    show = models.OneToOneField('Show')
     desc = models.CharField(max_length=250)
     subtitle = models.CharField(max_length=250, blank=True, null=True)
 
     # When did it happen ?
     time_start = models.CharField(max_length=4, choices=TIMES, blank=True)
     time_end = models.CharField(max_length=4, choices=TIMES, blank=True)
-    date = models.DateField()
+    date = models.DateField(default=date.today)
 
     # This playlist might have genres and subgenres different from the show in general
     genre = models.ManyToManyField('music.Genre', blank=True)
@@ -74,7 +75,7 @@ class DJ(models.Model):
     """ A DJ plays the music, and must have identifying information
     """
     # One-to-one link to a Django "User" instance, for authentication purposes
-    username = models.OneToOneField(User, null=True, on_delete=models.SET_NULL)
+    user = models.OneToOneField(User, null=True, on_delete=models.SET_NULL)
 
     # Identifying information for the DJ, real name and artist/DJ name
     dj_name = models.CharField(max_length=100)
@@ -86,7 +87,6 @@ class DJ(models.Model):
     display_email = models.BooleanField(default=True)
     website = models.URLField(blank=True)
     display_website = models.BooleanField(default=False)
-
 
 class Show(models.Model):
     """ A show is a recurring time slot on the radio, held by one or more DJs.

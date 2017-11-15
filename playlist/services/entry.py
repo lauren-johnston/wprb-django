@@ -8,7 +8,8 @@ from django.http import QueryDict, HttpResponse, JsonResponse
 
 from ..models import Spin, Playlist
 from music.models import Song, Artist, Album, Label, Genre, Subgenre
-from ..common import * 
+from music.common import get_or_create
+from ..common import invalid_array_index, error, success
 
 #@login_required
 @require_http_methods(["POST"])
@@ -34,17 +35,7 @@ def add(request, playlist_id):
 	   return error('Invalid index')
 
 	# Get the artist, album, and song objects, creating each if necessary
-	artist = Artist.objects.filter(name=artist_name).first()
-	if not artist: 
-		artist = Artist(name=artist_name)
-
-	album = Album.objects.filter(name=album_name, artist=artist).first()
-	if not album: 
-		album = Album(name=album_name, artist=artist)
-
-	song = Song.objects.filter(name=song_title, album=album, artist=artist).first()
-	if not song: 
-		song = Song(name=song_title, album=album, artist=artist)
+	artist, album, song = get_or_create(artist_name, album_name, song_title)
 
 	# Add the medium if it's provided
 	new_spin = Spin(song=song, index=index, playlist=playlist)
