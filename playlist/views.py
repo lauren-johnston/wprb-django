@@ -3,33 +3,38 @@ from django.shortcuts import render
 
 from .models import *
 
-@csrf_exempt
+#@login_required
+def new_playlist(request):
+	""" Create a new playlist object, and then redirect to the
+	edit page for that playlist
+	"""
+
+	# TODO: Get the DJ from the request and then associate
+	# the playlist with that dj
+	playlist = Playlist()
+
+	return redirect('/playlist/%d/' % playlist.id)
+
+#@login_required
 def edit_playlist(request, playlist_id):
 	""" Serve the page for editing a single playlist.
 	"""
 
-	show = {
-		'title'  	: 'A Cool Show',
-		'subtitle'	: 'with a subtitle: ' + playlist_id,
-		'dj'		: ['One DJ', 'And Another'],
-		'genre'		: 'The Main genre',
-		'subgenre'	: ['A mike genre', 'shit-slop funk bass', 'fruit loops'],
-		'desc'		: 'Here you can talk about this episode of your show. Anything in particular you want to say?'
+	playlist = Playlist.objects.get(pk=playlist_id)
+
+	showdetails = {
+		'title'  	: playlist.show.name,
+		'subtitle'	: playlist.subtitle,
+		'dj'		: [dj.dj_name for dj in playlist.show.dj.all()],
+		'genre'		: playlist.genre.name if playlist.genre else None,
+		'subgenre'	: [g.name for g in playlist.subgenre.all()],
+		'desc'		: playlist.desc
 	}
 
-	# playlist = Playlist.objects.get(pk=playlist_id)
-
-	# spins = [{
-	# 	'title'	: spin.song.title
-	# 	'artist': [a.name for a in spin.song.artist],
-	# 	'album'	: spin.song.album.name
-	# } for spin in playlist.spin_set]
-
 	spins = [{
-		'title'	: 'Track %d' % i,
-		'artist': ['Artist %d' % i],
-		'album'	: 'Album %d' % i
-	} for i in range(10)]
+		'title'	: spin.song.name,
+		'artist': [a.name for a in spin.song.artist.all()],
+		'album'	: spin.song.album.name
+	} for spin in playlist.spin_set.all()]
 
-
-	return render(request, "edit.html", context={'spins': spins, 'show': show})
+	return render(request, "edit.html", context={'spins': spins, 'show': showdetails})
