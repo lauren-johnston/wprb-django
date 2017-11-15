@@ -31,14 +31,11 @@ def add(request, playlist_id):
 	except (KeyError, ValueError):
 		return error('Invalid request')
 
-	if invalid_array_index(spins, index-1):
-	   return error('Invalid index')
-
 	# Get the artist, album, and song objects, creating each if necessary
 	artist, album, song = get_or_create(artist_name, album_name, song_title)
 
 	# Add the medium if it's provided
-	new_spin = Spin(song=song, index=index, playlist=playlist)
+	new_spin = Spin(song=song, index=spin_index, playlist=playlist)
 	if 'medium' in request.POST:
 		new_spin.medium = request.POST['medium']
 
@@ -50,10 +47,10 @@ def add(request, playlist_id):
 	album.playcount += 1
 
 	# Finally, shift the playlist if need be
-	spins_to_update = spins.filter(index__gte=index)
-	for spin in spins_to_update:
-		spin.index = spin.index + 1
-		spin.save()
+	# spins_to_update = spins.filter(index__gte=spin_index)
+	# for spin in spins_to_update:
+	# 	spin.index = spin.index + 1
+	# 	spin.save()
 
 	return success()
 
