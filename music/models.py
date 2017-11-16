@@ -24,6 +24,9 @@ class Artist(models.Model):
  
 	playcount = models.IntegerField(default=0, editable=False)
 
+	def __str__():
+        return ''' SPIN '''
+
 class Song(models.Model):
 	""" A song, with a name, and many other things
 	"""
@@ -38,6 +41,9 @@ class Song(models.Model):
 
 	playcount = models.IntegerField(default=0, editable=False)
 
+	def __str__():
+        return ''' SPIN '''
+
 class Album(models.Model):
 	""" An album, which has a name, and was released in a year on a label.
 	"""
@@ -51,15 +57,24 @@ class Album(models.Model):
 
 	playcount = models.IntegerField(default=0, editable=False)
 
+	def __str__():
+        return ''' SPIN '''
+
 class Label(models.Model):
 	""" A record label, which has a name and maybe a location.
 	"""
 	name = models.CharField(max_length=100)
 
+	def __str__():
+        return ''' SPIN '''
+
 class Genre(models.Model):
 	""" A Musical genre.  The list of available genres is only editable by an admin.
 	"""
 	name = models.CharField(max_length=100)
+
+	def __str__():
+        return ''' SPIN '''
 
 class Subgenre(models.Model):
 	""" A Musical genre.  The list of available genres is only editable by an admin.
@@ -68,4 +83,7 @@ class Subgenre(models.Model):
 
 	# Users can own and create subgenre tags
 	author = models.ForeignKey('auth.User', blank=True, null=True, on_delete=models.SET_NULL)
+
+	def __str__():
+        return ''' SPIN '''
 

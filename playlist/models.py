@@ -50,6 +50,9 @@ class Spin(models.Model):
     # how did you spin it? sadly, "format" is a python reserved keyword...
     medium = models.CharField(max_length=1, blank=True, choices=FORMATS)
 
+    def __str__():
+        return ''' SPIN '''
+
 
 class Playlist(models.Model):
     """ An ordered list of spins that happened at a particular time, by at least one DJ.
@@ -70,6 +73,10 @@ class Playlist(models.Model):
     # When did it get added ?
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    def __str__():
+        return ''' SPIN '''
+
+
 
 class DJ(models.Model):
     """ A DJ plays the music, and must have identifying information
@@ -88,6 +95,10 @@ class DJ(models.Model):
     website = models.URLField(blank=True)
     display_website = models.BooleanField(default=False)
 
+    def __str__():
+        return ''' SPIN '''
+
+
 class Show(models.Model):
     """ A show is a recurring time slot on the radio, held by one or more DJs.
 
@@ -103,6 +114,9 @@ class Show(models.Model):
 
     desc = models.CharField(max_length=1000, blank=True)
 
+    def __str__():
+        return ''' SPIN '''
+
 class Comment(models.Model):
     """ A comment that is made on a playlist, or playlist entry.
     """
@@ -114,6 +128,9 @@ class Comment(models.Model):
 
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    def __str__():
+        return ''' SPIN '''
+
 class Settings(models.Model):
     """ A collection of options that the DJ can set.
 
@@ -123,3 +140,6 @@ class Settings(models.Model):
     """
     # Whose settings are these ?
     owner = models.OneToOneField('DJ', blank=True, null=True)
+
+    def __str__():
+        return ''' SPIN '''
