@@ -3,14 +3,14 @@
 
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
-from django.http import QueryDict, HttpResponse, JsonResponse
+from django.http import QueryDict, JsonResponse
 
 from ..models import Spin, Playlist
+from ..common import invalid_array_index, error, success
 from music.models import Song, Artist, Album, Label, Genre, Subgenre
 from music.common import get_or_create
-from ..common import invalid_array_index, error, success
 
-@login_required
+#@login_required
 @require_http_methods(["POST"])
 def add(request, playlist_id):
 	""" Adds the song specified by the provided title, artist,
@@ -24,20 +24,17 @@ def add(request, playlist_id):
 		artist_name = request.POST['artist']
 		album_name  = request.POST['album']
 		label_name  = request.POST['label']
-		spin_index  = int(request.POST['index'])
+		spin_index  = spins.count() + 1
 	except Playlist.DoesNotExist:
 		return error('Invalid URI')
 	except (KeyError, ValueError):
 		return error('Invalid request')
 
-	if invalid_array_index(spins, index-1):
-	   return error('Invalid index')
-
 	# Get the artist, album, and song objects, creating each if necessary
 	artist, album, song = get_or_create(artist_name, album_name, song_title)
 
 	# Add the medium if it's provided
-	new_spin = Spin(song=song, index=index, playlist=playlist)
+	new_spin = Spin(song=song, index=spin_index, playlist=playlist)
 	if 'medium' in request.POST:
 		new_spin.medium = request.POST['medium']
 
@@ -49,15 +46,46 @@ def add(request, playlist_id):
 	album.playcount += 1
 
 	# Finally, shift the playlist if need be
-	spins_to_update = spins.filter(index__gte=index)
-	for spin in spins_to_update:
-		spin.index = spin.index + 1
-		spin.save()
+	# spins_to_update = spins.filter(index__gte=spin_index)
+	# for spin in spins_to_update:
+	# 	spin.index = spin.index + 1
+	# 	spin.save()
 
-	return success()
+	# Hacky, forgive me
+	response = {
+		"success": True,
+		"index": new_spin.index,
+		'title':song_title,
+		'artist':artist_name,
+		'album':album_name
+	}
+	if label_name is not None:
+		response['label'] = label_name
 
+	return JsonResponse(response)
 
-@login_required
+@require_http_methods(["GET"])
+def get_playlist_spins(request, playlist_id):
+	''' A helper method. Does what it says. 
+	'''
+	try:
+		playlist = Playlist.objects.get(pk=playlist_id)
+		spins    = Spin.objects.filter(playlist__pk=playlist_id)
+	except Playlist.DoesNotExist:
+		return error('Invalid URI')
+
+	# Hacky, to get around serialization issues
+	list_of_spin_dicts = []
+	for spin in spins:
+		list_of_spin_dicts.append({
+			'index':spin.index,
+			'title':spin.song.name,
+			'artist':spin.artist.name,
+			'album':spin.album.name,
+			})
+	return to_return
+
+#@login_required
 @require_http_methods(["PUT"])
 def move(request, playlist_id):
 	""" Moves the spin specified by the given 'spin_pk' to the index
@@ -98,7 +126,7 @@ def move(request, playlist_id):
 
 	return success()
 
-@login_required
+#@login_required
 @require_http_methods(["DELETE"])
 def delete(request, playlist_id):
 	""" Deletes the spin specified by the given pk from the 
@@ -139,7 +167,7 @@ def delete(request, playlist_id):
 
 	return success()
 
-@login_required
+#@login_required
 @require_http_methods(["PUT"])
 def update(request, playlist_id):
 	""" Updates the specified entry with the information provided. 

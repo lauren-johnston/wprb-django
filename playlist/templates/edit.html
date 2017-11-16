@@ -42,26 +42,60 @@
 		<div id="playlist" class="col-content">
 			<span class="playlist-numbering playlist-heading"> </span>
 			<span class="playlist-numbering playlist-heading"> </span>
-			<span class="playlist-text-cell playlist-heading"> TITLE </span>
-			<span class="playlist-text-cell playlist-heading"> ARTIST </span>
-			<span class="playlist-text-cell playlist-heading"> ALBUM </span>
-			<span class="playlist-text-cell playlist-heading"> RECORD LABEL </span>
+			<span class="playlist-text-cell playlist-heading"> title </span>
+			<span class="playlist-text-cell playlist-heading"> artist </span>
+			<span class="playlist-text-cell playlist-heading"> album </span>
+			<span class="playlist-text-cell playlist-heading"> record label </span>
 			<span class="playlist-numbering playlist-heading"> </span>
 			{% for track in spins %}
-				<div class="playlist-item">
-					<div class="playlist-movetab"> </div>
-					<div class="playlist-numbering">{{forloop.counter}}</div>
-					<div class="playlist-text-cell playlist-artist">
-						{% for artist in track.artist %}
-							<span class="playlist-artist-name tagged-item">{{artist}}</span>
-						{% endfor %}
-					</div>
-					<div class="playlist-text-cell playlist-title">{{track.title}}</div>
-					<div class="playlist-text-cell playlist-album">{{track.album}}</div>
-					<div class="playlist-text-cell playlist-recordlabel"></div>
-					<div class="playlist-comment"> </div>
+			<div class="playlist-item">
+				<div class="playlist-movetab"> </div>
+				<div class="playlist-numbering">{{forloop.counter}}</div>
+				<div class="playlist-text-cell playlist-title">{{track.title}}</div>
+				<div class="playlist-text-cell playlist-artist">
+					{% for artist in track.artist %}
+					<span class="playlist-artist-name tagged-item">{{artist}}</span>
+					{% endfor %}
 				</div>
+				<div class="playlist-text-cell playlist-album">{{track.album}}</div>
+				<div class="playlist-text-cell playlist-recordlabel"></div>
+				<div class="playlist-comment"> </div>
+			</div>
 			{% endfor %}
+			{# So we never want to "submit" this form.  Just grab values from its fields and then send them Asynchronously #}
+			<form class="entry-add-form" name='add-form' id="add-form">
+				{% csrf_token %}
+				<div class="playlist-item playlist-entry" id="new-entry">
+					<div class="playlist-movetab"> 
+					</div>
+					<div class="playlist-numbering" id="new-entry-number">
+						{{ spins|length|add:1}}
+					</div>
+					<div class="playlist-text-cell playlist-title">
+						<input id="entry-add-title" type="text" name="title" placeholder="track title" /> 
+					</div>
+					<div class="playlist-text-cell playlist-artist">
+						<span class="playlist-artist-name tagged-item">
+							<input id="entry-add-artist" type="text" name="artist" placeholder="artist" /> 
+						</span>
+					</div>
+					<div class="playlist-text-cell playlist-album">
+						<input id="entry-add-album" type="text" name="album" placeholder="album" /> 
+					</div>
+					<div class="playlist-text-cell playlist-recordlabel">
+						<input id="entry-add-label" type="text" name="label" placeholder="record label" />
+					</div>
+
+					<div class="playlist-plus clickable" id="add-entry-button">
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 {% endblock content %}
+
+{% block scripts %}
+{{ block.super }}
+
+<script type="text/javascript" src="{% static 'playlist/js/edit.js' %}"></script>
+{% endblock scripts%}

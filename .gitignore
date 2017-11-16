@@ -21,3 +21,4 @@ venv
 pyenv/
 
 */migrations/*
+*.DS_Store

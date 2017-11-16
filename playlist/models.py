@@ -64,7 +64,7 @@ class Playlist(models.Model):
     date = models.DateField(default=date.today)
 
     # This playlist might have genres and subgenres different from the show in general
-    genre = models.ManyToManyField('music.Genre', blank=True)
+    genre = models.ForeignKey('music.Genre', blank=True, null=True)
     subgenre = models.ManyToManyField('music.Subgenre', blank=True)
 
     # When did it get added ?
