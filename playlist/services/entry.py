@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 """ entry.py - Implements basic services for editing entry in a playlist. """
 
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
-from django.http import QueryDict, HttpResponse, JsonResponse
+from django.http import QueryDict, JsonResponse
 
 from ..models import Spin, Playlist
+from ..common import invalid_array_index, error, success
 from music.models import Song, Artist, Album, Label, Genre, Subgenre
 from music.common import get_or_create
-from ..common import invalid_array_index, error, success
 
 #@login_required
 @require_http_methods(["POST"])
