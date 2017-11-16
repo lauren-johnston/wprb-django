@@ -13,6 +13,7 @@ def new_playlist(request):
 	# TODO: Get the DJ from the request and then associate
 	# the playlist with that dj
 	playlist = Playlist()
+	playlist.save()
 
 	return redirect('/playlist/%d/' % playlist.id)
 
@@ -36,6 +37,7 @@ def edit_playlist(request, playlist_id):
 	}
 
 	spins = [{
+		'id'    : spin.id,
 		'title'	: spin.song.name,
 		'artist': [a.name for a in spin.song.artist.all()],
 		'album'	: spin.song.album.name,

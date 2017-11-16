@@ -55,7 +55,7 @@ def main():
 	print('Making dj account for jerrysmith: "DJ Jerry"')
 	test_dj = DJ(
 		user=test_user, 
-		dj_name='DJ Jerry', 
+		name='DJ Jerry', 
 		first_name='Jerry',
 		last_name='Smith'
 	)
