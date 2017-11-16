@@ -1,7 +1,7 @@
 from django.db import models
 
 # Commenting out these dummy functions for later implementation (?)
-'''
+"""
 def exploresong(songid):
     return "lol"
 
@@ -19,15 +19,15 @@ def exploreDJ(DJid):
 
 def exploreshow(showid):
     return "running this ish"
-'''
+"""
 
 def exploreplays(songid, limit):
-    '''
+    """
     An exploratory function to return a list of dictionaries of information 
     relevant to "songid", upper bounded by "limit". 
     The fields being returned are: 
     'showId', 'djId', 'showName', 'djName', 'timestamp'
-    '''
+    """
 
     # Initializing return list
     ret = []
@@ -57,23 +57,26 @@ def exploreplays(songid, limit):
 
 
 def exploredetails(songid):
-    '''
+    """
     Returning a dictionary containing the information relevant to the queried
     songid. The dictionary contains the fields:
     'title', 'album', 'albumid', 'artist', 'artistid', 
     'genres', 'subgenres', 'plays'
-    '''
+    """
 
     # Caching the song associated with songid
     song = Song.objects.get(id=songid)
     
     # Populate the return dictionary
     ret = {
-        'title' : song.name, 
-        'album': song.album, 'albumid': song.album.id,
-        'artist': song.artist, 'artistid': song.artist.id,
-        'genres': list(song.genre), 'subgenres': list(song.subgenre)
-        'plays': song.playcount
+        'title'    : song.name, 
+        'album'    : song.album.name,
+        'albumid'  : song.album.id,
+        'artist'   : song.artist.name, 
+        'artistid' : song.artist.id,
+        'genres'   : song.genre.name, 
+        'subgenres': [subgenre.name for subgenre in song.subgenre.all()]
+        'plays'    : song.playcount
     }
 
     return ret
