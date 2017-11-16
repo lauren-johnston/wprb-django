@@ -78,7 +78,11 @@ class DJ(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.SET_NULL)
 
     # Identifying information for the DJ, real name and artist/DJ name
-    dj_name = models.CharField(max_length=100)
+
+    # THIS IS THE DJ NAME
+    name = models.CharField(max_length=100)
+    # REMEMBER THIS IS THE DJ NAME
+
     first_name = models.CharField(max_length=40)
     last_name = models.CharField(max_length=40)
 
