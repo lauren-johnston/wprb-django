@@ -3,10 +3,12 @@
 A module to initialize a specific test database that we can
 use to make sure our basic functionality is happening.
 """
+
 # Hacky way of running a script in our django context
-import os, django
-os.environ['DJANGO_SETTINGS_MODULE'] = 'radio.settings'
-django.setup()
+if __name__=='__main__':
+	import os, django
+	os.environ['DJANGO_SETTINGS_MODULE'] = 'radio.settings'
+	django.setup()
 
 from playlist.models import *
 from music.models import *
@@ -69,13 +71,14 @@ def main():
 	print('Adding DJ Jerry as dj of "Earth Radio"')
 	test_show.dj.add(test_dj)
 
-	print('Creating a playlist on "Earth Radio"')
+	print('Creating a playlist on "Earth Radio"', end=' ')
 	test_playlist = Playlist(
 		show=test_show,
 		subtitle='Human Music',
 		desc='Just some music for humans',
 	)
 	test_playlist.save()
+	print('(id=%d)' % test_playlist.id)
 
 	# Add some songs and some spins to the playlist
 	print('Adding songs to playlist...')
