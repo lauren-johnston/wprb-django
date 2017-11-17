@@ -40,7 +40,7 @@ def edit_playlist(request, playlist_id):
 		'id'    : spin.id,
 		'title'	: spin.song.name,
 		'artist': [a.name for a in spin.song.artist.all()],
-		'album'	: spin.song.album.name
+		'album'	: spin.song.album.name,
 	} for spin in playlist.spin_set.all()]
 
 	return render(request, "edit.html", context={'spins': spins, 'show': showdetails})

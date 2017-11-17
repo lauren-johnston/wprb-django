@@ -50,6 +50,11 @@ class Spin(models.Model):
     # how did you spin it? sadly, "format" is a python reserved keyword...
     medium = models.CharField(max_length=1, blank=True, choices=FORMATS)
 
+    def __str__(self):
+        artists = ' & '.join([artist.name for artist in self.song.artist.all()])
+        return 'Spin %d: Song: %s, Album: %s, Artist(s): %s' \
+            % (self.id, self.song.name, self.song.album.name, artists)
+
 
 class Playlist(models.Model):
     """ An ordered list of spins that happened at a particular time, by at least one DJ.
@@ -69,6 +74,10 @@ class Playlist(models.Model):
 
     # When did it get added ?
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        djs = ' & '.join([dj.name for dj in self.show.dj.all()])
+        return 'Playlist %d: "%s" with %s' % (self.id, self.show.name, djs)
 
 
 class DJ(models.Model):
@@ -92,6 +101,11 @@ class DJ(models.Model):
     website = models.URLField(blank=True)
     display_website = models.BooleanField(default=False)
 
+    def __str__(self):
+        return 'DJ %d: DJ Name: %s, Human Name: %s %s' \
+            % (self.id, self.name, self.first_name, self.last_name)
+
+
 class Show(models.Model):
     """ A show is a recurring time slot on the radio, held by one or more DJs.
 
@@ -107,6 +121,11 @@ class Show(models.Model):
 
     desc = models.CharField(max_length=1000, blank=True)
 
+    def __str__(self):
+        djs = ' & '.join([dj.name for dj in self.dj.all()])
+        return 'Show %d: Name: %s, DJ(s): %s, Desc: "%s..."' \
+            % (self.id, self.name, djs, self.desc[:15])
+
 class Comment(models.Model):
     """ A comment that is made on a playlist, or playlist entry.
     """
@@ -118,6 +137,10 @@ class Comment(models.Model):
 
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return 'Comment %d: Author: %s, Playlist: %s, Spin: %s, Text: "%s..."' \
+            % (self.id, self.author.name, self.playlist.name, self.spin.id, self.text[:15])
+
 class Settings(models.Model):
     """ A collection of options that the DJ can set.
 
@@ -127,3 +150,6 @@ class Settings(models.Model):
     """
     # Whose settings are these ?
     owner = models.OneToOneField('DJ', blank=True, null=True)
+
+    def __str__(self):
+        return 'Settings %d: DJ: %s' % (self.id, self.dj.name)
