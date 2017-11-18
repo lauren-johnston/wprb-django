@@ -30,7 +30,7 @@ def edit_playlist(request, playlist_id):
 	showdetails = {
 		'title'  	: playlist.show.name,
 		'subtitle'	: playlist.subtitle,
-		'dj'		: [dj.dj_name for dj in playlist.show.dj.all()],
+		'dj'		: [dj.name for dj in playlist.show.dj.all()],
 		'genre'		: playlist.genre.name if playlist.genre else None,
 		'subgenre'	: [g.name for g in playlist.subgenre.all()],
 		'desc'		: playlist.desc
