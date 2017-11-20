@@ -15,8 +15,13 @@ from .services import entry, meta, comment
 
 playlist_id = r'^(?P<playlist_id>[0-9]+)/'
 
+app_name = 'playlist'
+
 urlpatterns = [
 	url( playlist_id + '$', views.edit_playlist, name='edit-playlist'),
+
+	url( 'login', views.login, name='login'),
+	url( 'handlelogin', views.handlelogin, name='handlelogin'),
 
 	# Intra-Playlist services
 	url( playlist_id + 'entry/add/$',      services.entry.add,      name='entry-add'),
@@ -31,7 +36,7 @@ urlpatterns = [
 	url( playlist_id + 'meta/subtitle/$',      services.meta.subtitle,      name='meta-title'),
 	url( playlist_id + 'meta/add_subgenre/$',  services.meta.add_subgenre,  name='meta-add_subgenre'),
 	url( playlist_id + 'meta/del_subgenre/$',  services.meta.del_subgenre,  name='meta-del_subgenre'),
-	
+
 	# Comments
 	url( playlist_id + 'comment/new',      services.comment.new,    name='comment-new'),
 	url( playlist_id + 'comment/edit',     services.comment.edit,   name='comment-edit'),

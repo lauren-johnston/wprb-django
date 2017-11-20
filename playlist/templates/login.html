@@ -1,0 +1,10 @@
+<h3>Please log in!</h3>
+
+<form action="{% url 'playlist:handlelogin' %}" method="post">
+{% csrf_token %}
+Username:<input type="text" name="username"/><br>
+Password:<input type="password" name="password"/><br>
+<input type="submit" value="Log In" />
+
+<p>{{ message }}</p>
+</form>
