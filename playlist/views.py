@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from .models import *
 from .common import *
@@ -22,33 +22,12 @@ def new_playlist(request):
     return redirect('/playlist/%d/' % playlist.id)
 
 
-def login(request):
-    print('here0')
-    return render(request, "login.html", context={'message':"MMM"})
-
-
-def handlelogin(request):
-    print('here1')
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        return HttpResponseRedirect(reverse('playlist:edit-playlist'))
-    else:
-        return render(request, 'login.html', context={'message': "Invalid username / password combination"})
-
-
-
 @login_required(login_url = 'playlist:login')
 def edit_playlist(request, playlist_id):
     """ Serve the page for editing a single playlist.
     """
-    try:
-        playlist = Playlist.objects.get(pk=playlist_id)
-    except Playlist.DoesNotExist:
-        return error("No such playlist")
 
+    playlist = get_object_or_404(Playlist, pk=playlist_id)
 
     showdetails = {
         'title'     : playlist.show.name,
