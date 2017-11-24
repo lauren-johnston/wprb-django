@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block styles %}
+	{{ block.super }}
+	<link rel="stylesheet" href="{% static 'playlist/css/login.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<div class="box-content box-centered">
+	<h3>Please log in broh!</h3>
+
+	<form method="post">
+		{% csrf_token %}
+
+		{{form.as_p}}
+		<div class="center">
+			<button type="submit">Login</button>
+		</div>
+	</form>
+</div>
+{% endblock content %}

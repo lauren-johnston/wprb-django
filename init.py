@@ -44,13 +44,11 @@ def main():
 	# execute_from_command_line('flush')
 
 	print('Adding user jerrysmith')
-	test_user = User(
-		username='jerrysmith', 
-		password='password',
-		is_staff=True, 
-		is_superuser=True
+	test_user = User.objects.create_user(
+		username='jerrysmith',
+		password='plutoisaplanet',
+		email='jerrysmith@earthradio.com'
 	)
-	test_user.save()
 
 	print('Making dj account for jerrysmith: "DJ Jerry"')
 	test_dj = DJ(

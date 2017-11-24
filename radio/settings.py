@@ -124,5 +124,6 @@ PROJECT_ROOT = BASE_DIR = os.path.dirname(PROJECT_APP_PATH)
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, STATIC_URL.strip("/"))
-print(STATIC_ROOT)
 
+# The login page
+LOGIN_URL = '/playlist/login/'
