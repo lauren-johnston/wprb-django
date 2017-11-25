@@ -4,6 +4,10 @@ from django.shortcuts import render, get_object_or_404
 from .models import *
 from .common import *
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import ensure_csrf_cookie
+
 #@login_required
 def new_playlist(request):
     """ Create a new playlist object, and then redirect to the
@@ -17,15 +21,12 @@ def new_playlist(request):
 
     return redirect('/playlist/%d/' % playlist.id)
 
-#@login_required
+
+@login_required(login_url = 'playlist:login')
 def edit_playlist(request, playlist_id):
     """ Serve the page for editing a single playlist.
     """
-    try: 
-        playlist = Playlist.objects.get(pk=playlist_id)
-    except Playlist.DoesNotExist:
-        return error("No such playlist")
-
+    playlist = get_object_or_404(Playlist, pk=playlist_id)
 
     showdetails = {
         'title'     : playlist.show.name,
