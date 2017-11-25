@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% load filters %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'playlist/css/edit.css' %}" >
+{% endblock styles %}
+
+{% block content %}
+    <div id="react">
+        <!-- Contents get replaced by mounted React.Component -->
+        <i class="pending">Loading components...</i><br><br>
+    </div>
+
+    <script>
+        window.props = {{ props|json }};
+        window.react_mount = document.getElementById('react');
+    </script>
+
+    {# dyanamically determine the bundle to render #}
+    {% render_bundle bundle %}
+    
+{% endblock %}
