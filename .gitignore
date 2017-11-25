@@ -2,23 +2,32 @@
 # $GIT_DIR/info/exclude or the core.excludesFile configuration variable as
 # described in https://git-scm.com/docs/gitignore
 
+# Python stuff
 *.egg-info
 *.pot
 *.py[co]
 .tox/
 __pycache__
 MANIFEST
-dist/
+db.sqlite3
+*/migrations/*
+
+# Documentation
 docs/_build/
 docs/locale/
+
+# Javascript stuff
 node_modules/
+npm-debug.log
 tests/coverage_html/
 tests/.coverage
 build/
+dist/
 tests/report/
-db.sqlite3
+
+# Virtual env
 venv
 pyenv/
 
-*/migrations/*
+# OS
 *.DS_Store
