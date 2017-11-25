@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from .models import *
 from .common import *
@@ -41,6 +41,13 @@ def edit_playlist(request, playlist_id):
 		'title'	: spin.song.name,
 		'artist': [a.name for a in spin.song.artist.all()],
 		'album'	: spin.song.album.name,
+        'index' : spin.index,
 	} for spin in playlist.spin_set.all()]
 
-	return render(request, "edit.html", context={'spins': spins, 'show': showdetails})
+    context = {
+        'props' : {'spins': spins, 'show': showdetails},
+        'component' : 'entry.js',
+        'title' : 'Playlist Editor'
+    }
+
+	return render(request, "edit.html", context=context)
