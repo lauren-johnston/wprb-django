@@ -33,3 +33,5 @@ pyenv/
 *.DS_Store
 webpack-stats.json
 
+assets/bundles
+
