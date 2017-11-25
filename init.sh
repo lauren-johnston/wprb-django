@@ -9,4 +9,6 @@ python manage.py migrate;
 # Start it over
 echo ""
 echo "Initializing new database"
-python init.py
+python init.py;
+
+npm run build

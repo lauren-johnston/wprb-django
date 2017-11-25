@@ -26,7 +26,6 @@ def new_playlist(request):
 def edit_playlist(request, playlist_id):
     """ Serve the page for editing a single playlist.
     """
-
     playlist = get_object_or_404(Playlist, pk=playlist_id)
 
     showdetails = {
@@ -43,7 +42,14 @@ def edit_playlist(request, playlist_id):
         'title' : spin.song.name,
         'artist': [a.name for a in spin.song.artist.all()],
         'album' : spin.song.album.name,
+        'index' : spin.index,
     } for spin in playlist.spin_set.all()]
 
-    return render(request, "edit.html", context={'spins': spins, 'show': showdetails})
+    context = {
+        'props' : {'spins': spins, 'show': showdetails},
+        'bundle': 'playlist',
+        'styles': ['edit'],
+        'title' : 'Playlist Editor'
+    }
 
+    return render(request, "component.html", context=context)
