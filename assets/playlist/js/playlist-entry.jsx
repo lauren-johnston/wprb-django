@@ -177,21 +177,32 @@ class PlaylistEntryFormContainer extends React.Component {
 		super(props)
 	}
 
+	getCsrfToken() {
+
+	}
+	
 	makeFormData() {
 		var data = new FormData();
-		data.append('title', document.getElementById('entry-add-title').val());
-		data.append('artist', document.getElementById('entry-add-artist').val());
-		data.append('album', document.getElementById('entry-add-album').val());
-		data.append('label', document.getElementById('entry-add-label').val());
+		data.append('title', document.getElementById('entry-add-title').value);
+		data.append('artist', document.getElementById('entry-add-artist').value);
+		data.append('album', document.getElementById('entry-add-album').value);
+		data.append('label', document.getElementById('entry-add-label').value);
 		return data;
+	}
+
+	makeHeaders() {
+		headers = new Headers();
+		csrftoken = this.getCsrfToken()
+		headers.append("X-CSRFToken", csrftoken);
+		return headers;
 	}
 
 	postForm(e) {
 		e.preventDefault();
 
-		fetch('entry/add', {
+		fetch('entry/add/', {
 			method: "POST",
-			headers: new Headers(),
+			headers: this.makeHeaders(),
 			body: this.makeFormData(),
 			mode: 'cors',
 			cache: 'default'
@@ -206,7 +217,7 @@ class PlaylistEntryFormContainer extends React.Component {
 		return (
 			<PlaylistEntryForm 
 				index={this.props.index}
-				addEntry={this.postForm.bind(this)}}/>
+				addEntry={this.postForm.bind(this)}/>
 			);
 	}
 }
@@ -240,7 +251,7 @@ class PlaylistEntryForm extends React.Component {
 						<input id="entry-add-label" type="text" name="label" placeholder="record label" />
 					</div>
 
-					<div onClick={this.props.submit} className="playlist-plus clickable" id="add-entry-button">
+					<div onClick={this.props.addEntry} className="playlist-plus clickable" id="add-entry-button">
 					</div>
 				</div>
 			</form>
