@@ -91,8 +91,8 @@ class PlaylistTable extends React.Component {
 			);
 	}
 
-	addSpin() {
-
+	addSpin(jsonData) {
+		console.log(jsonData);
 	}
 
 	render() {
@@ -100,9 +100,9 @@ class PlaylistTable extends React.Component {
 			<div id="playlist" className="col-content">
 				<PlaylistTableHeader />
 				{this.renderSpins()}
-				<PlaylistEntryForm 
+				<PlaylistEntryFormContainer
 				    index={this.props.spins.length + 1}
-				    submit={this.addSpin.bind(this)}/>
+				   	addSpin={this.addSpin.bind(this)}/>
 			</div>
 		);
 	}
@@ -169,6 +169,45 @@ class PlaylistEntry extends React.Component {
 				<div className="playlist-comment"> </div>
 			</div>
 		);
+	}
+}
+
+class PlaylistEntryFormContainer extends React.Component {
+	constructor(props) {
+		super(props)
+	}
+
+	makeFormData() {
+		var data = new FormData();
+		data.append('title', document.getElementById('entry-add-title').val());
+		data.append('artist', document.getElementById('entry-add-artist').val());
+		data.append('album', document.getElementById('entry-add-album').val());
+		data.append('label', document.getElementById('entry-add-label').val());
+		return data;
+	}
+
+	postForm(e) {
+		e.preventDefault();
+
+		fetch('entry/add', {
+			method: "POST",
+			headers: new Headers(),
+			body: this.makeFormData(),
+			mode: 'cors',
+			cache: 'default'
+		}).then(response => {
+			return response.json();
+		}).then(data => {
+			this.props.addSpin(data);
+		});
+	}
+
+	render() {
+		return (
+			<PlaylistEntryForm 
+				index={this.props.index}
+				addEntry={this.postForm.bind(this)}}/>
+			);
 	}
 }
 
