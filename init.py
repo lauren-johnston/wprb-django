@@ -87,6 +87,7 @@ def main():
 		_, _, song = get_or_create(s['artist'], s['album'], s['title'])
 		print('\tAdding %s by %s' % (s['title'], s['artist']))
 		spin = Spin(song=song, playlist=test_playlist, index=i+1)
+
 		spin.save()
 
 if __name__ == '__main__':
