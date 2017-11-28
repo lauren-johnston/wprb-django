@@ -31,8 +31,6 @@ function csrfSafeMethod(method) {
    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
-console.log('common included');
-
 module.exports = {
     getCookie,
     csrfSafeMethod
