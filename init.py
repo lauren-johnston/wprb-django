@@ -24,6 +24,21 @@ TEST_SONGS = [
 		'album' : 'SHOW ME WHAT U GOT'
 	},
 	{
+		'title' : 'O Great Head',
+		'artist': 'Rick Sanchez',
+		'album' : 'SHOW ME WHAT U GOT'
+	},
+	{
+		'title' : 'Take Off Your Pants',
+		'artist': 'Rick Sanchez',
+		'album' : 'SHOW ME WHAT U GOT'
+	},
+	{
+		'title' : 'Abradolf',
+		'artist': 'Rick Sanchez',
+		'album' : 'Riggity Riggity Rekt'
+	},
+	{
 		'title' : 'The Rick Dance',
 		'artist': 'Rick Sanchez',
 		'album' : 'Riggity Riggity Rekt'
@@ -33,6 +48,21 @@ TEST_SONGS = [
 		'artist': 'Morty Smith',
 		'album' : 'Hanging with Krombopulous Michael'
 	},
+	{
+		'title' : 'Dear Jessica',
+		'artist': 'Morty Smith',
+		'album' : 'Hanging with Krombopulous Michael'
+	},
+	{
+		'title' : 'Oh Jeez Man',
+		'artist': 'Morty Smith',
+		'album' : 'Hanging with Krombopulous Michael'
+	},
+	{
+		'title' : 'Where\'s Perry?',
+		'artist': 'Phineas & Pherb',
+		'album' : 'Is This A Crossover Episode?'
+	}
 ]
 
 def main():
