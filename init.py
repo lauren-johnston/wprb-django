@@ -47,7 +47,9 @@ def main():
 	test_user = User.objects.create_user(
 		username='jerrysmith',
 		password='plutoisaplanet',
-		email='jerrysmith@earthradio.com'
+		email='jerrysmith@earthradio.com',
+		is_superuser=True,
+		is_staff=True
 	)
 
 	print('Making dj account for jerrysmith: "DJ Jerry"')
@@ -84,7 +86,7 @@ def main():
 		# Create artist if they don't exist
 		_, _, song = get_or_create(s['artist'], s['album'], s['title'])
 		print('\tAdding %s by %s' % (s['title'], s['artist']))
-		spin = Spin(song=song, playlist=test_playlist, index=i)
+		spin = Spin(song=song, playlist=test_playlist, index=i+1)
 		spin.save()
 
 if __name__ == '__main__':
