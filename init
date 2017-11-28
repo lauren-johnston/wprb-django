@@ -10,5 +10,3 @@ python manage.py migrate;
 echo ""
 echo "Initializing new database"
 python init.py;
-
-npm run build

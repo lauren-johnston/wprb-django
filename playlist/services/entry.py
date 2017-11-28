@@ -7,10 +7,11 @@ from django.http import QueryDict, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ..models import Spin, Playlist
-from ..common import invalid_array_index, error, success
+from ..common import invalid_array_index, error, success, spinDict
 from music.models import Song, Artist, Album, Label, Genre, Subgenre
 from music.common import get_or_create
 
+import json
 
 #@login_required
 @csrf_exempt 
@@ -57,10 +58,7 @@ def add(request, playlist_id):
 	# Hacky, forgive me
 	response = {
 		"success": True,
-		"index": new_spin.index,
-		'title':song_title,
-		'artist':[artist_name,],
-		'album':album_name
+		"spin": spinDict(new_spin)
 	}
 	if label_name is not None:
 		response['label'] = label_name
@@ -95,7 +93,7 @@ def move(request, playlist_id):
 		specified by 'index'. 
 	"""
 	try:
-		args         = QueryDict(request.body)
+		args         = json.loads(request.body)
 		spins        = Spin.objects.filter(playlist__pk=playlist_id)
 		target_spin  = spins.get(pk=args['spinId'])
 		old_index    = target_spin.index
@@ -137,16 +135,19 @@ def delete(request, playlist_id):
 		playlist specified in the URI. 
 	"""
 	try:
-		args         = QueryDict(request.body)
+		args         = json.loads(request.body)
 		spins        = Spin.objects.filter(playlist__pk=playlist_id)
 		target_spin  = spins.get(index=args['index'])
-		index        = spin.index
+		index        = target_spin.index
 	except KeyError:
 		return error('Invalid request')
 	except Spin.DoesNotExist:
 		return error('No matching spin')
 
 	if invalid_array_index(spins, index):
+		print("Length is %d" %len(spins))
+		print("Index is %d" %index)
+		print(spins)
 		return error('Invalid index')
 
 	# Delete the spin from the database and update other playlist indices
@@ -157,37 +158,45 @@ def delete(request, playlist_id):
 		spin.save()
 
 	# Update the playcounts
-	song = spin.song
-	album = spin.song.album
-	artist = spin.song.artist
-
-	song.playcount -= 1
-	album.playcount -= 1
-	artist.playcount -= 1
-
-	song.save()
-	album.save()
-	artist.save()
 
 	return success()
 
 #@login_required
+@csrf_exempt
 @require_http_methods(["PUT"])
 def update(request, playlist_id):
-	""" Updates the specified entry with the information provided. 
+	""" Updates the specified entry with provided basic spin dict 
 	"""
 	try: 
-		args         = QueryDict(request.body)
+		args         = json.loads(request.body)
+		playlist     = Playlist.objects.get(pk=playlist_id)
 		spins        = Spin.objects.filter(playlist__pk=playlist_id)
-		target_spin  = spins.get(pk=args['spinId'])
+		target_spin  = spins.get(pk=args['index'])
 	except KeyError:
 		return error('Invalid request')
 	except Spin.DoesNotExist:
 		return error('No matching spin')
+	except Playlist.DoesNotExist:
+		return error('No matching playlist')
 
-	# TODO
+	try:
+		artist, album, song = get_or_create(args['artist'], args['album'], args['title'])
+	except KeyError:
+		return error('Invalid request')
 
-	return error('Not implemented')
+	new_spin = Spin(song=song, index=target_spin.index, playlist=playlist)
+
+	target_spin.delete()
+	new_spin.save()
+
+	return JsonResponse({
+		'success': True,
+		'spin': {
+			'title': args['title'],
+			'album': args['album'],
+			'artist': args['artist']
+		}
+	})
 
 @require_http_methods(["GET"])
 def complete(request, playlist_id):
