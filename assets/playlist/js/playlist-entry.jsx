@@ -82,23 +82,31 @@ class PlaylistTable extends React.Component {
 		this.state = { spins:this.props.spins };
 
 		this.addSpin = this.addSpin.bind(this);
+		this.removeSpin = this.removeSpin.bind(this);
 	}
 
 	renderSpins() {
-		return this.state.spins.map((spin) => 
-			<PlaylistEntry
+		return this.state.spins.map((spin, index) => 
+			<PlaylistEntryContainer
 				key={spin.id}
-				index={spin.index}
+				index={index}
 				title={spin.title}
 				artists={spin.artist}
 				album={spin.album}
-				label={spin.label}/>
+				label={spin.label}
+				removeSpin={this.removeSpin}/>
 			);
 	}
 
 	addSpin(newSpin) {
 		let updatedSpins = this.state.spins.slice();
 		updatedSpins.push(newSpin);
+		this.setState({spins: updatedSpins});
+	}
+
+	removeSpin(spinIndex) {
+		let updatedSpins = this.state.spins.slice();
+		updatedSpins.pop(spinIndex);
 		this.setState({spins: updatedSpins});
 	}
 
@@ -142,17 +150,68 @@ PlaylistTableHeader.defaultProps = {
 	label: 	'record label'
 }
 
+class PlaylistEntryContainer extends React.Component {
+	constructor(props) {
+		super(props);
+		this.deleteEntry = this.deleteEntry.bind(this);
+	}
+
+	deleteEntry() {
+		console.log("deleting!");
+		// Remove spin from the server
+		fetch('entry/delete/', {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "application/json"
+			},
+			body: JSON.stringify({index: this.props.index}),
+			mode: 'cors',
+			cache: 'default'
+		}).then(response => {
+			return response.json();
+		}).then(data => {
+			this.props.removeSpin(this.props.index);
+		});
+	}
+
+	render() {
+		return (
+			<PlaylistEntry
+				index={this.props.index}
+				title={this.props.title}
+				artists={this.props.artists}
+				album={this.props.album}
+				label={this.props.label} 
+				deleteEntry={this.deleteEntry}
+			/>
+			);
+	}
+}
+
+
 class PlaylistEntry extends React.Component {
 	constructor(props) {
 		super(props)
+		this.state = {
+			title:  this.props.title,
+			artists: this.props.artists,
+			album:  this.props.album,
+			label:  this.props.label,
+			index: this.props.index
+		};
+
+		this.delete = this.delete.bind(this);
 	}
 
 	renderArtists() {
-		return this.props.artists.map( (artistName) => 
+		return this.state.artists.map( (artistName) => 
 			// Todo: replace this with a component with support for clicking and editing artists
 			<span key={artistName} className="playlist-artist-name tagged-item">{artistName}</span> 
 		);
 	}
+
+	delete() { this.props.deleteEntry(); }
 
 	render() {
 		return (
@@ -173,7 +232,8 @@ class PlaylistEntry extends React.Component {
 				<div className="playlist-text-cell playlist-recordlabel">
 					{this.props.label}
 				</div>
-				<div className="playlist-comment"> </div>
+				<div className="playlist-minus clickable" onClick={this.delete}> </div>
+				<div className="playlist-comment clickable"> </div>
 			</div>
 		);
 	}
