@@ -33,6 +33,11 @@ function csrfSafeMethod(method) {
 
 console.log('common included');
 
+module.exports = {
+    getCookie,
+    csrfSafeMethod
+}
+
 //----------------------------------------------------------------------
 
 // function invalidFormException(message) {

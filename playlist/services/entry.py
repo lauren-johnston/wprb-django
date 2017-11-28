@@ -4,13 +4,16 @@
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.http import QueryDict, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from ..models import Spin, Playlist
 from ..common import invalid_array_index, error, success
 from music.models import Song, Artist, Album, Label, Genre, Subgenre
 from music.common import get_or_create
 
+
 #@login_required
+@csrf_exempt 
 @require_http_methods(["POST"])
 def add(request, playlist_id):
 	""" Adds the song specified by the provided title, artist,
@@ -56,7 +59,7 @@ def add(request, playlist_id):
 		"success": True,
 		"index": new_spin.index,
 		'title':song_title,
-		'artist':artist_name,
+		'artist':[artist_name,],
 		'album':album_name
 	}
 	if label_name is not None:
