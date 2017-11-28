@@ -130,6 +130,7 @@ def move(request, playlist_id):
 	return success()
 
 #@login_required
+@csrf_exempt 
 @require_http_methods(["DELETE"])
 def delete(request, playlist_id):
 	""" Deletes the spin specified by the given pk from the 
@@ -138,7 +139,7 @@ def delete(request, playlist_id):
 	try:
 		args         = QueryDict(request.body)
 		spins        = Spin.objects.filter(playlist__pk=playlist_id)
-		target_spin  = spins.get(pk=args['spinId'])
+		target_spin  = spins.get(index=args['index'])
 		index        = spin.index
 	except KeyError:
 		return error('Invalid request')
