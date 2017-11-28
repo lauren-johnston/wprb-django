@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+const common = require('./common.js');
+
 class Playlist extends React.Component {
 	constructor(props) {
 		super(props)
@@ -76,11 +78,14 @@ class PlaylistDetails extends React.Component {
 
 class PlaylistTable extends React.Component {
 	constructor(props) {
-		super(props)
+		super(props);
+		this.state = { spins:this.props.spins };
+
+		this.addSpin = this.addSpin.bind(this);
 	}
 
 	renderSpins() {
-		return this.props.spins.map((spin) => 
+		return this.state.spins.map((spin) => 
 			<PlaylistEntry
 				key={spin.id}
 				index={spin.index}
@@ -91,8 +96,10 @@ class PlaylistTable extends React.Component {
 			);
 	}
 
-	addSpin() {
-
+	addSpin(newSpin) {
+		let updatedSpins = this.state.spins.slice();
+		updatedSpins.push(newSpin);
+		this.setState({spins: updatedSpins});
 	}
 
 	render() {
@@ -100,9 +107,9 @@ class PlaylistTable extends React.Component {
 			<div id="playlist" className="col-content">
 				<PlaylistTableHeader />
 				{this.renderSpins()}
-				<PlaylistEntryForm 
+				<PlaylistEntryFormContainer
 				    index={this.props.spins.length + 1}
-				    submit={this.addSpin.bind(this)}/>
+				   	addSpin={this.addSpin}/>
 			</div>
 		);
 	}
@@ -143,7 +150,7 @@ class PlaylistEntry extends React.Component {
 	renderArtists() {
 		return this.props.artists.map( (artistName) => 
 			// Todo: replace this with a component with support for clicking and editing artists
-			<span className="playlist-artist-name tagged-item">{artistName}</span> 
+			<span key={artistName} className="playlist-artist-name tagged-item">{artistName}</span> 
 		);
 	}
 
@@ -172,9 +179,82 @@ class PlaylistEntry extends React.Component {
 	}
 }
 
+class PlaylistEntryFormContainer extends React.Component {
+	constructor(props) {
+		super(props)
+	}
+
+	makeHeaders() {
+		let headers = new Headers();
+		let csrftoken = common.getCookie('csrftoken')
+		headers.append("X-CSRFToken", csrftoken);
+		console.log(headers);
+		console.log(csrftoken);
+		return headers;
+	}
+
+	postForm() {
+		let headers = {
+				"X-CSRFToken": common.getCookie('csrftoken'),
+				"Accept": "application/json",
+				"Content-Type": "multipart/form-data"
+		};
+		console.log(headers);
+
+		// Post new spin to the server
+		fetch('entry/add/', {
+			method: "POST",
+			//headers: headers,
+			body: new FormData(document.getElementById("add-form")),
+			mode: 'cors',
+			cache: 'default'
+		}).then(response => {
+			return response.json();
+		}).then(data => {
+			this.props.addSpin(data);
+		});
+	}
+
+	render() {
+		return (
+			<PlaylistEntryForm 
+				index={this.props.index}
+				postForm={this.postForm.bind(this)}/>
+			);
+	}
+}
+
 class PlaylistEntryForm extends React.Component {
 	constructor(props) {
 		super(props)
+		this.state = {
+			title:  '',
+			artist: '',
+			album:  '',
+			label:  '',
+			index: props.index
+		}
+		this.submit = this.submit.bind(this);
+		this.handleChange = this.handleChange.bind(this);
+	}
+
+	handleChange(e) {
+		let newState = {};
+		newState[e.target.name] = e.target.value;
+		this.setState(newState);
+	}
+
+	submit() {
+		this.props.postForm();
+		this.setState((state) => {
+			return {
+				title:  '',
+				artist: '',
+				album:  '',
+				label:  '',
+				index: state.index + 1
+			};
+		});
 	}
 
 	render() {
@@ -184,24 +264,48 @@ class PlaylistEntryForm extends React.Component {
 					<div className="playlist-movetab"> 
 					</div>
 					<div className="playlist-numbering" id="new-entry-number">
-						{this.props.index}
+						{this.state.index}
 					</div>
 					<div className="playlist-text-cell playlist-title">
-						<input id="entry-add-title" type="text" name="title" placeholder="track title" /> 
+						<input 
+							id="entry-add-title" 
+							type="text" 
+							name="title" 
+							value={this.state.title}
+							placeholder="track title" 
+							onChange={this.handleChange} /> 
 					</div>
 					<div className="playlist-text-cell playlist-artist">
 						<span className="playlist-artist-name tagged-item">
-							<input id="entry-add-artist" type="text" name="artist" placeholder="artist" /> 
+							<input 
+								id="entry-add-artist" 
+								type="text" 
+								name="artist" 
+								value={this.state.artist}
+								placeholder="artist" 
+								onChange={this.handleChange}/> 
 						</span>
 					</div>
 					<div className="playlist-text-cell playlist-album">
-						<input id="entry-add-album" type="text" name="album" placeholder="album" /> 
+						<input 
+							id="entry-add-album" 
+							type="text" 
+							name="album" 
+							value={this.state.album}
+							placeholder="album" 
+							onChange={this.handleChange}/> 
 					</div>
 					<div className="playlist-text-cell playlist-recordlabel">
-						<input id="entry-add-label" type="text" name="label" placeholder="record label" />
+						<input 
+							id="entry-add-label" 
+							type="text" 
+							name="label" 
+							value={this.state.label}
+							placeholder="record label" 
+							onChange={this.handleChange}/>
 					</div>
 
-					<div onClick={this.props.submit} className="playlist-plus clickable" id="add-entry-button">
+					<div onClick={this.submit} className="playlist-plus clickable" id="add-entry-button">
 					</div>
 				</div>
 			</form>

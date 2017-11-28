@@ -7,6 +7,8 @@ DJs, who play the music at particular times.
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
+
 from datetime import date
 
 # Integer/string tuple representation of times of day
@@ -45,7 +47,7 @@ class Spin(models.Model):
     playlist = models.ForeignKey('Playlist')
     # Which number in the playlist is this?
     # unclear if this is the best approach, maybe a linked-list instead?
-    index = models.IntegerField()
+    index = models.IntegerField(validators=[MinValueValidator(1)])
 
     # how did you spin it? sadly, "format" is a python reserved keyword...
     medium = models.CharField(max_length=1, blank=True, choices=FORMATS)
