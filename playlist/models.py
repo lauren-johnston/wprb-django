@@ -61,7 +61,7 @@ class Spin(models.Model):
 class Playlist(models.Model):
     """ An ordered list of spins that happened at a particular time, by at least one DJ.
     """
-    show = models.OneToOneField('Show')
+    show = models.ForeignKey('Show')
     desc = models.CharField(max_length=250)
     subtitle = models.CharField(max_length=250, blank=True, null=True)
 
