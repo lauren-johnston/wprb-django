@@ -58,7 +58,7 @@ def add(request, playlist_id):
 	# Hacky, forgive me
 	response = {
 		"success": True,
-		"spin": spinDict(new_spin)
+		"spin": spin_to_dict(new_spin)
 	}
 	if label_name is not None:
 		response['spin']['label'] = label_name
@@ -201,11 +201,11 @@ def update(request, playlist_id):
 	print("Received this dict on update...")
 	print(args)
 	print("Returning this dict on update...")
-	print(spinDict(new_spin))
+	print(spin_to_dict(new_spin))
 
 	return JsonResponse({
 		'success': True,
-		'spin': spinDict(new_spin)
+		'spin': spin_to_dict(new_spin)
 	})
 
 @require_http_methods(["GET"])
