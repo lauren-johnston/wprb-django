@@ -79,45 +79,79 @@ class PlaylistDetails extends React.Component {
 class PlaylistTable extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { spins:this.props.spins };
+		this.state = {spins:this.props.spins};
 
-		this.addSpin = this.addSpin.bind(this);
-		this.removeSpin = this.removeSpin.bind(this);
+		this.renderSpins        = this.renderSpins.bind(this);
+		this.addSpinToView      = this.addSpinToView.bind(this);
+		this.removeSpinFromView = this.removeSpinFromView.bind(this);
+		this.updateSpinInView   = this.updateSpinInView.bind(this);
 	}
 
+
 	renderSpins() {
-		return this.state.spins.map((spin, index) => 
+		let spinList = this.state.spins.sort((spina, spinb) => {
+			return spina.index - spinb.index;
+		}).map((spin, index) => 
 			<PlaylistEntryContainer
 				key={spin.id}
 				index={index + 1}
 				title={spin.title}
-				artists={spin.artist}
+				artist={spin.artist}
 				album={spin.album}
-				label={spin.label}
-				removeSpin={this.removeSpin}/>
-			);
+				label={spin.label||''}
+				removeSpinFromView={this.removeSpinFromView}
+				updateSpinInView={this.updateSpinInView}/>
+		);
+
+		console.log("This was spinlist on render spins...");
+		console.log(spinList);
+
+		return spinList;
 	}
 
-	addSpin(newSpin) {
+	updateSpinInView(spin) {
 		let updatedSpins = this.state.spins.slice();
-		updatedSpins.push(newSpin);
-		this.setState({spins: updatedSpins});
+		console.log("Placing new spin at index " + spin.index)
+		// Spin indices are 1 oriented
+		updatedSpins[spin.index - 1] = spin;
+		this.setState({ spins: updatedSpins });
 	}
 
-	removeSpin(spinIndex) {
+	addSpinToView(spin) {
 		let updatedSpins = this.state.spins.slice();
-		updatedSpins.pop(spinIndex);
-		this.setState({spins: updatedSpins});
+		updatedSpins.splice(spin.index - 1, 0, spin);
+		this.setState({ spins: updatedSpins });
+	}
+
+	removeSpinFromView(index) {
+		let updatedSpins = this.state.spins.slice();
+		updatedSpins.splice(index-1, 1);
+		// console.log("old spins");
+		// console.log(this.state.spins);
+		// console.log("shallow copy");
+		// console.log(updatedSpins);
+		// console.log('index');
+		// console.log(index);
+		// // Spin indices are 1-oriented
+		// updatedSpins.pop((index - 1));
+		// console.log("after popping index - 1");
+		// console.log(updatedSpins);
+		this.setState({ spins: updatedSpins} );
 	}
 
 	render() {
+		console.log("rerendering!");
+		console.log("Current spins");
+		console.log(this.state.spins);
+		let spinList = this.renderSpins();
 		return (
 			<div id="playlist" className="col-content">
 				<PlaylistTableHeader />
-				{this.renderSpins()}
+				{spinList}
 				<PlaylistEntryFormContainer
-				    index={this.props.spins.length + 1}
-				   	addSpin={this.addSpin}/>
+					key={spinList.length + 1}
+					index={spinList.length + 1}
+					addSpinToView={this.addSpinToView} />
 			</div>
 		);
 	}
@@ -153,11 +187,39 @@ PlaylistTableHeader.defaultProps = {
 class PlaylistEntryContainer extends React.Component {
 	constructor(props) {
 		super(props);
-		this.deleteEntry = this.deleteEntry.bind(this);
+
+		this.setEntry = this.setEntry.bind(this);
+		this.setInput = this.setInput.bind(this);
+
+		this.deleteSpinFromDB = this.deleteSpinFromDB.bind(this);
+		this.updateSpinInDB   = this.updateSpinInDB.bind(this);
+
+		this.state = {
+			entry: undefined,
+			inputs: {}
+		}
 	}
 
-	deleteEntry() {
-		console.log("deleting!");
+	setEntry(c) { this.setState({entry: c}) }
+
+	setInput(c) {
+		let isMount = (c==null? false:true);
+		if(isMount) {
+			this.setState((state) => {
+				let newInputs = state.inputs;
+				newInputs[c.state.name] = c;
+				return {
+					inputs:newInputs
+				}
+			});
+		}
+	}
+
+	deleteSpinFromDB() {
+		// Close all inputs (for a small bug)
+		for(let inputKey of Object.keys(this.state.inputs)) 
+			this.state.inputs[inputKey].setState({editing:false})
+		
 		// Remove spin from the server
 		fetch('entry/delete/', {
 			method: "DELETE",
@@ -171,7 +233,46 @@ class PlaylistEntryContainer extends React.Component {
 		}).then(response => {
 			return response.json();
 		}).then(data => {
-			this.props.removeSpin(this.props.index);
+			if(!data.success) {
+				console.log("Ajax Error:");
+				console.log(data);
+				return;
+			}
+			this.props.removeSpinFromView(this.props.index);
+		});
+	}
+
+	updateSpinInDB() {
+		// Build body of request
+		let body = { index: this.props.index }
+		for(let inputKey of Object.keys(this.state.inputs))
+			body[inputKey] = this.state.inputs[inputKey].state.value;
+
+		console.log("Here's our state");
+		console.log(this.state);
+		console.log("Here's the update request body..");
+		console.log(body);
+
+		// Update spin in the server
+		fetch('entry/update/', {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "application/json"
+			},
+			body: JSON.stringify(body),
+			mode: 'cors',
+			cache: 'default'
+		}).then(response => {
+			return response.json();
+		}).then(data => {
+			if(!data.success) {
+				console.log("Ajax Error:");
+				console.log(data);
+				return;
+			}
+			console.log(data);
+			this.props.updateSpinInView(data.spin);
 		});
 	}
 
@@ -180,10 +281,13 @@ class PlaylistEntryContainer extends React.Component {
 			<PlaylistEntry
 				index={this.props.index}
 				title={this.props.title}
-				artists={this.props.artists}
+				artist={this.props.artist}
 				album={this.props.album}
 				label={this.props.label} 
-				deleteEntry={this.deleteEntry}
+				delete={this.deleteSpinFromDB}
+				update={this.updateSpinInDB}
+				ref={this.entrySet}
+				setInput={this.setInput}
 			/>
 			);
 	}
@@ -193,46 +297,49 @@ class PlaylistEntryContainer extends React.Component {
 class PlaylistEntry extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = {
-			title:  this.props.title,
-			artists: this.props.artists,
-			album:  this.props.album,
-			label:  this.props.label,
-			index: this.props.index
-		};
-
-		this.delete = this.delete.bind(this);
 	}
 
 	renderArtists() {
-		return this.state.artists.map( (artistName) => 
+		return this.props.artists.map( (artistName) => 
 			// Todo: replace this with a component with support for clicking and editing artists
 			<span key={artistName} className="playlist-artist-name tagged-item">{artistName}</span> 
 		);
 	}
 
-	delete() { this.props.deleteEntry(); }
-
 	render() {
 		return (
 			<div className="spin">
 				<div className="playlist-movetab"> </div>
-				<div className="playlist-numbering">
-					{this.props.index}
-				</div>
-				<div className="playlist-text-cell playlist-title">
-					{this.props.title}
-				</div>
-				<div className="playlist-text-cell playlist-artist">
-					{this.renderArtists()}
-				</div>
-				<div className="playlist-text-cell playlist-album">
-					{this.props.album}
-				</div>
-				<div className="playlist-text-cell playlist-recordlabel">
-					{this.props.label}
-				</div>
-				<div className="playlist-minus clickable" onClick={this.delete}> </div>
+				<div className="playlist-numbering"> {this.props.index} </div>
+				<PlaylistTextInput 
+					ref={this.props.setInput} 
+					value={this.props.title}     
+					name='title' 
+					inDB={true} 
+					update={this.props.update}
+					delete={this.props.delete}/>
+				<PlaylistTextInput 
+					ref={this.props.setInput} 
+					value={this.props.artist}     
+					name='artist'
+					inDB={true} 
+					update={this.props.update}
+					delete={this.props.delete}/>
+				<PlaylistTextInput 
+					ref={this.props.setInput} 
+					value={this.props.album}      
+					name='album' 
+					inDB={true} 
+					update={this.props.update}
+					delete={this.props.delete}/>
+				<PlaylistTextInput 
+					ref={this.props.setInput} 
+					value={this.props.label}      
+					name='label' 
+					inDB={true} 
+					update={this.props.update}
+					delete={this.props.delete}/>
+				<div className="playlist-minus clickable" onClick={this.props.delete}> </div>
 				<div className="playlist-comment clickable"> </div>
 			</div>
 		);
@@ -242,36 +349,37 @@ class PlaylistEntry extends React.Component {
 class PlaylistEntryFormContainer extends React.Component {
 	constructor(props) {
 		super(props)
+		this.addSpinToDB = this.addSpinToDB.bind(this);
 	}
 
 	makeHeaders() {
 		let headers = new Headers();
 		let csrftoken = common.getCookie('csrftoken')
 		headers.append("X-CSRFToken", csrftoken);
-		console.log(headers);
-		console.log(csrftoken);
 		return headers;
 	}
 
-	postForm() {
-		let headers = {
-				"X-CSRFToken": common.getCookie('csrftoken'),
-				"Accept": "application/json",
-				"Content-Type": "multipart/form-data"
-		};
-		console.log(headers);
-
+	addSpinToDB() {
 		// Post new spin to the server
 		fetch('entry/add/', {
 			method: "POST",
-			//headers: headers,
+			//headers: {
+			// 		"X-CSRFToken": common.getCookie('csrftoken'),
+			// 		"Accept": "application/json",
+			// 		"Content-Type": "multipart/form-data"
+			// }
 			body: new FormData(document.getElementById("add-form")),
 			mode: 'cors',
 			cache: 'default'
 		}).then(response => {
 			return response.json();
 		}).then(data => {
-			this.props.addSpin(data);
+			if(!data.success) {
+				console.log("Ajax Error:");
+				console.log(data);
+				return;
+			}
+			this.props.addSpinToView(data.spin);
 		});
 	}
 
@@ -279,7 +387,7 @@ class PlaylistEntryFormContainer extends React.Component {
 		return (
 			<PlaylistEntryForm 
 				index={this.props.index}
-				postForm={this.postForm.bind(this)}/>
+				addSpinToDB={this.addSpinToDB}/>
 			);
 	}
 }
@@ -288,88 +396,178 @@ class PlaylistEntryForm extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			title:  '',
-			artist: '',
-			album:  '',
-			label:  '',
-			index: props.index
+			index: props.index,
+			inputs: {}
 		}
+
 		this.submit = this.submit.bind(this);
-		this.handleChange = this.handleChange.bind(this);
+		this.saveInput = this.saveInput.bind(this);
+		this.clearInputs = this.clearInputs.bind(this);
+		this.titleFocus  = this.titleFocus.bind(this);
 	}
 
-	handleChange(e) {
-		let newState = {};
-		newState[e.target.name] = e.target.value;
-		this.setState(newState);
+	saveInput(input) {
+		let isMount = (input==null? false:true);
+		if(isMount) {
+			let newState = {inputs: this.state.inputs};
+			newState.inputs[input.state.name] = input;
+			this.setState(newState);
+		}
+	}
+
+	clearInputs() {
+		for(let inputKey of Object.keys(this.state.inputs)) {
+			this.state.inputs[inputKey].setState((state) => {
+				return {
+					value:''
+				}
+			});
+		}
+	}
+
+	titleFocus() {
+		console.log(this.state.inputs);
+		if('title' in Object.keys(this.state.inputs)) {
+			console.log("TItle is there..");
+			this.state.inputs['title'].focus();
+		}
 	}
 
 	submit() {
-		this.props.postForm();
+		this.props.addSpinToDB();
+		this.clearInputs();
 		this.setState((state) => {
 			return {
-				title:  '',
-				artist: '',
-				album:  '',
-				label:  '',
 				index: state.index + 1
-			};
+			}
 		});
+		this.titleFocus();
 	}
 
 	render() {
 		return (
 			<form className="entry-add-form" name='add-form' id="add-form">
-				<div className="playlist-item playlist-entry" id="new-entry">
-					<div className="playlist-movetab"> 
-					</div>
-					<div className="playlist-numbering" id="new-entry-number">
-						{this.state.index}
-					</div>
-					<div className="playlist-text-cell playlist-title">
-						<input 
-							id="entry-add-title" 
-							type="text" 
-							name="title" 
-							value={this.state.title}
-							placeholder="track title" 
-							onChange={this.handleChange} /> 
-					</div>
-					<div className="playlist-text-cell playlist-artist">
-						<span className="playlist-artist-name tagged-item">
-							<input 
-								id="entry-add-artist" 
-								type="text" 
-								name="artist" 
-								value={this.state.artist}
-								placeholder="artist" 
-								onChange={this.handleChange}/> 
-						</span>
-					</div>
-					<div className="playlist-text-cell playlist-album">
-						<input 
-							id="entry-add-album" 
-							type="text" 
-							name="album" 
-							value={this.state.album}
-							placeholder="album" 
-							onChange={this.handleChange}/> 
-					</div>
-					<div className="playlist-text-cell playlist-recordlabel">
-						<input 
-							id="entry-add-label" 
-							type="text" 
-							name="label" 
-							value={this.state.label}
-							placeholder="record label" 
-							onChange={this.handleChange}/>
-					</div>
-
+				<div className="spin" id="new-entry">
+					<div className="playlist-movetab"> </div>
+					<div className="playlist-numbering"> {this.state.index} </div>
+					<PlaylistTextInput 
+						ref={this.saveInput}
+						name="title"
+						placeholder="song title"
+						value=''
+						editing={true}
+						inDB={false}
+						submit={this.submit}
+					/>
+					<PlaylistTextInput
+					    ref={this.saveInput} 
+						name="artist"
+						placeholder="artist"
+						value=''
+						editing={true}
+						inDB={false}
+						submit={this.submit}
+					/>
+					<PlaylistTextInput 
+					    ref={this.saveInput}
+						name="album"
+						placeholder="album"
+						value=''
+						editing={true}
+						inDB={false}
+						submit={this.submit}
+					/>
+					<PlaylistTextInput 
+					    ref={this.saveInput}
+						name="label"
+						placeholder="album label"
+						value=''
+						editing={true}
+						inDB={false}
+						submit={this.submit}
+					/>
 					<div onClick={this.submit} className="playlist-plus clickable" id="add-entry-button">
 					</div>
 				</div>
 			</form>
 		);
+	}
+}
+
+class PlaylistTextInput extends React.Component {
+	constructor(props){
+		super(props);
+		this.state = {
+			value: this.props.value,
+			name:  this.props.name,
+			placeholder: this.props.placeholder,
+			editing: this.props.editing,
+			inDB: this.props.inDB,
+			update: this.props.update,
+			submit: this.props.submit,
+			delete: this.props.delete
+		}
+
+		this.handleKeyDown = this.handleKeyDown.bind(this);
+		this.toggleEditing = this.toggleEditing.bind(this);
+		this.updateValue  = this.updateValue.bind(this);
+	}
+
+	handleKeyDown(e) {
+		if(this.state.inDB) {
+			if(e.key == 'Enter') {
+				this.toggleEditing();
+				this.state.update();
+			}
+			else if (e.metaKey) {
+				if(e.key == "Backspace") {
+					this.toggleEditing();
+					this.state.delete();
+				}
+			}
+		}
+		else {
+			if(e.key == 'Enter')
+				this.state.submit();
+		}
+	}
+
+	updateValue(e) { this.setState({value:e.target.value}); }
+
+	toggleEditing() {
+		this.setState((state) => {
+			return {
+				editing: !state.editing
+			};
+		});
+	}
+
+	render() {
+		let onDblClick = null;
+		if(this.state.inDB) onDblClick = this.toggleEditing;
+
+		if(this.state.editing) {
+			return (
+				<div className="playlist-text-cell clickable" 
+					 onDoubleClick={onDblClick}>
+						<input 
+							type="text" 
+							name={this.state.name}
+							value={this.state.value}
+							placeholder={this.state.placeholder} 
+							onChange={this.updateValue}
+							onKeyDown={this.handleKeyDown}/>
+				</div>
+			)
+		}
+		else if(!this.state.editing) {
+			return (
+				<div className="playlist-text-cell clickable"
+					 onDoubleClick={onDblClick}>
+					{this.state.value}
+				</div>
+			);
+		}
 	}
 }
 

@@ -46,7 +46,7 @@ TEST_SONGS = [
 	{
 		'title' : 'Goodbye Moonman',
 		'artist': 'Morty Smith',
-		'album' : 'Hanging with Krombopulous Michael'
+		'album' : 'Hanging with Michael'
 	},
 	{
 		'title' : 'Dear Jessica',
