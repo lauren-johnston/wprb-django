@@ -25,9 +25,15 @@ urlpatterns = [
 	# Explore View
 	url(r'(?P<field>[a-zA-Z]+)/(?P<field_id>[0-9]+)/$', views.explore, name='explore'),
 
+	# New Playlist
+	url(r'^new/$', views.new_playlist, name='new-playlist'),
+
 	# Authentication
 	url(r'^login/$', auth_views.login, name='login'),
 	url(r'^logout/$', auth_views.logout, name='logout'),
+
+	# Landing Page
+	url(r'^$', views.landing),
 
 	# Intra-Playlist services
 	url(playlist_id + 'entry/add/$',      services.entry.add,      name='entry-add'),

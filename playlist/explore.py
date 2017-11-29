@@ -2,11 +2,7 @@ from django.shortcuts import render, get_object_or_404
 
 from music.models import *
 from .models import *
-
-def date_to_str(date):
-    """ Convert a date object to a string mm/dd/yy
-    """
-    return '%d/%d/%s' % (date.month, date.day, str(date.year)[-2:])
+from .util import date_to_str
 
 def plays(field, field_id, max=50):
     """ Return a list 
