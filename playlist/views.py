@@ -37,10 +37,12 @@ def edit_playlist(request, playlist_id):
         'desc'      : playlist.desc
     }
 
+
+    # Change artists back
     spins = [{
         'id'    : spin.id,
         'title' : spin.song.name,
-        'artist': [a.name for a in spin.song.artist.all()],
+        'artist': spin.song.artist.all()[0].name,
         'album' : spin.song.album.name,
         'index' : spin.index,
     } for spin in playlist.spin_set.all()]

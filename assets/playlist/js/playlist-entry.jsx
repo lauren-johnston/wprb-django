@@ -81,6 +81,7 @@ class PlaylistTable extends React.Component {
 		super(props);
 		this.state = {spins:this.props.spins};
 
+		this.renderSpins        = this.renderSpins.bind(this);
 		this.addSpinToView      = this.addSpinToView.bind(this);
 		this.removeSpinFromView = this.removeSpinFromView.bind(this);
 		this.updateSpinInView   = this.updateSpinInView.bind(this);
@@ -88,46 +89,68 @@ class PlaylistTable extends React.Component {
 
 
 	renderSpins() {
-		return this.state.spins.map((spin, index) => 
-				<PlaylistEntryContainer
-					key={spin.id}
-					index={index + 1}
-					title={spin.title}
-					artist={spin.artist}
-					album={spin.album}
-					label={spin.label}
-					removeSpinFromView={this.removeSpinFromView}
-					updateSpinInView={this.updateSpinInView}/>
-			);
+		let spinList = this.state.spins.sort((spina, spinb) => {
+			return spina.index - spinb.index;
+		}).map((spin, index) => 
+			<PlaylistEntryContainer
+				key={spin.index}
+				index={spin.index}
+				title={spin.title}
+				artist={spin.artist}
+				album={spin.album}
+				label={spin.label||''}
+				removeSpinFromView={this.removeSpinFromView}
+				updateSpinInView={this.updateSpinInView}/>
+		);
+
+		console.log("This was spinlist on render spins...");
+		console.log(spinList);
+
+		return spinList;
 	}
 
 	updateSpinInView(spin) {
-		this.removeSpinFromView(spin.index);
-		this.addSpinToView(spin);
+		let updatedSpins = this.state.spins.slice();
+		console.log("Placing new spin at index " + spin.index)
+		// Spin indices are 1 oriented
+		updatedSpins[spin.index - 1] = spin;
+		this.setState({ spins: updatedSpins });
 	}
 
 	addSpinToView(spin) {
 		let updatedSpins = this.state.spins.slice();
-		updatedSpins.splice(spin.index, 0, spin);
+		updatedSpins.splice(spin.index - 1, 0, spin);
 		this.setState({ spins: updatedSpins });
 	}
 
 	removeSpinFromView(index) {
-		let updatedSpins = this.state.spins.slice();
-		updatedSpins.pop(index);
-		this.setState({ spins: updatedSpins });
+		let updatedSpins = this.state.spins
+		updatedSpins.splice(index-1, 1);
+		// console.log("old spins");
+		// console.log(this.state.spins);
+		// console.log("shallow copy");
+		// console.log(updatedSpins);
+		// console.log('index');
+		// console.log(index);
+		// // Spin indices are 1-oriented
+		// updatedSpins.pop((index - 1));
+		// console.log("after popping index - 1");
+		// console.log(updatedSpins);
+		this.setState({ spins: updatedSpins} );
 	}
 
 	render() {
 		console.log("rerendering!");
 		console.log("Current spins");
 		console.log(this.state.spins);
+		let spinList = this.renderSpins();
 		return (
 			<div id="playlist" className="col-content">
 				<PlaylistTableHeader />
-				{this.renderSpins()}
+				{spinList}
 				<PlaylistEntryFormContainer
-					index={this.state.spins.length+ 1}
+					key={spinList.length + 1}
+					index={spinList.length + 1}
 					addSpinToView={this.addSpinToView} />
 			</div>
 		);
@@ -165,24 +188,37 @@ class PlaylistEntryContainer extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.saveEntry = this.saveEntry.bind(this);
-		this.saveInput = this.saveInput.bind(this);
+		this.setEntry = this.setEntry.bind(this);
+		this.setInput = this.setInput.bind(this);
 
 		this.deleteSpinFromDB = this.deleteSpinFromDB.bind(this);
 		this.updateSpinInDB   = this.updateSpinInDB.bind(this);
 
-		this.state = {_entry: undefined}
+		this.state = {
+			entry: undefined,
+			inputs: {}
+		}
 	}
 
-	saveEntry(c) { this.setState({_entry: c}) }
-	saveInput(c) { 
-		let field = c.state.name;
-		let newState = {};
-		newState[field] = c;
-		this.setState(newState);
+	setEntry(c) { this.setState({entry: c}) }
+	setInput(c) {
+		let isMount = (c==null? false:true);
+		if(isMount) {
+			this.setState((state) => {
+				let newInputs = state.inputs;
+				newInputs[c.state.name] = c;
+				return {
+					inputs:newInputs
+				}
+			});
+		}
 	}
 
 	deleteSpinFromDB() {
+		// Close all inputs (for a small bug)
+		for(let inputKey of Object.keys(this.state.inputs)) 
+			this.state.inputs[inputKey].setState({editing:false})
+		
 		// Remove spin from the server
 		fetch('entry/delete/', {
 			method: "DELETE",
@@ -207,18 +243,14 @@ class PlaylistEntryContainer extends React.Component {
 
 	updateSpinInDB() {
 		// Build body of request
-		let updateRequestBody = { index: this.props.index }
-		for(let field of ['title', 'artist', 'album', 'label'])
-			if(field in this.state) {
-				console.log(field);
-				console.log(this.state[field]);
-				updateRequestBody[field] = this.state[field].state.value;
-			}
+		let body = { index: this.props.index }
+		for(let inputKey of Object.keys(this.state.inputs))
+			body[inputKey] = this.state.inputs[inputKey].state.value;
 
 		console.log("Here's our state");
 		console.log(this.state);
 		console.log("Here's the update request body..");
-		console.log(updateRequestBody);
+		console.log(body);
 
 		// Update spin in the server
 		fetch('entry/update/', {
@@ -227,7 +259,7 @@ class PlaylistEntryContainer extends React.Component {
 				"Content-Type": "application/json",
 				"Accept": "application/json"
 			},
-			body: JSON.stringify(updateRequestBody),
+			body: JSON.stringify(body),
 			mode: 'cors',
 			cache: 'default'
 		}).then(response => {
@@ -254,7 +286,7 @@ class PlaylistEntryContainer extends React.Component {
 				delete={this.deleteSpinFromDB}
 				update={this.updateSpinInDB}
 				ref={this.entrySet}
-				saveInput={this.saveInput}
+				setInput={this.setInput}
 			/>
 			);
 	}
@@ -278,10 +310,34 @@ class PlaylistEntry extends React.Component {
 			<div className="spin">
 				<div className="playlist-movetab"> </div>
 				<div className="playlist-numbering"> {this.props.index} </div>
-				<PlaylistTextInput ref={this.props.saveInput} value={this.props.title}      name='title' inDB={true} update={this.props.update}/>
-				<PlaylistTextInput ref={this.props.saveInput} value={this.props.artist}     name='artist'inDB={true} update={this.props.update}/>
-				<PlaylistTextInput ref={this.props.saveInput} value={this.props.album}      name='album' inDB={true} update={this.props.update}/>
-				<PlaylistTextInput ref={this.props.saveInput} value={this.props.label}      name='label' inDB={true} update={this.props.update}/>
+				<PlaylistTextInput 
+					ref={this.props.setInput} 
+					value={this.props.title}     
+					name='title' 
+					inDB={true} 
+					update={this.props.update}
+					delete={this.props.delete}/>
+				<PlaylistTextInput 
+					ref={this.props.setInput} 
+					value={this.props.artist}     
+					name='artist'
+					inDB={true} 
+					update={this.props.update}
+					delete={this.props.delete}/>
+				<PlaylistTextInput 
+					ref={this.props.setInput} 
+					value={this.props.album}      
+					name='album' 
+					inDB={true} 
+					update={this.props.update}
+					delete={this.props.delete}/>
+				<PlaylistTextInput 
+					ref={this.props.setInput} 
+					value={this.props.label}      
+					name='label' 
+					inDB={true} 
+					update={this.props.update}
+					delete={this.props.delete}/>
 				<div className="playlist-minus clickable" onClick={this.props.delete}> </div>
 				<div className="playlist-comment clickable"> </div>
 			</div>
@@ -339,62 +395,95 @@ class PlaylistEntryForm extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			title:  '',
-			artist: '',
-			album:  '',
-			label:  '',
-			index: props.index
+			index: props.index,
+			inputs: {}
 		}
 
 		this.submit = this.submit.bind(this);
+		this.saveInput = this.saveInput.bind(this);
+		this.clearInputs = this.clearInputs.bind(this);
+		this.titleFocus  = this.titleFocus.bind(this);
+	}
+
+	saveInput(input) {
+		let isMount = (input==null? false:true);
+		if(isMount) {
+			let newState = {inputs: this.state.inputs};
+			newState.inputs[input.state.name] = input;
+			this.setState(newState);
+		}
+	}
+
+	clearInputs() {
+		for(let inputKey of Object.keys(this.state.inputs)) {
+			this.state.inputs[inputKey].setState((state) => {
+				return {
+					value:''
+				}
+			});
+		}
+	}
+
+	titleFocus() {
+		console.log(this.state.inputs);
+		if('title' in Object.keys(this.state.inputs)) {
+			console.log("TItle is there..");
+			this.state.inputs['title'].focus();
+		}
 	}
 
 	submit() {
-		this.props.postForm();
+		this.props.addSpinToDB();
+		this.clearInputs();
 		this.setState((state) => {
 			return {
-				title:  '',
-				artist: '',
-				album:  '',
-				label:  '',
 				index: state.index + 1
-			};
+			}
 		});
+		this.titleFocus();
 	}
 
 	render() {
 		return (
 			<form className="entry-add-form" name='add-form' id="add-form">
-				<div className="playlist-item playlist-entry" id="new-entry">
+				<div className="spin" id="new-entry">
 					<div className="playlist-movetab"> </div>
 					<div className="playlist-numbering"> {this.state.index} </div>
 					<PlaylistTextInput 
+						ref={this.saveInput}
 						name="title"
 						placeholder="song title"
-						value={this.state.title}
+						value=''
 						editing={true}
 						inDB={false}
+						submit={this.submit}
 					/>
-					<PlaylistTextInput 
+					<PlaylistTextInput
+					    ref={this.saveInput} 
 						name="artist"
 						placeholder="artist"
-						value={this.state.artist}
+						value=''
 						editing={true}
 						inDB={false}
+						submit={this.submit}
 					/>
 					<PlaylistTextInput 
+					    ref={this.saveInput}
 						name="album"
 						placeholder="album"
-						value={this.state.album}
+						value=''
 						editing={true}
 						inDB={false}
+						submit={this.submit}
 					/>
 					<PlaylistTextInput 
+					    ref={this.saveInput}
 						name="label"
 						placeholder="album label"
-						value={this.state.album}
+						value=''
 						editing={true}
 						inDB={false}
+						submit={this.submit}
 					/>
 					<div onClick={this.submit} className="playlist-plus clickable" id="add-entry-button">
 					</div>
@@ -412,21 +501,34 @@ class PlaylistTextInput extends React.Component {
 			name:  this.props.name,
 			placeholder: this.props.placeholder,
 			editing: this.props.editing,
-			inDB: this.props.inDB
+			inDB: this.props.inDB,
+			update: this.props.update,
+			submit: this.props.submit,
+			delete: this.props.delete
 		}
 
-		this.handleKeyPress = this.handleKeyPress.bind(this);
+		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.toggleEditing = this.toggleEditing.bind(this);
 		this.updateValue  = this.updateValue.bind(this);
 	}
 
-	handleKeyPress(e) {
-		if(this.state.inDB){
+	handleKeyDown(e) {
+		if(this.state.inDB) {
 			if(e.key == 'Enter') {
 				this.toggleEditing();
-				this.props.update();
+				this.state.update();
 			}
-		}		
+			else if (e.metaKey) {
+				if(e.key == "Backspace") {
+					this.toggleEditing();
+					this.state.delete();
+				}
+			}
+		}
+		else {
+			if(e.key == 'Enter')
+				this.state.submit();
+		}
 	}
 
 	updateValue(e) { this.setState({value:e.target.value}); }
@@ -440,23 +542,27 @@ class PlaylistTextInput extends React.Component {
 	}
 
 	render() {
+		let onDblClick = null;
+		if(this.state.inDB) onDblClick = this.toggleEditing;
+
 		if(this.state.editing) {
 			return (
-				<div className="playlist-text-cell clickable" >
+				<div className="playlist-text-cell clickable" 
+					 onDoubleClick={onDblClick}>
 						<input 
 							type="text" 
 							name={this.state.name}
 							value={this.state.value}
 							placeholder={this.state.placeholder} 
 							onChange={this.updateValue}
-							onKeyPress={this.handleKeyPress}/>
+							onKeyDown={this.handleKeyDown}/>
 				</div>
 			)
 		}
-		else {
+		else if(!this.state.editing) {
 			return (
 				<div className="playlist-text-cell clickable"
-					 onDoubleClick={this.toggleEditing}>
+					 onDoubleClick={onDblClick}>
 					{this.state.value}
 				</div>
 				)

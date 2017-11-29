@@ -61,8 +61,12 @@ def add(request, playlist_id):
 		"spin": spinDict(new_spin)
 	}
 	if label_name is not None:
-		response['label'] = label_name
+		response['spin']['label'] = label_name
+	else:
+		response['spin']['label'] = ''
 
+	print("Returning add response...")
+	print(response)
 	return JsonResponse(response)
 
 @require_http_methods(["GET"])
@@ -150,6 +154,12 @@ def delete(request, playlist_id):
 		print(spins)
 		return error('Invalid index')
 
+	print("Received the following dict on delete...")
+	print(args)
+	print("Found the following spin...")
+	print(target_spin)
+	print("Proceeding to delete, and update other spins...")
+
 	# Delete the spin from the database and update other playlist indices
 	target_spin.delete()
 	spins_to_update = spins.filter(index__gt=index)
@@ -158,7 +168,6 @@ def delete(request, playlist_id):
 		spin.save()
 
 	# Update the playcounts
-
 	return success()
 
 #@login_required
@@ -171,7 +180,7 @@ def update(request, playlist_id):
 		args         = json.loads(request.body)
 		playlist     = Playlist.objects.get(pk=playlist_id)
 		spins        = Spin.objects.filter(playlist__pk=playlist_id)
-		target_spin  = spins.get(pk=args['index'])
+		target_spin  = spins.get(index=args['index'])
 	except KeyError:
 		return error('Invalid request')
 	except Spin.DoesNotExist:
@@ -189,13 +198,14 @@ def update(request, playlist_id):
 	target_spin.delete()
 	new_spin.save()
 
+	print("Received this dict on update...")
+	print(args)
+	print("Returning this dict on update...")
+	print(spinDict(new_spin))
+
 	return JsonResponse({
 		'success': True,
-		'spin': {
-			'title': args['title'],
-			'album': args['album'],
-			'artist': args['artist']
-		}
+		'spin': spinDict(new_spin)
 	})
 
 @require_http_methods(["GET"])

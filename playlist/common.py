@@ -4,7 +4,10 @@ A location for helper functions.
 from django.http import JsonResponse
 
 def error(message):
-	return JsonResponse({'error': message})
+	return JsonResponse({
+		'success': False,
+		'error': message
+		})
 
 def success():
 	return JsonResponse({'success': True})
@@ -19,7 +22,7 @@ def spinDict(spin):
 		"id": spin.id,
 		"index": spin.index,
 		"title": spin.song.name,
-		"artist": spin.song.artist.name,
+		"artist": spin.song.artist.all()[0].name,
 		"album": spin.song.album.name,
 		"label": spin.song.album.label
 	}
