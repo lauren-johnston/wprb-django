@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404
 
 from .models import *
 from .common import *
+from .explore import plays, details
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -37,19 +38,30 @@ def edit_playlist(request, playlist_id):
         'desc'      : playlist.desc
     }
 
-    spins = [{
+    spins = sorted([{
         'id'    : spin.id,
         'title' : spin.song.name,
         'artist': [a.name for a in spin.song.artist.all()],
         'album' : spin.song.album.name,
         'index' : spin.index,
-    } for spin in playlist.spin_set.all()]
+    } for spin in playlist.spin_set.all()], key=lambda x: x['index'])
 
     context = {
         'props' : {'spins': spins, 'show': showdetails},
         'bundle': 'playlist',
         'styles': ['edit'],
         'title' : 'Playlist Editor'
+    }
+
+    return render(request, "component.html", context=context)
+
+def explore(request, field, field_id):
+    """ Render the page with the explore component and relevant info.
+    """
+    context = {
+        'bundle': 'explore',
+        'title': 'Explore %ss' % field.capitalize(),
+        'props': {'plays': plays(field, int(field_id))}
     }
 
     return render(request, "component.html", context=context)

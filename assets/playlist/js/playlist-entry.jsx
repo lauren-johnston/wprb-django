@@ -89,7 +89,7 @@ class PlaylistTable extends React.Component {
 		return this.state.spins.map((spin, index) => 
 			<PlaylistEntryContainer
 				key={spin.id}
-				index={index}
+				index={index + 1}
 				title={spin.title}
 				artists={spin.artist}
 				album={spin.album}
