@@ -154,3 +154,13 @@
 	width: 5%;
 	height: 1em;
 }
+
+.playlist-minus {
+   background-image: url("media/minus.png");
+   background-position: center;
+   background-repeat: no-repeat; 
+   background-size: 15px 15px;
+   display: inline-block;
+   width: 5%;
+   height: 1em;
+}
