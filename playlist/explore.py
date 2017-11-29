@@ -1,67 +1,45 @@
-from django.db import models
+from django.shortcuts import render, get_object_or_404
 
-# Commenting out these dummy functions for later implementation (?)
-"""
-def exploresong(songid):
-    return "lol"
+from music.models import *
+from .models import *
+from .util import date_to_str
 
-def exploreartist(artistid):
-    return "thunderfunk"
+def plays(field, field_id, max=50):
+    """ Return a list 
 
-def explorealbum(albumid):
-    return "The Life of Pabloo00o0"
-
-def explorelabels(labelid):
-    return "The Ellen Degeneres Label"
-
-def exploreDJ(DJid):
-    return "MixMaster Paalindrome"
-
-def exploreshow(showid):
-    return "running this ish"
-"""
-
-def exploreplays(songid, limit):
-    """
-    An exploratory function to return a list of dictionaries of information 
-    relevant to "songid", upper bounded by "limit". 
-    The fields being returned are: 
-    'showId', 'djId', 'showName', 'djName', 'timestamp'
     """
 
-    # Initializing return list
-    ret = []
-    
-    # Grabbing the song in question
-    song = Song.objects.get(id=songid)
-    
-    # Grabbing the instances of playtlists that have spins of the song
-    playlists = Playlists.objects.filter(spin__song=song)[:limit]
-    
-    # Iterating through, populating list with ddictionaries
-    for playlist in playlists:
+    # Filter the spins on the appropriate query
+    if field == 'artist':
+        plays = Spin.objects.filter(song__artist__id=field_id)
+    elif field == 'album':
+        plays = Spin.objects.filter(song__album__id=field_id)
+    elif field == 'dj':
+        plays = Spin.objects.filter(playlist__show__dj=field_id)
+    elif field == 'song':
+        plays = Spin.objects.filter(song=field_id)
+    elif field == 'playlist':
+        plays = Spin.objects.filter(playlist=field_id)
 
-        # Some logistical hoop-jumping to allow for multiple spins
-        # of same song in a particular playlist
-        multiplespins = Spin.objects.filter(playlist=playlist, song=song)
+    p = [{
+        'artist'    : [{'name': a.name, 'id': a.id} for a in p.song.artist.all()],
+        'song'      : p.song.name,
+        'songId'    : p.song.id,
+        'album'     : p.song.album.name,
+        'albumId'   : p.song.album.id,
+        'label'     : p.song.album.label.name if p.song.album.label else None,
+        'labelId'   : p.song.album.label.id if p.song.album.label else None,
+        'dj'        : [{'name': dj.name, 'id': dj.id} for dj in p.playlist.show.dj.all()],
+        'date' : date_to_str(p.playlist.date),
+        'playlistId': p.playlist.id,
+    } for p in plays]
 
-        for spin in multiplespins
-            entrydict = {
-                'showId': playlist.show.id, 'showName': playlist.show.name, 
-                'djId': playlist.show.dj.id, 'djName': playlist.show.dj.name, 
-                'timestamp': spin.timestamp
-            }
-            ret.append(entrydict)
-    
-    return ret
+    print(p)
 
+    return p
 
-def exploredetails(songid):
-    """
-    Returning a dictionary containing the information relevant to the queried
-    songid. The dictionary contains the fields:
-    'title', 'album', 'albumid', 'artist', 'artistid', 
-    'genres', 'subgenres', 'plays'
+def details(field, id):
+    """ Return the details associated with a given resource    
     """
 
     # Caching the song associated with songid
@@ -75,7 +53,7 @@ def exploredetails(songid):
         'artist'   : song.artist.name, 
         'artistid' : song.artist.id,
         'genres'   : song.genre.name, 
-        'subgenres': [subgenre.name for subgenre in song.subgenre.all()]
+        'subgenres': [subgenre.name for subgenre in song.subgenre.all()],
         'plays'    : song.playcount
     }
 

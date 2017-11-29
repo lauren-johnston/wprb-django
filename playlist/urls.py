@@ -10,7 +10,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
-from . import views, services
+from . import views, services, explore
 from .views import edit_playlist
 from .services import entry, meta, comment
 
@@ -19,10 +19,21 @@ playlist_id = r'^(?P<playlist_id>[0-9]+)/'
 app_name = 'playlist'
 
 urlpatterns = [
+	# playlist edit
 	url(playlist_id + '$', views.edit_playlist, name='edit-playlist'),
 
+	# Explore View
+	url(r'(?P<field>[a-zA-Z]+)/(?P<field_id>[0-9]+)/$', views.explore, name='explore'),
+
+	# New Playlist
+	url(r'^new/$', views.new_playlist, name='new-playlist'),
+
+	# Authentication
 	url(r'^login/$', auth_views.login, name='login'),
 	url(r'^logout/$', auth_views.logout, name='logout'),
+
+	# Landing Page
+	url(r'^$', views.landing),
 
 	# Intra-Playlist services
 	url(playlist_id + 'entry/add/$',      services.entry.add,      name='entry-add'),
@@ -42,5 +53,4 @@ urlpatterns = [
 	url(playlist_id + 'comment/new',      services.comment.new,    name='comment-new'),
 	url(playlist_id + 'comment/edit',     services.comment.edit,   name='comment-edit'),
 	url(playlist_id + 'comment/delete',   services.comment.delete, name='comment-delete'),
-
 ]

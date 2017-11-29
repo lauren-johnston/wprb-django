@@ -10,6 +10,7 @@ module.exports = {
   entry: {
     // bundle name: location
     'playlist': './assets/playlist/js/playlist-entry',
+    'explore': './assets/playlist/js/explore',
   },
 
   output: {

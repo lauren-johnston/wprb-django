@@ -93,8 +93,8 @@ class PlaylistTable extends React.Component {
 			return spina.index - spinb.index;
 		}).map((spin, index) => 
 			<PlaylistEntryContainer
-				key={spin.index}
-				index={spin.index}
+				key={spin.id}
+				index={index + 1}
 				title={spin.title}
 				artist={spin.artist}
 				album={spin.album}
@@ -124,7 +124,7 @@ class PlaylistTable extends React.Component {
 	}
 
 	removeSpinFromView(index) {
-		let updatedSpins = this.state.spins
+		let updatedSpins = this.state.spins.slice();
 		updatedSpins.splice(index-1, 1);
 		// console.log("old spins");
 		// console.log(this.state.spins);
@@ -201,6 +201,7 @@ class PlaylistEntryContainer extends React.Component {
 	}
 
 	setEntry(c) { this.setState({entry: c}) }
+
 	setInput(c) {
 		let isMount = (c==null? false:true);
 		if(isMount) {
@@ -565,7 +566,7 @@ class PlaylistTextInput extends React.Component {
 					 onDoubleClick={onDblClick}>
 					{this.state.value}
 				</div>
-				)
+			);
 		}
 	}
 }

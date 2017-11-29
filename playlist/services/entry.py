@@ -7,7 +7,7 @@ from django.http import QueryDict, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ..models import Spin, Playlist
-from ..common import invalid_array_index, error, success, spinDict
+from ..util import invalid_array_index, error, success, spin_to_dict
 from music.models import Song, Artist, Album, Label, Genre, Subgenre
 from music.common import get_or_create
 

@@ -7,7 +7,7 @@ from django.http import QueryDict, HttpResponse, JsonResponse
 
 from ..models import Playlist
 from music.models import Genre, Subgenre
-from ..common import *
+from ..util import *
 
 @login_required
 @require_http_methods(["PUT"])

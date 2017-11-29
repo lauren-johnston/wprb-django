@@ -6,8 +6,7 @@
 {% block title %}{{ title }}{% endblock %}
 {% block styles %}
     {{ block.super }}
-    {# HACK FOR NOW: IF WE WANT A REUSABLE COMPONENT TEMPLATE, WE SHOULD DYNAMICALLY LOAD STYLES #}
-    <link rel="stylesheet" href="{% static 'playlist/css/edit.css' %}" >
+    <link rel="stylesheet" href="/static/playlist/css/{{bundle}}.css" >
 {% endblock styles %}
 
 {% block content %}
