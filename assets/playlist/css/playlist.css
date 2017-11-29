@@ -46,8 +46,13 @@
 	background-color: #2a2a2a;
 }
 
+.spin {
+	border-top: 1px solid rgba(255,255,255, 0.1);
+	padding: 0.2em 0;
+}
+
 .entry-add-form {
-	margin:0em;
+	margin: 0em;
 }
 
 /* A text item that lives in a rounded bubble */

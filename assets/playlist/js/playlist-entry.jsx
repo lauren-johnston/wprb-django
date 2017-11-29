@@ -514,7 +514,7 @@ class PlaylistTextInput extends React.Component {
 	}
 
 	handleKeyDown(e) {
-		if(this.state.inDB) {
+		if (this.state.inDB) {
 			if(e.key == 'Enter') {
 				this.toggleEditing();
 				this.state.update();
@@ -548,7 +548,7 @@ class PlaylistTextInput extends React.Component {
 
 		if(this.state.editing) {
 			return (
-				<div className="playlist-text-cell clickable" 
+				<div className="playlist-text-cell dbl-clickable" 
 					 onDoubleClick={onDblClick}>
 						<input 
 							type="text" 
@@ -562,7 +562,7 @@ class PlaylistTextInput extends React.Component {
 		}
 		else if(!this.state.editing) {
 			return (
-				<div className="playlist-text-cell clickable"
+				<div className="playlist-text-cell dbl-clickable"
 					 onDoubleClick={onDblClick}>
 					{this.state.value}
 				</div>

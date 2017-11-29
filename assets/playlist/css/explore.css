@@ -1,21 +1,28 @@
 .play-container {
+	position: absolute;
+	left: 5%;
+	width: 70%;
+	margin-top: 1%;
 	background-color: rgb(42, 42, 42);
+	border: 2px solid #959595;
+	border-radius: 0.15em;
 	padding: 2em;
 }
 
-.play-container-header > div{
-	margin: 3%;
-	display:inline-block;
-	width: 10%;
+.play-container-header > .play-field {
+	width: 12%;
 	color: rgb(170, 247, 205);
+	cursor: auto;
 }
 
-.play > div {
-	margin: 1% 3% 1% 3%;
-	display:inline-block;
-	width: 10%
+.play-field {
+/*	margin: 1% 3% 1% 3%;
+*/	padding: 0.25em 0.5em;
+	display: inline-block;
+	width: 12%;
+	cursor: pointer;
 }
 
-.play-field.album-field {
-	width: 12%
+.play-field:hover {
+	font-weight: bold;
 }
