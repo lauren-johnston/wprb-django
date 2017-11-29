@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-const moment = require('moment');
 
 class ExploreDetails extends React.Component {
 	constructor(props) {
@@ -49,7 +48,7 @@ class ExplorePlaysTable extends React.Component {
 			<div className="play-container">
 				<ExplorePlaysHeader />
 				<div className="plays">
-					{this.props.plays.map((play) => 
+					{this.props.plays.map((play) =>
 						<ExplorePlay key={play.spinId} {...play}/>)}
 				</div>
 			</div>
@@ -79,42 +78,42 @@ class ExplorePlay extends React.Component {
 		return (
 			<div className="play">
 				<div className="play-field artist-field">
-					{this.props.artist.map((artist) => 
+					{this.props.artist.map((artist) =>
 						<ClickableExploreField
-							field="artist" 
+							field="artist"
 							key={artist.id}
 							value={artist.name}
 							id={artist.id} />)}
 				</div>
 				<div className="play-field song-field">
 					<ClickableExploreField
-						field="song" 
+						field="song"
 						value={this.props.song}
 						id={this.props.songId} />
 				</div>
 				<div className="play-field album-field">
 					<ClickableExploreField
-						field="album" 
+						field="album"
 						value={this.props.album}
 						id={this.props.albumId} />
 				</div>
 				<div className="play-field label-field">
 					<ClickableExploreField
-						field="label" 
+						field="label"
 						value={this.props.label}
 						id={this.props.labelId} />
 				</div>
 				<div className="play-field dj-field">
-					{this.props.dj.map((dj) => 
+					{this.props.dj.map((dj) =>
 						<ClickableExploreField
-							field="dj" 
+							field="dj"
 							key={dj.id}
 							value={dj.name}
 							id={dj.id} />)}
 				</div>
 				<div className="play-field timestamp-field">
 					<ClickableExploreField
-						field="playlist" 
+						field="playlist"
 						value={this.props.date}
 						id={this.props.playlistId} />
 				</div>
