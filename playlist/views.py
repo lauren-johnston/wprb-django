@@ -71,7 +71,6 @@ def edit_playlist(request, playlist_id):
     context = {
         'props' : {'spins': spins, 'show': showdetails},
         'bundle': 'playlist',
-        'styles': ['edit'],
         'title' : 'Playlist Editor'
     }
 
