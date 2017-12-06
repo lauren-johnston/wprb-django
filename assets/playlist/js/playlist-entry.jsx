@@ -10,25 +10,27 @@ const common = require('./common.js');
 
 // Following syntax from online
 const DragHandle = SortableHandle(() => <div className="playlist-movetab"/>);
+
 const SortablePlaylistEntry = 
 	SortableElement(function({spin, spindex, removeSpinFromView, updateSpinInView}) {
 	// Hacked to remove index keyword (demanded by Sortable Element)
 	return (
 		<PlaylistEntryContainer
-				title={spin.title}
-				artist={spin.artist}
-				album={spin.album}
-				label={spin.label||''}
-				spindex={spindex}
-				removeSpinFromView={removeSpinFromView}
-				updateSpinInView={updateSpinInView}/>
-		);
+			title={spin.title}
+			artist={spin.artist}
+			album={spin.album}
+			label={spin.label||''}
+			spindex={spindex}
+			removeSpinFromView={removeSpinFromView}
+			updateSpinInView={updateSpinInView} />
+	);
 });
+
 const SortablePlaylistList = 
 	SortableContainer(({spins, removeSpinFromView, updateSpinInView}) => {
 	// index MUST BE index in array or Sortable will blow up
 	return (
-		<div className='playlist-table-contents'>
+		<div className='playlist-table-spins'>
 		 {
 		 	spins.map((spin, index) => {
 		 		return <SortablePlaylistEntry 
@@ -41,7 +43,7 @@ const SortablePlaylistList =
 		 	})
 		 }
 		</div>
-		);
+	);
 });
 
 class Playlist extends React.Component {
