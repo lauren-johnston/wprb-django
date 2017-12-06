@@ -31,11 +31,6 @@ function csrfSafeMethod(method) {
    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
-module.exports = {
-    getCookie,
-    csrfSafeMethod
-}
-
 //----------------------------------------------------------------------
 
 // function invalidFormException(message) {

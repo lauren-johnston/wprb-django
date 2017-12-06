@@ -131,6 +131,9 @@
 	width: 5%;
 }
 
+.playlist-table-contents {
+	overflow-y:scroll;
+}
 .playlist-text-cell {
 	display: inline-block;
 	width: 20%;
