@@ -7,7 +7,7 @@ class ExploreDetails extends React.Component {
 	}
 
 	render() {
-		return null;
+		return 'POOP';
 	}
 }
 
