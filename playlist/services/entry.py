@@ -91,21 +91,30 @@ def get_playlist_spins(request, playlist_id):
 	return to_return
 
 #@login_required
+@csrf_exempt 
 @require_http_methods(["PUT"])
 def move(request, playlist_id):
-	""" Moves the spin specified by the given 'spin_pk' to the index
-		specified by 'index'. 
+	""" Moves the spin specified by the given 'oldIndex' to the index
+		specified by 'newIndex'. 
 	"""
 	try:
 		args         = json.loads(request.body)
+
+		print("Received this dict on move...")
+		print(args)
+
+		old_index    = int(args['oldSpindex'])
+		new_index    = int(args['newSpindex'])
+		
 		spins        = Spin.objects.filter(playlist__pk=playlist_id)
-		target_spin  = spins.get(pk=args['spinId'])
-		old_index    = target_spin.index
-		new_index    = int(args['index'])
+		target_spin  = spins.get(index=args['oldSpindex'])
 	except (KeyError, ValueError):
 		return error('Invalid request')
 	except Spin.DoesNotExist:
 		return error('No matching spin')
+	except Spin.MultipleObjectsReturned:
+		print(spins.filter(index=args['oldSpindex']))
+		return error('Multiple spins with same index!')
 
 	if invalid_array_index(spins, old_index):
 		return error('Check with your db admin')
@@ -113,21 +122,28 @@ def move(request, playlist_id):
 		return error('Invalid index')
 
 	# Two sets to update depending on if spin was moved up or down
-	spins_to_decrement = spins.filter(index__gt=old_index, index__lte=new_index)
-	spins_to_increment = spins.filter(index__lt=old_index, index__gte=new_index)
+	if(old_index == new_index):
+		return success()
+	# If you moved it up, move others down
+	elif(old_index > new_index):
+		spins_to_increment = spins.filter(index__lt=old_index, index__gte=new_index)
+		for spin in spins_to_increment:
+			spin.index = spin.index + 1
+			spin.save()
+	# If you moved it down, move others up
+	else:
+		spins_to_decrement = spins.filter(index__gt=old_index, index__lte=new_index)
+		for spin in spins_to_decrement:
+			spin.index = spin.index - 1
+			spin.save()
+		
 
 	# Update target spin and save
 	target_spin.index = new_index
 	target_spin.save()
 
-	# Update following spins and save
-	for spin in spins_to_decrement:
-		spin.index = spin.index - 1
-		spin.save()
-
-	for spin in spins_to_increment:
-		spin.index = spin.index + 1
-		spin.save()
+	print('just saved ...')
+	print(target_spin)
 
 	return success()
 
@@ -208,32 +224,34 @@ def update(request, playlist_id):
 		'spin': spin_to_dict(new_spin)
 	})
 
+# DEPRECATED
 @require_http_methods(["GET"])
 def complete(request, playlist_id):
-	""" Returns a list of songs that *match* the provided
-	    title, artist, album, and label, which can all be 
-		incomplete strings. 
-	"""
-	args = request.GET
+	pass
+# 	""" Returns a list of songs that *match* the provided
+# 	    title, artist, album, and label, which can all be 
+# 		incomplete strings. 
+# 	"""
+# 	args = request.GET
 
-	# Filter songs by query, case insensitively
-	songs = Songs.objects.all()
-	if 'title' in args:
-		songs = songs.filter(name__icontains=args['title'])
-	if 'artist' in args:
-		songs = songs.filter(artist__name__icontains=args['artist'])
-	if 'album' in args:
-		songs = songs.filter(album__name__icontains=args['album'])
-	if 'label' in args:
-		songs = songs.filter(album__label__name__icontains=args['label'])
+# 	# Filter songs by query, case insensitively
+# 	songs = Songs.objects.all()
+# 	if 'title' in args:
+# 		songs = songs.filter(name__icontains=args['title'])
+# 	if 'artist' in args:
+# 		songs = songs.filter(artist__name__icontains=args['artist'])
+# 	if 'album' in args:
+# 		songs = songs.filter(album__name__icontains=args['album'])
+# 	if 'label' in args:
+# 		songs = songs.filter(album__label__name__icontains=args['label'])
 
-	matches = [
-		{
-			'title'	: s.name,
-			'artist': s.artist.name,
-			'album' : s.album.name,
-			'label' : s.album.label.name if album.label else None,
-		} for s in songs
-	]
+# 	matches = [
+# 		{
+# 			'title'	: s.name,
+# 			'artist': s.artist.name,
+# 			'album' : s.album.name,
+# 			'label' : s.album.label.name if album.label else None,
+# 		} for s in songs
+# 	]
 
-	return JsonResponse({ 'matches': matches })
+# 	return JsonResponse({ 'matches': matches })

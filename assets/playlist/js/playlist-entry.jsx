@@ -1,10 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-// We probably won't want this...
-import Draggable from 'react-draggable';
-
-// Let's see if we want this...
 import {SortableContainer, 
 		SortableElement, 
 		SortableHandle,
@@ -12,24 +8,22 @@ import {SortableContainer,
 
 const common = require('./common.js');
 
-
+// Following syntax from online
 const DragHandle = SortableHandle(() => <div className="playlist-movetab"/>);
-
 const SortablePlaylistEntry = 
 	SortableElement(function({spin, spindex, removeSpinFromView, updateSpinInView}) {
 	// Hacked to remove index keyword (demanded by Sortable Element)
 	return (
 		<PlaylistEntryContainer
-				spindex={spindex}
 				title={spin.title}
 				artist={spin.artist}
 				album={spin.album}
 				label={spin.label||''}
+				spindex={spindex}
 				removeSpinFromView={removeSpinFromView}
 				updateSpinInView={updateSpinInView}/>
 		);
 });
-
 const SortablePlaylistList = 
 	SortableContainer(({spins, removeSpinFromView, updateSpinInView}) => {
 	// index MUST BE index in array or Sortable will blow up
@@ -50,32 +44,6 @@ const SortablePlaylistList =
 		);
 });
 
-// Expects: spinList, removeSpinFromView, updateSpinInView
-class SortablePlaylistComponent extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = {spins: this.props.spins}
-
-		this.onSortEnd = this.onSortEnd.bind(this);
-	}
-
-	onSortEnd({oldIndex, newIndex}) {
-		let newState = { spins: arrayMove(this.state.spins, oldIndex, newIndex)}
-		this.setState(newState);
-	};
-
-	render() {
-		return (
-			<SortablePlaylistList 
-				spins = {this.state.spins}
-				updateSpinInView={this.props.updateSpinInView}
-				removeSpinFromView={this.props.removeSpinFromView}
-				onSortEnd={this.onSortEnd}
-				useDragHandle={true}/>
-		);
-	}
-}
-
 class Playlist extends React.Component {
 	constructor(props) {
 		super(props)
@@ -94,7 +62,7 @@ class Playlist extends React.Component {
 						desc={this.props.show.desc}/>
 				</div>
 				<div id="col-right" className="col">
-					<PlaylistTable spins={this.props.spins} />
+					<SortablePlaylistTable spins={this.props.spins} />
 				</div>
 			</div>
 		);
@@ -146,10 +114,9 @@ class PlaylistDetails extends React.Component {
 			</div>
 		);
 	}
-
 }
 
-class PlaylistTable extends React.Component {
+class SortablePlaylistTable extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {spins:this.props.spins};
@@ -157,47 +124,71 @@ class PlaylistTable extends React.Component {
 		this.addSpinToView      = this.addSpinToView.bind(this);
 		this.removeSpinFromView = this.removeSpinFromView.bind(this);
 		this.updateSpinInView   = this.updateSpinInView.bind(this);
-
-		this.byIndex = this.byIndex.bind(this);
-	}
-
-	byIndex(spinA, spinB) {
-		return spinA.index - spinB.index;
+		
+		this.onSortEnd          = this.onSortEnd.bind(this);
 	}
 
 	updateSpinInView(spin) {
 		let updatedSpins = this.state.spins.slice();
-		console.log("Placing new spin at index " + spin.index)
-		// Spin indices are 1 oriented
-		updatedSpins[spin.index - 1] = spin;
+		updatedSpins[spin.spindex - 1] = spin;
 		this.setState({ spins: updatedSpins });
 	}
 
 	addSpinToView(spin) {
 		let updatedSpins = this.state.spins.slice();
-		updatedSpins.splice(spin.index - 1, 0, spin);
+		updatedSpins.push(spin);
 		this.setState({ spins: updatedSpins});
 	}
 
 	removeSpinFromView(index) {
 		let updatedSpins = this.state.spins.slice();
 		updatedSpins.splice(index-1, 1);
-		this.setState({ spins: updatedSpins} );
+		this.setState({ spins: updatedSpins });
 	}
+
+	onSortEnd({oldIndex, newIndex}) {
+		let newState = { spins: arrayMove(this.state.spins, oldIndex, newIndex)}
+		this.setState(newState);
+
+		console.log(`moved ${oldIndex} to ${newIndex}`)
+		// Move spin in the server
+		if(oldIndex != newIndex) 
+			fetch('entry/move/', {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+					"Accept": "application/json"
+				},
+				body: JSON.stringify({oldSpindex: oldIndex+1, newSpindex: newIndex+1}),
+				mode: 'cors',
+				cache: 'default'
+			}).then(response => {
+				return response.json();
+			}).then(data => {
+				if(!data.success) {
+					console.log("Ajax Error:");
+					console.log(data);
+					return;
+				}
+				console.log("Move: Success!");
+				console.log(data);
+			});
+	};
 
 	render() {
 		return (
 			<div id="playlist" className="col-content">
 				<PlaylistTableHeader />
 				<div className="playlist-table-contents">
-					<SortablePlaylistComponent
-						spins={this.state.spins}
-						removeSpinFromView={this.removeSpinFromView}
+					<SortablePlaylistList 
+						spins = {this.state.spins}
 						updateSpinInView={this.updateSpinInView}
-						/>
+						removeSpinFromView={this.removeSpinFromView}
+						onSortEnd={this.onSortEnd}
+						useDragHandle={true}/>
 					<PlaylistEntryFormContainer
 						key={this.state.spins.length + 1}
-						index={this.state.spins.length + 1}
+						spindex={this.state.spins.length + 1}
 						addSpinToView={this.addSpinToView} />
 				</div>
 			</div>
@@ -267,8 +258,6 @@ class PlaylistEntryContainer extends React.Component {
 		// Close all inputs (for a small bug)
 		for(let inputKey of Object.keys(this.state.inputs)) 
 			this.state.inputs[inputKey].setState({editing:false})
-		
-		console.log('called delete');
 
 		// Remove spin from the server
 		fetch('entry/delete/', {
@@ -288,6 +277,8 @@ class PlaylistEntryContainer extends React.Component {
 				console.log(data);
 				return;
 			}
+			console.log("Ajax: Success!");
+			console.log(data);
 			this.props.removeSpinFromView(this.props.spindex);
 		});
 	}
@@ -339,8 +330,6 @@ class PlaylistEntryContainer extends React.Component {
 			);
 	}
 }
-
-
 class PlaylistEntry extends React.Component {
 	constructor(props) {
 		super(props)
@@ -399,22 +388,17 @@ class PlaylistEntryFormContainer extends React.Component {
 		this.addSpinToDB = this.addSpinToDB.bind(this);
 	}
 
-	makeHeaders() {
-		let headers = new Headers();
-		let csrftoken = common.getCookie('csrftoken')
-		headers.append("X-CSRFToken", csrftoken);
-		return headers;
-	}
+	// makeHeaders() {
+	// 	let headers = new Headers();
+	// 	let csrftoken = common.getCookie('csrftoken')
+	// 	headers.append("X-CSRFToken", csrftoken);
+	// 	return headers;
+	// }
 
 	addSpinToDB() {
 		// Post new spin to the server
 		fetch('entry/add/', {
 			method: "POST",
-			//headers: {
-			// 		"X-CSRFToken": common.getCookie('csrftoken'),
-			// 		"Accept": "application/json",
-			// 		"Content-Type": "multipart/form-data"
-			// }
 			body: new FormData(document.getElementById("add-form")),
 			mode: 'cors',
 			cache: 'default'
@@ -435,17 +419,16 @@ class PlaylistEntryFormContainer extends React.Component {
 	render() {
 		return (
 			<PlaylistEntryForm 
-				index={this.props.index}
+				spindex={this.props.spindex}
 				addSpinToDB={this.addSpinToDB}/>
 			);
 	}
 }
-
 class PlaylistEntryForm extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			index: props.index,
+			spindex: this.props.spindex,
 			inputs: {}
 		}
 
@@ -485,7 +468,7 @@ class PlaylistEntryForm extends React.Component {
 		this.clearInputs();
 		this.setState((state) => {
 			return {
-				index: state.index + 1
+				spindex: state.spindex + 1
 			}
 		});
 		this.titleFocus();
@@ -495,8 +478,8 @@ class PlaylistEntryForm extends React.Component {
 		return (
 			<form className="entry-add-form" name='add-form' id="add-form">
 				<div className="spin" id="new-entry">
-					<DragHandle />f
-					<div className="playlist-numbering"> {this.state.index} </div>
+					<div className='playlist-movetab' style={{opacity:0.0}} />
+					<div className="playlist-numbering"> {this.state.spindex} </div>
 					<PlaylistTextInput 
 						ref={this.saveInput}
 						name="title"

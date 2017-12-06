@@ -13,6 +13,8 @@ def success():
 	return JsonResponse({'success': True})
 
 def invalid_array_index(array, index):
+	if index is None:
+		return True
 	if (index < 0) or (index > len(array)):
 		return True
 	return False
