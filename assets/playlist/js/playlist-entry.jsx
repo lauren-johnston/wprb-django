@@ -250,7 +250,7 @@ class PlaylistEntryContainer extends React.Component {
 				let newInputs = state.inputs;
 				newInputs[c.state.name] = c;
 				return {
-					inputs:newInputs
+					inputs: newInputs
 				}
 			});
 		}
