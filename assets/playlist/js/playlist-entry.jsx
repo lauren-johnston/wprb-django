@@ -30,7 +30,7 @@ const SortablePlaylistList =
 	SortableContainer(({spins, removeSpinFromView, updateSpinInView}) => {
 	// index MUST BE index in array or Sortable will blow up
 	return (
-		<div className='playlist-table-contents'>
+		<div className='playlist-list-entries'>
 		{spins.map((spin, index) => {
 			return <SortablePlaylistEntry 
 				key={spin.id}
