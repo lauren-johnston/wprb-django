@@ -30,18 +30,17 @@ const SortablePlaylistList =
 	SortableContainer(({spins, removeSpinFromView, updateSpinInView}) => {
 	// index MUST BE index in array or Sortable will blow up
 	return (
-		<div className='playlist-table-spins'>
-		 {
-		 	spins.map((spin, index) => {
-		 		return <SortablePlaylistEntry 
-		 			key={spin.id}
-		 			spin={spin}
-		 			spindex={index + 1}
-		 			index={index}
-		 			removeSpinFromView={removeSpinFromView}
-		 			updateSpinInView={updateSpinInView} />
-		 	})
-		 }
+		<div className='playlist-table-contents'>
+		{spins.map((spin, index) => {
+			return <SortablePlaylistEntry 
+				key={spin.id}
+				spin={spin}
+				spindex={index + 1}
+				index={index}
+				removeSpinFromView={removeSpinFromView}
+				updateSpinInView={updateSpinInView} />
+			}
+		);}
 		</div>
 	);
 });
@@ -61,7 +60,7 @@ class Playlist extends React.Component {
 						dj={this.props.show.dj}
 						genre={this.props.show.genre}
 						subgenre={this.props.show.subgenre}
-						desc={this.props.show.desc}/>
+						desc={this.props.show.desc} />
 				</div>
 				<div id="col-right" className="col">
 					<SortablePlaylistTable spins={this.props.spins} />
@@ -187,7 +186,7 @@ class SortablePlaylistTable extends React.Component {
 						updateSpinInView={this.updateSpinInView}
 						removeSpinFromView={this.removeSpinFromView}
 						onSortEnd={this.onSortEnd}
-						useDragHandle={true}/>
+						useDragHandle={true} />
 					<PlaylistEntryFormContainer
 						key={this.state.spins.length + 1}
 						spindex={this.state.spins.length + 1}
@@ -329,7 +328,7 @@ class PlaylistEntryContainer extends React.Component {
 				update={this.updateSpinInDB}
 				ref={this.entrySet}
 				setInput={this.setInput} />
-			);
+		);
 	}
 }
 class PlaylistEntry extends React.Component {
@@ -349,28 +348,28 @@ class PlaylistEntry extends React.Component {
 			<div className="spin">
 				<DragHandle />
 				<div className="playlist-numbering"> {this.props.spindex} </div>
-				<PlaylistTextInput 
+				<ReactiveTextInput 
 					ref={this.props.setInput} 
 					value={this.props.title}     
 					name='title' 
 					inDB={true} 
 					update={this.props.update}
 					delete={this.props.delete}/>
-				<PlaylistTextInput 
+				<ReactiveTextInput 
 					ref={this.props.setInput} 
 					value={this.props.artist}     
 					name='artist'
 					inDB={true} 
 					update={this.props.update}
 					delete={this.props.delete}/>
-				<PlaylistTextInput 
+				<ReactiveTextInput 
 					ref={this.props.setInput} 
 					value={this.props.album}      
 					name='album' 
 					inDB={true} 
 					update={this.props.update}
 					delete={this.props.delete}/>
-				<PlaylistTextInput 
+				<ReactiveTextInput 
 					ref={this.props.setInput} 
 					value={this.props.label}      
 					name='label' 
@@ -423,7 +422,7 @@ class PlaylistEntryFormContainer extends React.Component {
 			<PlaylistEntryForm 
 				spindex={this.props.spindex}
 				addSpinToDB={this.addSpinToDB}/>
-			);
+		);
 	}
 }
 class PlaylistEntryForm extends React.Component {
@@ -431,49 +430,25 @@ class PlaylistEntryForm extends React.Component {
 		super(props)
 		this.state = {
 			spindex: this.props.spindex,
-			inputs: {}
+			title: '',
+			artist: '',
+			album: '',
+			label: ''
 		}
 
 		this.submit = this.submit.bind(this);
-		this.saveInput = this.saveInput.bind(this);
-		this.clearInputs = this.clearInputs.bind(this);
-		this.titleFocus  = this.titleFocus.bind(this);
 	}
-
-	saveInput(input) {
-		let isMount = (input==null? false:true);
-		if(isMount) {
-			let newState = {inputs: this.state.inputs};
-			newState.inputs[input.state.name] = input;
-			this.setState(newState);
-		}
-	}
-
-	clearInputs() {
-		for(let inputKey of Object.keys(this.state.inputs)) {
-			this.state.inputs[inputKey].setState((state) => {
-				return {
-					value:''
-				}
-			});
-		}
-	}
-
-	titleFocus() {
-		if('title' in Object.keys(this.state.inputs)) {
-			this.state.inputs['title'].focus();
-		}
-	}
-
 	submit() {
 		this.props.addSpinToDB();
-		this.clearInputs();
 		this.setState((state) => {
 			return {
-				spindex: state.spindex + 1
+				spindex: state.spindex + 1,
+				title: '',
+				artist: '',
+				album: '',
+				label: ''
 			}
 		});
-		this.titleFocus();
 	}
 
 	render() {
@@ -482,41 +457,33 @@ class PlaylistEntryForm extends React.Component {
 				<div className="spin" id="new-entry">
 					<div className='playlist-movetab' style={{opacity:0.0}} />
 					<div className="playlist-numbering"> {this.state.spindex} </div>
-					<PlaylistTextInput 
-						ref={this.saveInput}
+					<PlaylistEntryFormInput
 						name="title"
 						placeholder="song title"
-						value=''
-						editing={true}
-						inDB={false}
+						value={this.state.title}
 						submit={this.submit}
+						autoFocus={true}
 					/>
-					<PlaylistTextInput
-					    ref={this.saveInput} 
+					<PlaylistEntryFormInput
 						name="artist"
 						placeholder="artist"
-						value=''
-						editing={true}
-						inDB={false}
+						value={this.state.artist}
 						submit={this.submit}
+						autoFocus={false}
 					/>
-					<PlaylistTextInput 
-					    ref={this.saveInput}
+					<PlaylistEntryFormInput 
 						name="album"
 						placeholder="album"
-						value=''
-						editing={true}
-						inDB={false}
+						value={this.state.album}
 						submit={this.submit}
+						autoFocus={false}
 					/>
-					<PlaylistTextInput 
-					    ref={this.saveInput}
+					<PlaylistEntryFormInput 
 						name="label"
 						placeholder="album label"
-						value=''
-						editing={true}
-						inDB={false}
+						value={this.state.label}
 						submit={this.submit}
+						autoFocus={false}
 					/>
 					<div onClick={this.submit} className="playlist-plus clickable" id="add-entry-button">
 					</div>
@@ -526,7 +493,36 @@ class PlaylistEntryForm extends React.Component {
 	}
 }
 
-class PlaylistTextInput extends React.Component {
+// Props: name, placeholder, value, submit
+class PlaylistEntryFormInput extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {value: this.props.value};
+
+		this.handleKeyDown = this.handleKeyDown.bind(this);
+		this.updateValue  = this.updateValue.bind(this);
+	}
+
+	handleKeyDown(e) { if(e.key == 'Enter') this.props.submit(this.props.name); }
+	updateValue(e)   { this.setState({value: e.target.value}); }
+
+	render() { 
+			return (
+				<div className="playlist-text-cell">
+					<input 
+						autoFocus={this.props.autoFocus}
+						type="text"
+						value={this.state.value} 
+						name={this.props.name}
+						placeholder={this.props.placeholder} 
+						onChange={this.updateValue}
+						onKeyDown={this.handleKeyDown}/>
+				</div>
+				);
+	}
+}
+
+class ReactiveTextInput extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
