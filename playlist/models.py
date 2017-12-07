@@ -54,8 +54,8 @@ class Spin(models.Model):
 
     def __str__(self):
         artists = ' & '.join([artist.name for artist in self.song.artist.all()])
-        return 'Spin %d: Song: %s, Album: %s, Artist(s): %s' \
-            % (self.id, self.song.name, self.song.album.name, artists)
+        return 'Spin %d: \n\t Index: %d, \t Song: %s, \t Album: %s, \t Artist(s): %s' \
+            % (self.id, self.index, self.song.name, self.song.album.name, artists)
 
 
 class Playlist(models.Model):
