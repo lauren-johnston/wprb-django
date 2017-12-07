@@ -15,33 +15,32 @@ const SortablePlaylistEntry =
 	// Hacked to remove index keyword (demanded by Sortable Element)
 	return (
 		<PlaylistEntryContainer
-				title={spin.title}
-				artist={spin.artist}
-				album={spin.album}
-				label={spin.label||''}
-				spindex={spindex}
-				removeSpinFromView={removeSpinFromView}
-				updateSpinInView={updateSpinInView}/>
-		);
+			title={spin.title}
+			artist={spin.artist}
+			album={spin.album}
+			label={spin.label||''}
+			spindex={spindex}
+			removeSpinFromView={removeSpinFromView}
+			updateSpinInView={updateSpinInView} />
+	);
 });
 const SortablePlaylistList = 
 	SortableContainer(({spins, removeSpinFromView, updateSpinInView}) => {
 	// index MUST BE index in array or Sortable will blow up
 	return (
 		<div className='playlist-table-contents'>
-		 {
-		 	spins.map((spin, index) => {
-		 		return <SortablePlaylistEntry 
-		 			key={spin.id}
-		 			spin={spin}
-		 			spindex={index + 1}
-		 			index={index}
-		 			removeSpinFromView={removeSpinFromView}
-		 			updateSpinInView={updateSpinInView} />
-		 	})
-		 }
+		{spins.map((spin, index) => {
+			return <SortablePlaylistEntry 
+				key={spin.id}
+				spin={spin}
+				spindex={index + 1}
+				index={index}
+				removeSpinFromView={removeSpinFromView}
+				updateSpinInView={updateSpinInView} />
+			}
+		);}
 		</div>
-		);
+	);
 });
 
 class Playlist extends React.Component {
@@ -59,7 +58,7 @@ class Playlist extends React.Component {
 						dj={this.props.show.dj}
 						genre={this.props.show.genre}
 						subgenre={this.props.show.subgenre}
-						desc={this.props.show.desc}/>
+						desc={this.props.show.desc} />
 				</div>
 				<div id="col-right" className="col">
 					<SortablePlaylistTable spins={this.props.spins} />
@@ -185,7 +184,7 @@ class SortablePlaylistTable extends React.Component {
 						updateSpinInView={this.updateSpinInView}
 						removeSpinFromView={this.removeSpinFromView}
 						onSortEnd={this.onSortEnd}
-						useDragHandle={true}/>
+						useDragHandle={true} />
 					<PlaylistEntryFormContainer
 						key={this.state.spins.length + 1}
 						spindex={this.state.spins.length + 1}
@@ -248,7 +247,7 @@ class PlaylistEntryContainer extends React.Component {
 				let newInputs = state.inputs;
 				newInputs[c.state.name] = c;
 				return {
-					inputs:newInputs
+					inputs: newInputs
 				}
 			});
 		}
@@ -327,7 +326,7 @@ class PlaylistEntryContainer extends React.Component {
 				update={this.updateSpinInDB}
 				ref={this.entrySet}
 				setInput={this.setInput} />
-			);
+		);
 	}
 }
 class PlaylistEntry extends React.Component {
@@ -421,7 +420,7 @@ class PlaylistEntryFormContainer extends React.Component {
 			<PlaylistEntryForm 
 				spindex={this.props.spindex}
 				addSpinToDB={this.addSpinToDB}/>
-			);
+		);
 	}
 }
 class PlaylistEntryForm extends React.Component {
