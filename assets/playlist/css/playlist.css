@@ -17,7 +17,7 @@
 	padding: 0.5em;
 
 	width: calc(100% - 3em);
-	height: calc(80vh - 3em);
+	max-height: calc(80vh - 3em);
 }
 
 #subgenre-input {
