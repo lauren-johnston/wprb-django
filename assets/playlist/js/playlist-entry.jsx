@@ -10,6 +10,7 @@ const common = require('./common.js');
 
 // Following syntax from online
 const DragHandle = SortableHandle(() => <div className="playlist-movetab"/>);
+
 const SortablePlaylistEntry = 
 	SortableElement(function({spin, spindex, removeSpinFromView, updateSpinInView}) {
 	// Hacked to remove index keyword (demanded by Sortable Element)
@@ -24,6 +25,7 @@ const SortablePlaylistEntry =
 			updateSpinInView={updateSpinInView} />
 	);
 });
+
 const SortablePlaylistList = 
 	SortableContainer(({spins, removeSpinFromView, updateSpinInView}) => {
 	// index MUST BE index in array or Sortable will blow up
