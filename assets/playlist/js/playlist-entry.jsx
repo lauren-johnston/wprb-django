@@ -40,7 +40,7 @@ const SortablePlaylistList =
 				removeSpinFromView={removeSpinFromView}
 				updateSpinInView={updateSpinInView} />
 			}
-		);}
+		)}
 		</div>
 	);
 });
