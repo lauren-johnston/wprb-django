@@ -11,6 +11,11 @@ module.exports = {
     // bundle name: location
     'playlist': './assets/playlist/js/playlist-entry',
     'explore': './assets/playlist/js/explore',
+    'details': './assets/playlist/js/details',
+    'graph': './assets/playlist/js/graph',
+    'search': './assets/playlist/js/search',
+    'chart': './assets/playlist/js/chart',
+    'shows': './assets/playlist/js/shows'
   },
 
   output: {

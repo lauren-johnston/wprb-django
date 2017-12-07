@@ -3,6 +3,46 @@ import ReactDOM from 'react-dom';
 
 const common = require('./common.js');
 
+// Following syntax from online
+const DragHandle = SortableHandle(() => <div className="playlist-movetab"/>);
+
+const SortablePlaylistEntry = SortableElement(
+	({spin, spindex, removeSpinFromView, updateSpinInView}) => {
+		// Hacked to remove index keyword (demanded by Sortable Element)
+		return (
+			<PlaylistEntryContainer
+				title={spin.title}
+				artist={spin.artist}
+				album={spin.album}
+				label={spin.label||''}
+				spindex={spindex}
+				removeSpinFromView={removeSpinFromView}
+				updateSpinInView={updateSpinInView} />
+		);
+	}
+);
+
+const SortablePlaylistList = SortableContainer(
+	({spins, removeSpinFromView, updateSpinInView}) => {
+		// index MUST BE index in array or Sortable will blow up
+		return (
+			<div className='playlist-table-spins'>
+			 {
+			 	spins.map((spin, index) => {
+			 		return <SortablePlaylistEntry 
+			 			key={spin.id}
+			 			spin={spin}
+			 			spindex={index + 1}
+			 			index={index}
+			 			removeSpinFromView={removeSpinFromView}
+			 			updateSpinInView={updateSpinInView} />
+			 	})
+			 }
+			</div>
+		);
+	}
+);
+
 class Playlist extends React.Component {
 	constructor(props) {
 		super(props)
@@ -147,11 +187,18 @@ class PlaylistTable extends React.Component {
 		return (
 			<div id="playlist" className="col-content">
 				<PlaylistTableHeader />
-				{spinList}
-				<PlaylistEntryFormContainer
-					key={spinList.length + 1}
-					index={spinList.length + 1}
-					addSpinToView={this.addSpinToView} />
+				<div className="playlist-table-contents">
+					<SortablePlaylistList 
+						spins = {this.state.spins}
+						updateSpinInView={this.updateSpinInView}
+						removeSpinFromView={this.removeSpinFromView}
+						onSortEnd={this.onSortEnd}
+						useDragHandle={true} />
+					<PlaylistEntryFormContainer
+						key={this.state.spins.length + 1}
+						spindex={this.state.spins.length + 1}
+						addSpinToView={this.addSpinToView} />
+				</div>
 			</div>
 		);
 	}
@@ -317,28 +364,28 @@ class PlaylistEntry extends React.Component {
 					name='title' 
 					inDB={true} 
 					update={this.props.update}
-					delete={this.props.delete}/>
+					delete={this.props.delete} />
 				<PlaylistTextInput 
 					ref={this.props.setInput} 
 					value={this.props.artist}     
 					name='artist'
 					inDB={true} 
 					update={this.props.update}
-					delete={this.props.delete}/>
+					delete={this.props.delete} />
 				<PlaylistTextInput 
 					ref={this.props.setInput} 
 					value={this.props.album}      
 					name='album' 
 					inDB={true} 
 					update={this.props.update}
-					delete={this.props.delete}/>
+					delete={this.props.delete} />
 				<PlaylistTextInput 
 					ref={this.props.setInput} 
 					value={this.props.label}      
 					name='label' 
 					inDB={true} 
 					update={this.props.update}
-					delete={this.props.delete}/>
+					delete={this.props.delete} />
 				<div className="playlist-minus clickable" onClick={this.props.delete}> </div>
 				<div className="playlist-comment clickable"> </div>
 			</div>

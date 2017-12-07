@@ -61,6 +61,9 @@ a:hover {
     border-width: 2px;
     border-color: #959595;
     background-color: #2a2a2a;
+
+    height: 20em;
+    overflow-y: scroll;
 }
 
 .button {
