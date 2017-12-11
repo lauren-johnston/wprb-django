@@ -353,28 +353,32 @@ class PlaylistEntry extends React.Component {
 					name='title' 
 					inDB={true} 
 					update={this.props.update}
-					delete={this.props.delete}/>
+					delete={this.props.delete}
+					autocomplete={empty => null}/>
 				<ReactiveTextInput 
 					ref={this.props.setInput} 
 					value={this.props.artist}     
 					name='artist'
 					inDB={true} 
 					update={this.props.update}
-					delete={this.props.delete}/>
+					delete={this.props.delete}
+					autocomplete={empty => null}/>
 				<ReactiveTextInput 
 					ref={this.props.setInput} 
 					value={this.props.album}      
 					name='album' 
 					inDB={true} 
 					update={this.props.update}
-					delete={this.props.delete}/>
+					delete={this.props.delete}
+					autocomplete={empty => null}/>
 				<ReactiveTextInput 
 					ref={this.props.setInput} 
 					value={this.props.label}      
 					name='label' 
 					inDB={true} 
 					update={this.props.update}
-					delete={this.props.delete}/>
+					delete={this.props.delete}
+					autocomplete={empty => null}/>
 				<div className="playlist-minus clickable" onClick={this.props.delete}> </div>
 				<div className="playlist-comment clickable"> </div>
 			</div>
@@ -462,6 +466,7 @@ class PlaylistEntryForm extends React.Component {
 						value={this.state.title}
 						submit={this.submit}
 						autoFocus={true}
+						autocomplete={empty => null}
 					/>
 					<PlaylistEntryFormInput
 						name="artist"
@@ -469,6 +474,7 @@ class PlaylistEntryForm extends React.Component {
 						value={this.state.artist}
 						submit={this.submit}
 						autoFocus={false}
+						autocomplete={empty => null}
 					/>
 					<PlaylistEntryFormInput 
 						name="album"
@@ -476,6 +482,7 @@ class PlaylistEntryForm extends React.Component {
 						value={this.state.album}
 						submit={this.submit}
 						autoFocus={false}
+						autocomplete={empty => null}
 					/>
 					<PlaylistEntryFormInput 
 						name="label"
@@ -483,6 +490,7 @@ class PlaylistEntryForm extends React.Component {
 						value={this.state.label}
 						submit={this.submit}
 						autoFocus={false}
+						autocomplete={empty => null}
 					/>
 					<div onClick={this.submit} className="playlist-plus clickable" id="add-entry-button">
 					</div>
@@ -491,8 +499,7 @@ class PlaylistEntryForm extends React.Component {
 		);
 	}
 }
-
-// Props: name, placeholder, value, submit
+// Pass submit and autocomplete
 class PlaylistEntryFormInput extends React.Component {
 	constructor(props) {
 		super(props);
@@ -502,7 +509,11 @@ class PlaylistEntryFormInput extends React.Component {
 		this.updateValue  = this.updateValue.bind(this);
 	}
 
-	handleKeyDown(e) { if(e.key == 'Enter') this.props.submit(this.props.name); }
+	handleKeyDown(e) { 
+		if(e.key == 'Enter') this.props.submit(); 
+		else this.props.autocomplete(this.props.name, e.target.value);
+	}
+
 	updateValue(e)   { this.setState({value: e.target.value}); }
 
 	render() { 
@@ -521,6 +532,7 @@ class PlaylistEntryFormInput extends React.Component {
 	}
 }
 
+// Pass update, delete, and autocomplete
 class ReactiveTextInput extends React.Component {
 	constructor(props){
 		super(props);
@@ -528,55 +540,43 @@ class ReactiveTextInput extends React.Component {
 			value: this.props.value,
 			name:  this.props.name,
 			placeholder: this.props.placeholder,
-			editing: this.props.editing,
-			inDB: this.props.inDB,
-			update: this.props.update,
-			submit: this.props.submit,
-			delete: this.props.delete
+			editing: this.props.editing
 		}
 
 		this.handleKeyDown = this.handleKeyDown.bind(this);
-		this.toggleEditing = this.toggleEditing.bind(this);
 		this.updateValue  = this.updateValue.bind(this);
+		this.toggleEditing = this.toggleEditing.bind(this);
 	}
 
 	handleKeyDown(e) {
-		if (this.state.inDB) {
-			if(e.key == 'Enter') {
+		// Delete case
+		if(e.metaKey) {
+			if(e.key == 'Backspace') {
 				this.toggleEditing();
-				this.state.update();
-			}
-			else if (e.metaKey) {
-				if(e.key == "Backspace") {
-					this.toggleEditing();
-					this.state.delete();
-				}
+				this.props.delete();
+				return;
 			}
 		}
-		else {
-			if(e.key == 'Enter')
-				this.state.submit();
+
+		// Update case
+		if(e.key == 'Enter') {
+			this.toggleEditing();
+			this.props.update();
+			return;
 		}
+
+		// Autocomplete case
+		this.props.autocomplete(this.state.name, e.target.value);
 	}
 
-	updateValue(e) { this.setState({value:e.target.value}); }
-
-	toggleEditing() {
-		this.setState((state) => {
-			return {
-				editing: !state.editing
-			};
-		});
-	}
+	updateValue(e)  {this.setState({value:e.target.value});}
+	toggleEditing() {this.setState(state => {return {editing: !state.editing}})}
 
 	render() {
-		let onDblClick = null;
-		if(this.state.inDB) onDblClick = this.toggleEditing;
-
 		if(this.state.editing) {
 			return (
 				<div className="playlist-text-cell dbl-clickable" 
-					 onDoubleClick={onDblClick}>
+					 onDoubleClick={this.toggleEditing}>
 						<input 
 							type="text" 
 							name={this.state.name}
@@ -590,7 +590,7 @@ class ReactiveTextInput extends React.Component {
 		else if(!this.state.editing) {
 			return (
 				<div className="playlist-text-cell dbl-clickable"
-					 onDoubleClick={onDblClick}>
+					 onDoubleClick={this.toggleEditing}>
 					{this.state.value}
 				</div>
 			);
