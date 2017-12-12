@@ -7,11 +7,7 @@
 echo "Building with npm and running the server...";
 
 # Run npm
-npm run build & 
+npm run build &
 
 # Start the server
-<<<<<<< HEAD
 python manage.py runserver
-=======
-python manage.py runserver &
->>>>>>> react-add-autocomplete
