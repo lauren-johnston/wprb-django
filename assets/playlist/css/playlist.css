@@ -127,7 +127,7 @@
 	width: 5%;
 	height: 1em;
 
-	cursor: grab;
+	cursor: pointer;
 }
 
 .playlist-numbering {
@@ -149,12 +149,25 @@
 .playlist-artist-name {
 
 }
+/* Autocomplete stuff */
 
 .playlist-autocomplete-box {
-	max-height: 2em;
+	min-height: 5em;
+	max-height: 10em;
+
+	padding: 0.25em 0.25em;
+	border-radius: 0 0 0.25em 0.25em;
 	background-color: white;
-	overflow-y: scroll;
-	z-index: 1 !important;
+	overflow-y: auto;
+	z-index: 10;
+
+	color: #000;
+
+	position: absolute;
+}
+
+.playlist-suggestion {
+	color: black;
 }
 
 .playlist-comment {
@@ -178,7 +191,7 @@
 }
 
 .playlist-minus {
-   background-image: url("media/minus.png");
+   background-image: url("media/x.png");
    background-position: center;
    background-repeat: no-repeat; 
    background-size: 15px 15px;
@@ -192,6 +205,7 @@
 	position: fixed;
 	bottom: 0;
 	left: 70%;
+	width: 25%;
 
 	background-color: #424242;
 	color: #fff;
@@ -199,20 +213,60 @@
 
 	padding: 0.25em 0.5em;
 	border-radius: 0.25em 0.25em 0 0;
+
+	box-shadow: 2px 2px 2px #222;
+	border: 1px solid #fff;
+	border-bottom: none;
 }
 
 .comment-panel.hidden {
 	height: 2em;
-	cursor: pointer;
+}
+
+.hidden > form, .hidden > div {
+	display: none;
 }
 
 .comment-panel.show {
-
+	padding-bottom: 1em;
 }
 
-
-/* Autocomplete stuff */
-.playlist-suggestion {
-	color: black;
+.comment-meta {
+	text-align: right;
+	font-size: 0.75em;
 }
 
+.comment-text {
+	padding: 0.5em;
+	margin: 0.5em;
+	width: 90%;
+	border-radius: 0.5em;
+
+	background-color: #fef;
+	color: #000;
+}
+
+#new-comment-text {
+	width: 100%;
+	border-radius: 0.25em;
+	margin: 0.5em 0;
+}
+
+#new-comment-form {
+	text-align: right;
+}
+
+.comment-button {
+	border: 1px solid #fff;
+	border-radius: 0.5em;
+	padding: 0.25em 0.5em;
+	margin: 0.5em;
+
+	background-color: #fff;
+	color: #005;
+	cursor: pointer;
+}
+
+.comment-button:active {
+	background-color: #aaa;
+}

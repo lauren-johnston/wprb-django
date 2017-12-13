@@ -12,6 +12,7 @@ export default class CommentPanel extends React.Component {
 		};
 
 		this.toggle = this.toggle.bind(this);
+		this.addComment = this.addComment.bind(this);
 	}	
 
 	toggle() {
@@ -33,7 +34,7 @@ export default class CommentPanel extends React.Component {
 
 		return (
 			<div className={panelClass}>
-				<h2 onClick={this.toggle}>comments</h2>
+				<h2 onClick={this.toggle} className="comment-title clickable">comments</h2>
 				<div className="comment-contents">
 				{this.state.comments.map((comment) => 
 					<SingleComment 
@@ -58,12 +59,14 @@ class SingleComment extends React.Component {
 
 	render() {
 		// Convert timestamp to time string
-		let time = moment(this.props.timestamp, 'X').format('@h:mm');
+		let time = Moment(this.props.timestamp, 'X').format('@h:mma');
 
 		return (
 			<div className="comment-box">
-				<span className="comment-author">{this.props.author}</span>
-				<span className="comment-timestamp">{time}</span>
+				<div className="comment-meta">
+					<span className="comment-author">{this.props.author} </span>
+					<span className="comment-timestamp">{time}</span>
+				</div>
 				<div className="comment-text">{this.props.text}</div>
 			</div>
 		);
@@ -77,8 +80,11 @@ class NewCommentForm extends React.Component {
 		this.submit = this.submit.bind(this);
 	}
 
-	submit() {
-		let text = document.getElementById('new-comment-text').textContent;
+	submit(evt) {
+		evt.preventDefault();
+
+		let text = evt.target.value;
+		console.log(text);
 
 		fetch('comment/new/', {
 			method: "POST",
@@ -99,9 +105,9 @@ class NewCommentForm extends React.Component {
 
 	render() {
 		return (
-			<form className="new-comment-form">
-				<textarea id="new-comment-text" />
-				<button onClick={this.submit} />
+			<form id="new-comment-form">
+				<textarea id="new-comment-text" /> <br />
+				<button className="comment-button" onClick={this.submit}>comment!</button>
 			</form>
 		);
 	}

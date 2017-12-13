@@ -410,7 +410,6 @@ class PlaylistEntry extends React.Component {
 					handleInput={this.props.handleInput}
 					autocomplete={this.props.autocomplete}/>
 				<div className="playlist-minus clickable" onClick={this.props.delete}> </div>
-				<div className="playlist-comment clickable"> </div>
 			</div>
 		);
 	}
@@ -439,17 +438,17 @@ class ResponsiveTextInput extends React.Component {
 
 	updateValue(value) {
 		this.props.handleInput(this.props.identifier, value);
-		if(this.props.autocomplete) {
+		if (this.props.autocomplete) {
 			fetch(`entry/complete/?identifier=${this.props.identifier}&value=${value}`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-				"Accept": "application/json"
-			},
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					"Accept": "application/json"
+				},
 			}).then(response => response.json()).then(json => {
 				console.log(json);
-				if(json.ok) {
-					if(json.suggestions.length == 1 && json.suggestions[0] == value)
+				if (json.ok) {
+					if (json.suggestions.length == 1 && json.suggestions[0] == value)
 						this.setState({suggestions: []})
 					else 
 						this.setState({suggestions: json.suggestions})
@@ -584,7 +583,7 @@ class PlaylistEntryForm extends React.Component {
 					/>
 					<PlaylistEntryFormInput 
 						identifier="label"
-						placeholder="album label"
+						placeholder="record label"
 						value={this.state.label}
 						submit={this.submit}
 						autoFocus={false}
@@ -632,23 +631,22 @@ class PlaylistEntryFormInput extends React.Component {
 	}
 
 	render() { 
-			return (
-				<div className="playlist-text-cell">
-					<input 
-						autoFocus={this.props.autoFocus}
-						autoComplete={'off'}
-						type="text"
-						value={this.state.value} 
-						name={this.props.identifier}
-						placeholder={this.props.placeholder} 
-						onChange={e => this.updateValue(e.target.value)}
-						onKeyUp={this.handleKeyUp}/>
-					<SuggestionsBox
-						suggestions={this.state.suggestions} 
-						updateValue  ={this.updateValue}/>
-				</div>
-
-				);
+		return (
+			<div className="playlist-text-cell">
+				<input 
+					autoFocus={this.props.autoFocus}
+					autoComplete={'off'}
+					type="text"
+					value={this.state.value} 
+					name={this.props.identifier}
+					placeholder={this.props.placeholder} 
+					onChange={e => this.updateValue(e.target.value)}
+					onKeyUp={this.handleKeyUp}/>
+				{this.state.suggestions.length ? <SuggestionsBox
+					suggestions={this.state.suggestions} 
+					updateValue  ={this.updateValue}/> : ''}
+			</div>
+		);
 	}
 }
 
@@ -672,22 +670,21 @@ class SuggestionsBox extends React.Component {
 	   AND PICKING A VALUE ON KEYPRESS */ 
 	   
 	renderSuggestions() {
-		return ( this.props.suggestions.map((suggestion, index) => {
-
+		return this.props.suggestions.map((suggestion, index) => {
 			let customStyle = {};
-			if(index == this.state.selected)
+			if (index == this.state.selected)
 				customStyle.backgroundColor = 'blue';
 
-			return(
-					<div
-						key={index} 
-						style={customStyle}
-						onClick={e => this.clickedIt(suggestion, index)}
-						className="playlist-suggestion"> 
-						{suggestion} 
-					</div>
+			return (
+				<div
+					key={index} 
+					style={customStyle}
+					onClick={e => this.clickedIt(suggestion, index)}
+					className="playlist-suggestion"> 
+					{suggestion} 
+				</div>
 			);
-		}));
+		});
 	}
 
 	render() {
@@ -695,7 +692,7 @@ class SuggestionsBox extends React.Component {
 			<div className="playlist-autocomplete-box">
 				{this.renderSuggestions()} 
 			</div>
-			);
+		);
 	}
 }
 

@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import QueryDict, JsonResponse
 
 from ..models import Spin, Comment, Playlist
+import json
 
 @csrf_exempt
 @require_http_methods(['POST'])
@@ -18,12 +19,17 @@ def new(request, playlist_id):
     """
 
     # Check that specified playlist exists
-    if not Playlist.objects.filter(pk=playlist_id).exists():
+    try: 
+        playlist = Playlist.objects.get(pk=playlist_id)
+    except Playlist.DoesNotExist: 
         return JsonResponse({'error' : 'Specified playlist does not exist' })
 
+    # HACK
+    args = json.loads(request.body.decode('utf-8'))
+
     # Get text and instantiate comment
-    text = request.POST['text']
-    comment = Comment(text=text, playlist=playlist_id)
+    text = args['text']
+    comment = Comment(text=text, playlist=playlist)
 
     # Associate the proper entry if applicable
     if 'entryId' in request.POST:

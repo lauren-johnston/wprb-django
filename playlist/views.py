@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import ensure_csrf_cookie
 
+import time, datetime
+
 @login_required
 def landing(request):
     """ Serve the landing page for a dj that allows them to 
@@ -71,8 +73,8 @@ def edit_playlist(request, playlist_id):
     comments = [{
         'id'        : comment.id,
         'text'      : comment.text,
-        'timestamp' : comment.timestamp,
-        'author'    : comment.author.username
+        'timestamp' : time.mktime(comment.timestamp.timetuple()),
+        'author'    : comment.author.username if comment.author else 'anonymous'
     } for comment in Comment.objects.filter(playlist=playlist_id)]
 
     context = {
