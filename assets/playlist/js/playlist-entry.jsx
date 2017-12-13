@@ -691,11 +691,13 @@ class SuggestionsBox extends React.Component {
 	}
 
 	render() {
-		return (
-			<div className="playlist-autocomplete-box">
-				{this.renderSuggestions()} 
-			</div>
-		);
+		if (this.props.suggestions.length > 0)
+			return (
+				<div className="playlist-autocomplete-box">
+					{this.renderSuggestions()} 
+				</div>
+			);
+		else return null;
 	}
 }
 

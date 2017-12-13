@@ -12,6 +12,7 @@ def plays(field, field_id, max=50):
     # Filter the spins on the appropriate query
     if field == 'artist':
         plays = Spin.objects.filter(song__artist__id=field_id)
+        title = Artist.objects.get(pk=field_id).name
     elif field == 'album':
         plays = Spin.objects.filter(song__album__id=field_id)
     elif field == 'dj':
@@ -34,9 +35,8 @@ def plays(field, field_id, max=50):
         'playlistId': p.playlist.id,
     } for p in plays]
 
-    print(p)
 
-    return p
+    return p, title
 
 def details(field, id):
     """ Return the details associated with a given resource    
