@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import QueryDict, JsonResponse
 
 from ..models import Spin, Comment, Playlist
-import json
+import json, time, datetime
 
 @csrf_exempt
 @require_http_methods(['POST'])
@@ -29,6 +29,8 @@ def new(request, playlist_id):
 
     # Get text and instantiate comment
     text = args['text']
+
+    print(text)
     comment = Comment(text=text, playlist=playlist)
 
     # Associate the proper entry if applicable
@@ -38,15 +40,21 @@ def new(request, playlist_id):
             comment.spin = Spin.objects.get(pk=entry_id)
 
     # Associate user with comment if applicable
+    print(request.user)
     if not request.user.is_anonymous():
         comment.author = request.user
 
     comment.save()
 
-    return JsonResponse({
-        'id'    : comment.id,
-        'text'  : text,
-    })
+    response = {
+        'id'        : comment.id,
+        'text'      : comment.text,
+        'timestamp' : time.mktime(comment.timestamp.timetuple()),
+        'author'    : comment.author.username if comment.author else 'anonymous'
+    }
+    print(response)
+
+    return JsonResponse(response)
 
 @login_required
 @require_http_methods(['PUT'])

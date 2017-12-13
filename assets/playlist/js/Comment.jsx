@@ -83,8 +83,11 @@ class NewCommentForm extends React.Component {
 	submit(evt) {
 		evt.preventDefault();
 
-		let text = evt.target.value;
-		console.log(text);
+		let text = document.getElementById("new-comment-text").value;
+		document.getElementById("new-comment-text").value = '';
+
+		let body = JSON.stringify({text});
+		console.log(body);
 
 		fetch('comment/new/', {
 			method: "POST",
@@ -92,7 +95,7 @@ class NewCommentForm extends React.Component {
 				"Content-Type": "application/json",
 				"Accept": "application/json"
 			},
-			body: JSON.stringify({text}),
+			body: body,
 			mode: 'cors',
 			cache: 'default'
 		}).then(response => {
@@ -101,6 +104,7 @@ class NewCommentForm extends React.Component {
 			console.log(data);
 			this.props.addComment(data);
 		});
+
 	}
 
 	render() {
