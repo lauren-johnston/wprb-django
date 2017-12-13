@@ -31,6 +31,8 @@ function csrfSafeMethod(method) {
    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+function autocomplete(identifier, value) {}
+
 //----------------------------------------------------------------------
 
 // function invalidFormException(message) {

@@ -57,7 +57,7 @@ def add(request, playlist_id):
 
 	# Hacky, forgive me
 	response = {
-		"success": True,
+		"ok": True,
 		"spin": spin_to_dict(new_spin)
 	}
 	if label_name is not None:
@@ -196,7 +196,7 @@ def update(request, playlist_id):
 		args         = json.loads(request.body)
 		playlist     = Playlist.objects.get(pk=playlist_id)
 		spins        = Spin.objects.filter(playlist__pk=playlist_id)
-		target_spin  = spins.get(index=args['index'])
+		target_spin  = spins.get(index=args['spindex'])
 	except KeyError:
 		return error('Invalid request')
 	except Spin.DoesNotExist:
@@ -220,38 +220,51 @@ def update(request, playlist_id):
 	print(spin_to_dict(new_spin))
 
 	return JsonResponse({
-		'success': True,
+		'ok': True,
 		'spin': spin_to_dict(new_spin)
 	})
 
-# DEPRECATED
+
+#@login_required
+@csrf_exempt
 @require_http_methods(["GET"])
 def complete(request, playlist_id):
-	pass
-# 	""" Returns a list of songs that *match* the provided
-# 	    title, artist, album, and label, which can all be 
-# 		incomplete strings. 
-# 	"""
-# 	args = request.GET
+	""" Updates the specified entry with provided basic spin dict 
+	"""
+	try: 
+		args         = request.GET
+		identifier   = args.get('identifier')
+		value        = args.get('value')
+	except Exception:
+		return error("we don't really know...")
 
-# 	# Filter songs by query, case insensitively
-# 	songs = Songs.objects.all()
-# 	if 'title' in args:
-# 		songs = songs.filter(name__icontains=args['title'])
-# 	if 'artist' in args:
-# 		songs = songs.filter(artist__name__icontains=args['artist'])
-# 	if 'album' in args:
-# 		songs = songs.filter(album__name__icontains=args['album'])
-# 	if 'label' in args:
-# 		songs = songs.filter(album__label__name__icontains=args['label'])
+	if identifier not in ['title', 'artist', 'album', 'label']:
+		return error('Invalid request - hone identifier!')
 
-# 	matches = [
-# 		{
-# 			'title'	: s.name,
-# 			'artist': s.artist.name,
-# 			'album' : s.album.name,
-# 			'label' : s.album.label.name if album.label else None,
-# 		} for s in songs
-# 	]
+	if value is None or value == '':
+		return JsonResponse({'ok': True, 'suggestions':[]})
 
-# 	return JsonResponse({ 'matches': matches })
+	if   identifier == 'title':
+		suggestions = [s.name for s in Song.objects.filter(name__startswith=value)]
+	elif identifier == 'artist':
+		suggestions = [a.name for a in Artist.objects.filter(name__startswith=value)]
+	elif identifier == 'album':
+		suggestions = [a.name for a in Album.objects.filter(name__startswith=value)]
+	elif identifier == 'label':
+		suggestions = [l.name for l in Label.objects.filter(name__startswith=value)]
+	else:
+		print('no match.......')
+		suggestions = []
+
+	# print('Called complete...')
+	# print('Identifier is....')
+	# print(args.get('identifier'))
+	# print('Value is....')
+	# print(args.get('value'))
+	print('Matching songs...')
+	print([s.name for s in Song.objects.filter(name__contains=value)])
+
+	return JsonResponse({
+		'ok': True,
+		'suggestions': suggestions
+		})

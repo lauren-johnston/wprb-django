@@ -143,10 +143,18 @@
 .playlist-text-cell {
 	display: inline-block;
 	width: 20%;
+	min-width: 4em;
 }
 
 .playlist-artist-name {
 
+}
+
+.playlist-autocomplete-box {
+	max-height: 2em;
+	background-color: white;
+	overflow-y: scroll;
+	z-index: 1 !important;
 }
 
 .playlist-comment {
@@ -177,4 +185,8 @@
    display: inline-block;
    width: 5%;
    height: 1em;
+}
+
+.playlist-suggestion {
+	color: black;
 }

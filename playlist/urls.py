@@ -40,7 +40,7 @@ urlpatterns = [
 	url(playlist_id + 'entry/move/$',     services.entry.move,     name='entry-move'),
 	url(playlist_id + 'entry/delete/$',   services.entry.delete,   name='entry-delete'),
 	url(playlist_id + 'entry/update/$',   services.entry.update,   name='entry-update'),
-	url(playlist_id + 'entry/complete/$', services.entry.complete, name='entry-complete'),
+	url(playlist_id + 'entry/complete/$',   services.entry.complete,   name='entry-complete'),
 
 	# Meta-Playlist services
 	url(playlist_id + 'meta/desc/$',          services.meta.desc,          name='meta-desc'),
