@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {SortableContainer, 
-		SortableElement, 
+import {SortableContainer,
+		SortableElement,
 		SortableHandle,
 		arrayMove} from 'react-sortable-hoc';
 
@@ -11,7 +11,7 @@ const common = require('./common.js');
 // Following syntax from online
 const DragHandle = SortableHandle(() => <div className="playlist-movetab"/>);
 
-const SortablePlaylistEntry = 
+const SortablePlaylistEntry =
 	SortableElement(function({spin, spindex, removeSpinFromView, updateSpinInView}) {
 	// Hacked to remove index keyword (demanded by Sortable Element)
 	return (
@@ -26,13 +26,13 @@ const SortablePlaylistEntry =
 	);
 });
 
-const SortablePlaylistList = 
+const SortablePlaylistList =
 	SortableContainer(({spins, removeSpinFromView, updateSpinInView}) => {
 	// index MUST BE index in array or Sortable will blow up
 	return (
 		<div className='playlist-list-entries'>
 		{spins.map((spin, index) => {
-			return <SortablePlaylistEntry 
+			return <SortablePlaylistEntry
 				key={spin.id}
 				spin={spin}
 				spindex={index + 1}
@@ -54,7 +54,7 @@ class Playlist extends React.Component {
 		return (
 			<div id="container">
 				<div id="col-left" className="col">
-					<PlaylistDetails 
+					<PlaylistDetails
 						title={this.props.show.title}
 						subtitle={this.props.show.subtitle}
 						dj={this.props.show.dj}
@@ -125,7 +125,7 @@ class SortablePlaylistTable extends React.Component {
 		this.addSpinToView      = this.addSpinToView.bind(this);
 		this.removeSpinFromView = this.removeSpinFromView.bind(this);
 		this.updateSpinInView   = this.updateSpinInView.bind(this);
-		
+
 		this.onSortEnd          = this.onSortEnd.bind(this);
 	}
 
@@ -153,7 +153,7 @@ class SortablePlaylistTable extends React.Component {
 
 		console.log(`moved ${oldIndex} to ${newIndex}`)
 		// Move spin in the server
-		if(oldIndex != newIndex) 
+		if(oldIndex != newIndex)
 			fetch('entry/move/', {
 				method: "PUT",
 				headers: {
@@ -181,7 +181,7 @@ class SortablePlaylistTable extends React.Component {
 			<div id="playlist" className="col-content">
 				<PlaylistTableHeader />
 				<div className="playlist-table-contents">
-					<SortablePlaylistList 
+					<SortablePlaylistList
 						spins = {this.state.spins}
 						updateSpinInView={this.updateSpinInView}
 						removeSpinFromView={this.removeSpinFromView}
@@ -257,7 +257,7 @@ class PlaylistEntryContainer extends React.Component {
 
 	deleteSpinFromDB() {
 		// Close all inputs (for a small bug)
-		for(let inputKey of Object.keys(this.state.inputs)) 
+		for(let inputKey of Object.keys(this.state.inputs))
 			this.state.inputs[inputKey].setState({editing:false})
 
 		// Remove spin from the server
@@ -313,17 +313,17 @@ class PlaylistEntryContainer extends React.Component {
 		});
 	}
 
-	 				
+
 	render() {
 		// console.log("here's our entry container...");
 		// console.log(this);
 		return (
-			<PlaylistEntry 
+			<PlaylistEntry
 				spindex={this.props.spindex}
 				title={this.props.title}
 				artist={this.props.artist}
 				album={this.props.album}
-				label={this.props.label} 
+				label={this.props.label}
 				delete={this.deleteSpinFromDB}
 				update={this.updateSpinInDB}
 				ref={this.entrySet}
@@ -337,9 +337,9 @@ class PlaylistEntry extends React.Component {
 	}
 
 	renderArtists() {
-		return this.props.artists.map( (artistName) => 
+		return this.props.artists.map( (artistName) =>
 			// Todo: replace this with a component with support for clicking and editing artists
-			<span key={artistName} className="playlist-artist-name tagged-item">{artistName}</span> 
+			<span key={artistName} className="playlist-artist-name tagged-item">{artistName}</span>
 		);
 	}
 
@@ -348,35 +348,35 @@ class PlaylistEntry extends React.Component {
 			<div className="spin">
 				<DragHandle />
 				<div className="playlist-numbering"> {this.props.spindex} </div>
-				<ReactiveTextInput 
-					ref={this.props.setInput} 
-					value={this.props.title}     
-					name='title' 
-					inDB={true} 
+				<ReactiveTextInput
+					ref={this.props.setInput}
+					value={this.props.title}
+					name='title'
+					inDB={true}
 					update={this.props.update}
 					delete={this.props.delete}
 					autocomplete={empty => null}/>
-				<ReactiveTextInput 
-					ref={this.props.setInput} 
-					value={this.props.artist}     
+				<ReactiveTextInput
+					ref={this.props.setInput}
+					value={this.props.artist}
 					name='artist'
-					inDB={true} 
+					inDB={true}
 					update={this.props.update}
 					delete={this.props.delete}
 					autocomplete={empty => null}/>
-				<ReactiveTextInput 
-					ref={this.props.setInput} 
-					value={this.props.album}      
-					name='album' 
-					inDB={true} 
+				<ReactiveTextInput
+					ref={this.props.setInput}
+					value={this.props.album}
+					name='album'
+					inDB={true}
 					update={this.props.update}
 					delete={this.props.delete}
 					autocomplete={empty => null}/>
-				<ReactiveTextInput 
-					ref={this.props.setInput} 
-					value={this.props.label}      
-					name='label' 
-					inDB={true} 
+				<ReactiveTextInput
+					ref={this.props.setInput}
+					value={this.props.label}
+					name='label'
+					inDB={true}
 					update={this.props.update}
 					delete={this.props.delete}
 					autocomplete={empty => null}/>
@@ -423,7 +423,7 @@ class PlaylistEntryFormContainer extends React.Component {
 
 	render() {
 		return (
-			<PlaylistEntryForm 
+			<PlaylistEntryForm
 				spindex={this.props.spindex}
 				addSpinToDB={this.addSpinToDB}/>
 		);
@@ -477,7 +477,7 @@ class PlaylistEntryForm extends React.Component {
 						autoFocus={false}
 						autocomplete={empty => null}
 					/>
-					<PlaylistEntryFormInput 
+					<PlaylistEntryFormInput
 						name="album"
 						placeholder="album"
 						value={this.state.album}
@@ -485,7 +485,7 @@ class PlaylistEntryForm extends React.Component {
 						autoFocus={false}
 						autocomplete={empty => null}
 					/>
-					<PlaylistEntryFormInput 
+					<PlaylistEntryFormInput
 						name="label"
 						placeholder="album label"
 						value={this.state.label}
@@ -510,22 +510,22 @@ class PlaylistEntryFormInput extends React.Component {
 		this.updateValue  = this.updateValue.bind(this);
 	}
 
-	handleKeyDown(e) { 
-		if(e.key == 'Enter') this.props.submit(); 
+	handleKeyDown(e) {
+		if(e.key == 'Enter') this.props.submit();
 		else this.props.autocomplete(this.props.name, e.target.value);
 	}
 
 	updateValue(e)   { this.setState({value: e.target.value}); }
 
-	render() { 
+	render() {
 			return (
 				<div className="playlist-text-cell">
-					<input 
+					<input
 						autoFocus={this.props.autoFocus}
 						type="text"
-						value={this.state.value} 
+						value={this.state.value}
 						name={this.props.name}
-						placeholder={this.props.placeholder} 
+						placeholder={this.props.placeholder}
 						onChange={this.updateValue}
 						onKeyDown={this.handleKeyDown}/>
 				</div>
@@ -576,13 +576,13 @@ class ReactiveTextInput extends React.Component {
 	render() {
 		if(this.state.editing) {
 			return (
-				<div className="playlist-text-cell dbl-clickable" 
+				<div className="playlist-text-cell dbl-clickable"
 					 onDoubleClick={this.toggleEditing}>
-						<input 
-							type="text" 
+						<input
+							type="text"
 							name={this.state.name}
 							value={this.state.value}
-							placeholder={this.state.placeholder} 
+							placeholder={this.state.placeholder}
 							onChange={this.updateValue}
 							onKeyDown={this.handleKeyDown}/>
 				</div>

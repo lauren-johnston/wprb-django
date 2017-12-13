@@ -35,6 +35,9 @@ urlpatterns = [
 	# Landing Page
 	url(r'^$', views.landing),
 
+	#search GET Request
+	url(r'^search/$', services.search.search, name='search'),
+
 	# Intra-Playlist services
 	url(playlist_id + 'entry/add/$',      services.entry.add,      name='entry-add'),
 	url(playlist_id + 'entry/move/$',     services.entry.move,     name='entry-move'),

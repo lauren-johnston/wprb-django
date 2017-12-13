@@ -2,5 +2,11 @@
 	margin: 1em;
 	padding: 1em;
 	display: inline-block;
-	background-color: #424242;
+	background-color: #36e29b;
+}
+
+
+#search-bar {
+	border-radius: 5px;
+	border-style: 1px;
 }

@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from .models import *
 from .util import *
+from .services import search
 
 def graph(request):
 	""" This function will render the graph component.
@@ -28,7 +29,6 @@ def search(request):
 		'props' : props,
 		'bundle': 'search'
 	}
-
 	return render(request, "component.html", context=context)
 
 
@@ -74,4 +74,3 @@ def chart(request):
 	}
 
 	return render(request, "component.html", context=context)
-
