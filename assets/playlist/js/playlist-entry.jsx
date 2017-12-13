@@ -155,10 +155,12 @@ class PlaylistDetails extends React.Component {
 							/>
 					</h3>
 				</div>
-				<div className="show-dj show-section">
+				<div className="show-dj-name show-section">
 					{this.renderDJs()}
 				</div>
 				<div className="show-desc show-section">
+				<div className="desc-heading">Description</div>
+				<div class="section-title-underline"></div>
 					<div className="show-desc-text">
 						<ResponsiveTextInput
 							value={this.state.desc}
@@ -170,17 +172,18 @@ class PlaylistDetails extends React.Component {
 				</div>
 				<div className="show-genre show-section">
 					<div className="genre-heading">Genre</div>
+					<div class="section-title-underline"></div>
 						<ResponsiveTextInput
 							value={this.state.genre}
 							identifier={'genre'}
 							handleInput={this.updateGeneral}
 							update={this.putToServer}
 							/>
-				</div>
+					</div>
 				<div className="show-subgenre show-section">
-					<span className="genre-heading">Sub-genre Tags</span>
-					<div id="subgenre-input">New Sub-genre</div>
-					<div className="subgenre-add-button">ADD</div>
+					<div className="genre-heading">Sub-genres</div>
+					<div class="section-title-underline"></div>
+					{/*<div className="subgenre-add-button">ADD</div>*/}
 					{this.renderSubgenres()}
 				</div>
 			</div>

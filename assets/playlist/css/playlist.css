@@ -20,7 +20,7 @@
 	max-height: calc(80vh - 3em);
 }
 
-#subgenre-input {
+.section-title-underline {
 	font-size: 0.8em;
 	border-style: solid;
 	border-radius: 0.2em;
@@ -63,30 +63,44 @@
 }
 
 /* Styles within the show details section */
+#show .playlist-text-cell {
+    width: 100%;
+}
+
 .show-section {
 	margin: 1em 0 0em 0;
 }
 
+.show-title-text {
+    margin-bottom: 0.5em;
+}
+
 .show-subtitle-text {
 	font-weight: 100;
+    font-style: italic;
 }
 
 .show-dj-name {
-	
+	font: bold;
+}
+
+.desc-heading {
+    font-size: 1.1em;
+    margin-bottom: 0.5em;
 }
 
 .show-desc-text {
-    border-style: solid;
+    /*border-style: solid;
     border-width: 2px;
     border-color: #d4d4d4;
-    border-radius: 0.3em;
-    padding: 0.2em 0.2em 0.2em 0.2em;
-    font-size: 0.8em;
+    border-radius: 0.3em;*/
+/*    padding: 0.2em;
+    font-size: 0.8em;*/
 }
 
 .genre-heading {
 	font-size: 1.1em;
-	margin-bottom: 0.75em;
+	margin-bottom: 0.5em;
 }
 
 .show-genre-name {
