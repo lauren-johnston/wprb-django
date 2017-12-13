@@ -10,7 +10,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
-from . import views, services, explore
+from . import views, services, explore, test_views
 from .views import edit_playlist
 from .services import entry, meta, comment
 
@@ -53,4 +53,11 @@ urlpatterns = [
 	url(playlist_id + 'comment/new',      services.comment.new,    name='comment-new'),
 	url(playlist_id + 'comment/edit',     services.comment.edit,   name='comment-edit'),
 	url(playlist_id + 'comment/delete',   services.comment.delete, name='comment-delete'),
+
+	# VIEWS FOR TESTING COMPONENTS
+	url('test/graph', test_views.graph),
+	url('test/search', test_views.search),
+	url('test/details', test_views.details),
+	url('test/shows', test_views.shows),
+	url('test/chart', test_views.chart),
 ]

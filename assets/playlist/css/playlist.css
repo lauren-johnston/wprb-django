@@ -17,6 +17,7 @@
 	padding: 0.5em;
 
 	width: calc(100% - 3em);
+	max-height: calc(80vh - 3em);
 }
 
 #subgenre-input {
@@ -107,6 +108,7 @@
 .playlist-heading {
 	font-size: 1.2em;
 	font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+	margin-bottom: 0.5em;
 }
 
 .playlist-item {
@@ -124,6 +126,8 @@
 	display: inline-block;
 	width: 5%;
 	height: 1em;
+
+	cursor: grab;
 }
 
 .playlist-numbering {
@@ -132,8 +136,10 @@
 }
 
 .playlist-table-contents {
-	overflow-y:scroll;
+	max-height: 25em;
+	overflow-y: scroll;
 }
+
 .playlist-text-cell {
 	display: inline-block;
 	width: 20%;

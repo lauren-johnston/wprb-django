@@ -9,38 +9,39 @@ import {SortableContainer,
 const common = require('./common.js');
 // Following syntax from online
 const DragHandle = SortableHandle(() => <div className="playlist-movetab"/>);
+
 const SortablePlaylistEntry = 
 	SortableElement(function({spin, spindex, removeSpinFromView, updateSpinInView}) {
 	// Hacked to remove index keyword (demanded by Sortable Element)
 	return (
 		<PlaylistEntryContainer
-				title={spin.title}
-				artist={spin.artist}
-				album={spin.album}
-				label={spin.label||''}
-				spindex={spindex}
-				removeSpinFromView={removeSpinFromView}
-				updateSpinInView={updateSpinInView}/>
-		);
+			title={spin.title}
+			artist={spin.artist}
+			album={spin.album}
+			label={spin.label||''}
+			spindex={spindex}
+			removeSpinFromView={removeSpinFromView}
+			updateSpinInView={updateSpinInView} />
+	);
 });
+
 const SortablePlaylistList = 
 	SortableContainer(({spins, removeSpinFromView, updateSpinInView}) => {
 	// index MUST BE index in array or Sortable will blow up
 	return (
-		<div className='playlist-table-contents'>
-		 {
-		 	spins.map((spin, index) => {
-		 		return <SortablePlaylistEntry 
-		 			key={spin.id}
-		 			spin={spin}
-		 			spindex={index + 1}
-		 			index={index}
-		 			removeSpinFromView={removeSpinFromView}
-		 			updateSpinInView={updateSpinInView} />
-		 	})
-		 }
+		<div className='playlist-list-entries'>
+		{spins.map((spin, index) => {
+			return <SortablePlaylistEntry 
+				key={spin.id}
+				spin={spin}
+				spindex={index + 1}
+				index={index}
+				removeSpinFromView={removeSpinFromView}
+				updateSpinInView={updateSpinInView} />
+			}
+		)}
 		</div>
-		);
+	);
 });
 
 class Playlist extends React.Component {
@@ -58,7 +59,7 @@ class Playlist extends React.Component {
 						dj={this.props.show.dj}
 						genre={this.props.show.genre}
 						subgenre={this.props.show.subgenre}
-						desc={this.props.show.desc}/>
+						desc={this.props.show.desc} />
 				</div>
 				<div id="col-right" className="col">
 					<SortablePlaylistTable spins={this.props.spins} />
@@ -245,7 +246,7 @@ class SortablePlaylistTable extends React.Component {
 						updateSpinInView={this.updateSpinInView}
 						removeSpinFromView={this.removeSpinFromView}
 						onSortEnd={this.onSortEnd}
-						useDragHandle={true}/>
+						useDragHandle={true} />
 					<PlaylistEntryFormContainer
 						key={this.state.spins.length + 1}
 						spindex={this.state.spins.length + 1}
