@@ -88,11 +88,11 @@ def edit_playlist(request, playlist_id):
 def explore(request, field, field_id):
     """ Render the page with the explore component and relevant info.
     """
-    plays, title = plays(field, int(field_id))
+    p, title = plays(field, int(field_id))
     context = {
         'bundle': 'explore',
         'title': 'Explore %ss' % field.capitalize(),
-        'props': {'plays': plays, 'title' : title}
+        'props': {'plays': p, 'title' : title}
     }
 
     return render(request, "component.html", context=context)
