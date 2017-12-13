@@ -7,7 +7,8 @@ class Search extends React.Component {
 		super(props);
 		this.makeQuery = this.makeQuery.bind(this);
 
-		this.state = {query: ''};
+		this.state = {query: '', results: null};
+		this.makeQuery = this.makeQuery.bind(this);
 	}
 
 	makeQuery() {
@@ -26,17 +27,26 @@ class Search extends React.Component {
 	}
 
 	render() {
+		let results;
+		if (this.state.results) results = <SearchResults results={this.state.results} />)
+		else results = null;
+
 		return (
 			<div className="search">
-
-				<input id = "search-bar" type="text" name="search-input" onKeyPress={this.makeQuery} />
-
-				
-
-
-
+				<input id="search-bar" type="text" name="search-input" onKeyUp={this.makeQuery} />
+				{results}
 			</div>
 		);
+	}
+}
+
+class SearchResults extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+
+	render() {
+		return null;
 	}
 }
 

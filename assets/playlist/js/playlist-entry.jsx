@@ -303,7 +303,7 @@ class PlaylistEntryContainer extends React.Component {
 		}).then(response => {
 			return response.json();
 		}).then(data => {
-			if(!data.success) {
+			if (!data.success) {
 				console.log("Ajax Error:");
 				console.log(data);
 				return;
@@ -355,7 +355,7 @@ class PlaylistEntry extends React.Component {
 					inDB={true}
 					update={this.props.update}
 					delete={this.props.delete}
-					autocomplete={empty => null}/>
+					autocomplete={() => null}/>
 				<ReactiveTextInput
 					ref={this.props.setInput}
 					value={this.props.artist}
@@ -363,7 +363,7 @@ class PlaylistEntry extends React.Component {
 					inDB={true}
 					update={this.props.update}
 					delete={this.props.delete}
-					autocomplete={empty => null}/>
+					autocomplete={() => null}/>
 				<ReactiveTextInput
 					ref={this.props.setInput}
 					value={this.props.album}
@@ -371,7 +371,7 @@ class PlaylistEntry extends React.Component {
 					inDB={true}
 					update={this.props.update}
 					delete={this.props.delete}
-					autocomplete={empty => null}/>
+					autocomplete={() => null}/>
 				<ReactiveTextInput
 					ref={this.props.setInput}
 					value={this.props.label}
@@ -379,7 +379,7 @@ class PlaylistEntry extends React.Component {
 					inDB={true}
 					update={this.props.update}
 					delete={this.props.delete}
-					autocomplete={empty => null}/>
+					autocomplete={() => null}/>
 				<div className="playlist-minus clickable" onClick={this.props.delete}> </div>
 				<div className="playlist-comment clickable"> </div>
 			</div>
@@ -467,7 +467,7 @@ class PlaylistEntryForm extends React.Component {
 						value={this.state.title}
 						submit={this.submit}
 						autoFocus={true}
-						autocomplete={empty => null}
+						autocomplete={() => null}
 					/>
 					<PlaylistEntryFormInput
 						name="artist"
@@ -475,7 +475,7 @@ class PlaylistEntryForm extends React.Component {
 						value={this.state.artist}
 						submit={this.submit}
 						autoFocus={false}
-						autocomplete={empty => null}
+						autocomplete={() => null}
 					/>
 					<PlaylistEntryFormInput
 						name="album"
@@ -483,7 +483,7 @@ class PlaylistEntryForm extends React.Component {
 						value={this.state.album}
 						submit={this.submit}
 						autoFocus={false}
-						autocomplete={empty => null}
+						autocomplete={() => null}
 					/>
 					<PlaylistEntryFormInput
 						name="label"
@@ -491,7 +491,7 @@ class PlaylistEntryForm extends React.Component {
 						value={this.state.label}
 						submit={this.submit}
 						autoFocus={false}
-						autocomplete={empty => null}
+						autocomplete={() => null}
 					/>
 					<div onClick={this.submit} className="playlist-plus clickable" id="add-entry-button">
 					</div>
