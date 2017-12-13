@@ -10,12 +10,12 @@ def date_to_str(date):
 
 def error(message):
 	return JsonResponse({
-		'success': False,
+		'ok': False,
 		'error': message
 		})
 
 def success():
-	return JsonResponse({'success': True})
+	return JsonResponse({'ok': True})
 
 def invalid_array_index(array, index):
 	if (index < 0) or (index > len(array)):
@@ -25,7 +25,7 @@ def invalid_array_index(array, index):
 def spin_to_dict(spin):
 	return {
 		"id": spin.id,
-		"index": spin.index,
+		"spindex": spin.index,
 		"title": spin.song.name,
 		"artist": spin.song.artist.all()[0].name,
 		"album": spin.song.album.name,
