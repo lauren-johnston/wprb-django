@@ -2,14 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import CommentPanel from './Comment.jsx';
 
-class ExploreDetails extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-
-	render() {
-		return '';
-	}
+function ExploreDetails() {
+	return (
+		<div className="details">
+			<h1 className="details-title">{this.props.title}</h1>
+			<h3 className="details-subtitle">{this.props.subtitle}</h3>
+			<div className="details-description">{this.props.desc}</div>
+		</div>
+	)
 }
 
 class ExploreChart extends React.Component {
