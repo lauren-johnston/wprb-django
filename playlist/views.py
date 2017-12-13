@@ -68,8 +68,15 @@ def edit_playlist(request, playlist_id):
         'index' : spin.index,
     } for spin in playlist.spin_set.all()], key=lambda x: x['index'])
 
+    comments = [{
+        'id'        : comment.id,
+        'text'      : comment.text,
+        'timestamp' : comment.timestamp,
+        'author'    : comment.author.username
+    } for comment in Comment.objects.filter(playlist=playlist_id)]
+
     context = {
-        'props' : {'spins': spins, 'show': showdetails},
+        'props' : {'spins': spins, 'show': showdetails, 'comments': comments},
         'bundle': 'playlist',
         'title' : 'Playlist Editor'
     }

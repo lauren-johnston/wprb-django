@@ -178,3 +178,26 @@
    width: 5%;
    height: 1em;
 }
+
+/* Comment styles */
+.comment-panel {
+	position: fixed;
+	bottom: 0;
+	left: 70%;
+
+	background-color: #424242;
+	color: #fff;
+	z-index: 10;
+
+	padding: 0.25em 0.5em;
+	border-radius: 0.25em 0.25em 0 0;
+}
+
+.comment-panel.hidden {
+	height: 2em;
+	cursor: pointer;
+}
+
+.comment-panel.show {
+
+}
