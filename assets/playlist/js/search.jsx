@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ClickableExploreField from './ClickableExploreField.jsx';
 
 class Search extends React.Component {
 	constructor(props) {
@@ -11,6 +12,7 @@ class Search extends React.Component {
 			<div className="search">
 				THIS IS THE SEARCH COMPONENT AYYY <br />
 				STYLE ME UP WITH search.CSS
+				<ClickableExploreField field="artist" value="me" id="1" />
 			</div>
 		);
 	}
@@ -19,4 +21,4 @@ class Search extends React.Component {
 ReactDOM.render(
     React.createElement(Search, window.props),
     window.react_mount,
-)
+);

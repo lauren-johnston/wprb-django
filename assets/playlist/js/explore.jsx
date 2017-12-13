@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ClickableExploreField from './ClickableExploreField.jsx';
 
 class ExploreDetails extends React.Component {
 	constructor(props) {
@@ -122,25 +123,6 @@ class ExplorePlay extends React.Component {
 	}
 }
 
-class ClickableExploreField extends React.Component {
-	constructor(props) {
-		super(props);
-
-		this.followLink = this.followLink.bind(this);
-	}
-
-	followLink() {
-		window.location.href = `/explore/${this.props.field}/${this.props.id}/`;
-	}
-
-	render() {
-		return (
-			<span className="field-link" onClick={this.followLink}>
-				{this.props.value}
-			</span>
-		)
-	}
-}
 
 ReactDOM.render(
     React.createElement(ExplorePage, window.props),
