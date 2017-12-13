@@ -15,6 +15,10 @@ a:hover {
     text-decoration: none;
 }
 
+.explore-title {
+	font-size: 1.5em;
+	margin-bottom: 0.5em;
+}
 
 .play-container {
 	position: absolute;
@@ -28,9 +32,24 @@ a:hover {
 }
 
 .play-container-header > .play-field {
-	width: 12%;
+	width: 11.7%;
+	font-size: 1.2em;
+	font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
 	color: rgb(170, 247, 205);
 	cursor: auto;
+}
+
+.section-title-underline {
+	font-size: 0.8em;
+	border-style: solid;
+	border-radius: 0.2em;
+	border-top-color: white;
+	border-top-width: 2px;
+}
+
+.play {
+	border-bottom: 1px solid rgba(255,255,255, 0.1);
+	padding: 0.2em 0;
 }
 
 .play-field {
@@ -42,5 +61,6 @@ a:hover {
 }
 
 .play-field:hover {
-	font-weight: bold;
+	color: pink;
+    text-decoration: none;
 }

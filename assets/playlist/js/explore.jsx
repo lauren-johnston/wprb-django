@@ -60,13 +60,16 @@ class ExplorePlaysTable extends React.Component {
 function ExplorePlaysHeader() {
 	return (
 		<div className="play-container-header">
+			<div className="explore-title">EXPLORE</div>
 			<div className="play-field artist-field">artist</div>
 			<div className="play-field song-field">song</div>
 			<div className="play-field album-field">album</div>
 			<div className="play-field label-field">label</div>
 			<div className="play-field dj-field">dj</div>
 			<div className="play-field date-field">date</div>
+			<div className="section-title-underline"></div>
 		</div>
+
 	);
 }
 
