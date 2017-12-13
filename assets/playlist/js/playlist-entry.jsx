@@ -8,7 +8,6 @@ import {SortableContainer,
 		arrayMove} from 'react-sortable-hoc';
 
 const common = require('./common.js');
-
 // Following syntax from online
 const DragHandle = SortableHandle(() => <div className="playlist-movetab"/>);
 
@@ -75,38 +74,108 @@ class Playlist extends React.Component {
 class PlaylistDetails extends React.Component {
 	constructor(props) {
 		super(props)
+		this.state = {
+			title: this.props.title,
+			subtitle: this.props.subtitle,
+			djs: this.props.dj,
+			genre: this.props.genre,
+			subgenres: this.props.subgenre,
+			desc: this.props.desc
+		}
+
+		this.updateGeneral = this.updateGeneral.bind(this);
+		this.updateSubgenre = this.updateSubgenre.bind(this);
+		this.updateDJ = this.updateDJ.bind(this);
+	}
+
+	putToServer(identifier, value) {
+		let body = {};
+		body[identifier] = value;
+		fetch(`meta/${identifier}/`, {
+			method: "PUT",
+			body: JSON.stringify(body),
+		}).then(response => response.json()).then(json => {
+			console.log(json);
+			if(json.ok) {
+				// Do something
+			}
+		});
+	}
+
+	updateGeneral(identifier, value) {
+		let newState = this.state;
+		newState[identifier] = value;
+		this.setState(newState);
+	}
+	updateSubgenre(identifier, value) {
+		let subgenres = this.state.subgenres;
+		subgenres[identifier] = value;
+		this.setState({subgenres: subgenres});
+	}
+	updateDJ(identifier, value) {
+		let djs = this.state.djs;
+		djs[identifier] = value;
+		this.setState({djs: djs});
 	}
 
 	renderDJs() {
-		return this.props.dj.map( (dj) => (
-			<span key={dj} className="show-dj-name tagged-item">{dj}</span>
+		return this.state.djs.map( (dj, index) => (
+			<ResponsiveTextInput
+				key={dj} 
+				value={dj}
+				identifier={index}
+				handleInput={this.updateDJ}
+				/>
 		));
 	}
 
 	renderSubgenres() {
-		return this.props.subgenre.map( (subgenre) =>
-			<div key={subgenre} className="show-subgenre-name tagged-item">{subgenre}</div>
-		)
+		return this.props.subgenre.map( (subgenre, index) => (
+			<ResponsiveTextInput
+				key={subgenre}
+				value={subgenre}
+				identifier={index}
+				handleInput={this.updateSubgenre} />
+		));
 	}
 
 	render() {
 		return (
 			<div id="show" className="col-content">
 				<div className="show-title show-section">
-					<h2 className="show-title-text">{this.props.title}</h2>
-					<h3 className="show-subtitle-text">{this.props.subtitle}</h3>
+					<h2 className="show-title-text">
+						{this.props.title}
+					</h2>
+					<h3 className="show-subtitle-text">
+						<ResponsiveTextInput
+							value={this.state.subtitle}
+							identifier={'subtitle'}
+							handleInput={this.updateGeneral}
+							update={this.putToServer}
+							/>
+					</h3>
 				</div>
 				<div className="show-dj show-section">
 					{this.renderDJs()}
 				</div>
 				<div className="show-desc show-section">
-					<p className="show-desc-text">
-						{this.props.desc}
-					</p>
+					<div className="show-desc-text">
+						<ResponsiveTextInput
+							value={this.state.desc}
+							identifier={'desc'}
+							handleInput={this.updateGeneral}
+							update={this.putToServer}
+							/>
+					</div>
 				</div>
 				<div className="show-genre show-section">
 					<div className="genre-heading">Genre</div>
-					<span className="show-genre-name tagged-item">{this.props.genre}</span>
+						<ResponsiveTextInput
+							value={this.state.genre}
+							identifier={'genre'}
+							handleInput={this.updateGeneral}
+							update={this.putToServer}
+							/>
 				</div>
 				<div className="show-subgenre show-section">
 					<span className="genre-heading">Sub-genre Tags</span>
@@ -143,17 +212,16 @@ class SortablePlaylistTable extends React.Component {
 		this.setState({ spins: updatedSpins});
 	}
 
-	removeSpinFromView(index) {
+	removeSpinFromView(spindex) {
 		let updatedSpins = this.state.spins.slice();
-		updatedSpins.splice(index-1, 1);
+		updatedSpins.splice(spindex-1, 1);
 		this.setState({ spins: updatedSpins });
 	}
 
 	onSortEnd({oldIndex, newIndex}) {
-		let newState = { spins: arrayMove(this.state.spins, oldIndex, newIndex)}
-		this.setState(newState);
+		let newSpins = arrayMove(this.state.spins, oldIndex, newIndex);
+		this.setState({spins: newSpins});
 
-		console.log(`moved ${oldIndex} to ${newIndex}`)
 		// Move spin in the server
 		if(oldIndex != newIndex) 
 			fetch('entry/move/', {
@@ -164,17 +232,9 @@ class SortablePlaylistTable extends React.Component {
 				},
 				body: JSON.stringify({oldSpindex: oldIndex+1, newSpindex: newIndex+1}),
 				mode: 'cors',
-				cache: 'default'
-			}).then(response => {
-				return response.json();
-			}).then(data => {
-				if(!data.success) {
-					console.log("Ajax Error:");
-					console.log(data);
-					return;
-				}
-				console.log("Move: Success!");
-				console.log(data);
+			}).then(response => response.json()).then(json => {
+				console.log(json);
+				if(json.ok) {} // Something
 			});
 	};
 
@@ -226,43 +286,40 @@ PlaylistTableHeader.defaultProps = {
 	label: 	'record label'
 }
 
+// All the logic of a Playlist Entry
 class PlaylistEntryContainer extends React.Component {
 	constructor(props) {
 		super(props);
-
-		this.setEntry = this.setEntry.bind(this);
-		this.setInput = this.setInput.bind(this);
+		this.state = {
+			title: this.props.title,
+			artist: this.props.artist,
+			album: this.props.album,
+			label: this.props.label
+		}
 
 		this.deleteSpinFromDB = this.deleteSpinFromDB.bind(this);
 		this.updateSpinInDB   = this.updateSpinInDB.bind(this);
-
-		this.state = {
-			entry: undefined,
-			inputs: {}
-		}
+		this.handleInput      = this.handleInput.bind(this);
+		this.autocomplete     = this.autocomplete.bind(this);
 	}
 
-	setEntry(c) { this.setState({entry: c}) }
+	autocomplete(identifier, value) {
+		// Make call to server autocomplete
+		console.log('called autocomplete with ...');
+		console.log(`IDENTIFIER: ${identifier}`);
+		console.log(`VALUE:      ${value}`);
+		autocomplete(identifier, value);
+		console.log('called global autocomplete...');
+		return Array.from(value);
+	}
 
-	setInput(c) {
-		let isMount = (c==null? false:true);
-		if(isMount) {
-			this.setState((state) => {
-				let newInputs = state.inputs;
-				newInputs[c.state.name] = c;
-				return {
-					inputs: newInputs
-				}
-			});
-		}
+	handleInput(identifier, value) {
+	 	let updated = {};
+	 	updated[identifier] = value;
+		this.setState(updated);
 	}
 
 	deleteSpinFromDB() {
-		// Close all inputs (for a small bug)
-		for(let inputKey of Object.keys(this.state.inputs)) 
-			this.state.inputs[inputKey].setState({editing:false})
-
-		// Remove spin from the server
 		fetch('entry/delete/', {
 			method: "DELETE",
 			headers: {
@@ -270,29 +327,17 @@ class PlaylistEntryContainer extends React.Component {
 				"Accept": "application/json"
 			},
 			body: JSON.stringify({index: this.props.spindex}),
-			mode: 'cors',
-			cache: 'default'
-		}).then(response => {
-			return response.json();
-		}).then(data => {
-			if(!data.success) {
-				console.log("Ajax Error:");
-				console.log(data);
-				return;
-			}
-			console.log("Ajax: Success!");
-			console.log(data);
-			this.props.removeSpinFromView(this.props.spindex);
+			mode: 'cors'
+		}).then(response => response.json()).then(json => {
+			console.log(json);
+			if(json.ok) this.props.removeSpinFromView(this.props.spindex);
 		});
 	}
 
 	updateSpinInDB() {
-		// Build body of request
-		let body = { index: this.props.spindex }
-		for(let inputKey of Object.keys(this.state.inputs))
-			body[inputKey] = this.state.inputs[inputKey].state.value;
+		let body = this.state;
+		body.spindex = this.props.spindex;
 
-		// Update spin in the server
 		fetch('entry/update/', {
 			method: "PUT",
 			headers: {
@@ -300,39 +345,29 @@ class PlaylistEntryContainer extends React.Component {
 				"Accept": "application/json"
 			},
 			body: JSON.stringify(body),
-			mode: 'cors',
-			cache: 'default'
-		}).then(response => {
-			return response.json();
-		}).then(data => {
-			if(!data.success) {
-				console.log("Ajax Error:");
-				console.log(data);
-				return;
-			}
-			console.log(data);
-			this.props.updateSpinInView(data.spin);
+			mode: 'cors'
+		}).then(response => response.json()).then(json => {
+			console.log(json);
+			if(json.ok) this.props.updateSpinInView(json.spin);
 		});
 	}
-
 	 				
 	render() {
-		// console.log("here's our entry container...");
-		// console.log(this);
 		return (
 			<PlaylistEntry 
 				spindex={this.props.spindex}
-				title={this.props.title}
-				artist={this.props.artist}
-				album={this.props.album}
-				label={this.props.label} 
+				title={this.state.title}
+				artist={this.state.artist}
+				album={this.state.album}
+				label={this.state.label} 
 				delete={this.deleteSpinFromDB}
 				update={this.updateSpinInDB}
-				ref={this.entrySet}
-				setInput={this.setInput} />
-		);
+				handleInput={this.handleInput}
+				autocomplete={this.autocomplete}/>
+			);
 	}
 }
+// Pure Presentation
 class PlaylistEntry extends React.Component {
 	constructor(props) {
 		super(props)
@@ -350,42 +385,107 @@ class PlaylistEntry extends React.Component {
 			<div className="spin">
 				<DragHandle />
 				<div className="playlist-numbering"> {this.props.spindex} </div>
-				<ReactiveTextInput 
-					ref={this.props.setInput} 
+				<ResponsiveTextInput 
+					identifier='title'
 					value={this.props.title}     
-					name='title' 
-					inDB={true} 
 					update={this.props.update}
-					delete={this.props.delete}
-					autocomplete={empty => null}/>
-				<ReactiveTextInput 
-					ref={this.props.setInput} 
+					handleInput={this.props.handleInput}
+					autocomplete={this.props.autocomplete}/>
+				<ResponsiveTextInput 
+					identifier='artist'
 					value={this.props.artist}     
-					name='artist'
-					inDB={true} 
 					update={this.props.update}
-					delete={this.props.delete}
-					autocomplete={empty => null}/>
-				<ReactiveTextInput 
-					ref={this.props.setInput} 
+					handleInput={this.props.handleInput}
+					autocomplete={this.props.autocomplete}/>
+				<ResponsiveTextInput 
+					identifier='album' 
 					value={this.props.album}      
-					name='album' 
-					inDB={true} 
 					update={this.props.update}
-					delete={this.props.delete}
-					autocomplete={empty => null}/>
-				<ReactiveTextInput 
-					ref={this.props.setInput} 
+					handleInput={this.props.handleInput}
+					autocomplete={this.props.autocomplete}/>
+				<ResponsiveTextInput 
+					identifier='label' 
 					value={this.props.label}      
-					name='label' 
-					inDB={true} 
 					update={this.props.update}
-					delete={this.props.delete}
-					autocomplete={empty => null}/>
+					handleInput={this.props.handleInput}
+					autocomplete={this.props.autocomplete}/>
 				<div className="playlist-minus clickable" onClick={this.props.delete}> </div>
 				<div className="playlist-comment clickable"> </div>
 			</div>
 		);
+	}
+}
+// Pass update, handleInput, and (autocomplete)
+// Does not own it's value
+class ResponsiveTextInput extends React.Component {
+	constructor(props){
+		super(props);
+		this.state = { 
+			editing: this.props.editing,
+			suggestions: []
+		}
+
+		this.handleKeyUp = this.handleKeyUp.bind(this);
+		this.toggleEditing = this.toggleEditing.bind(this);
+		this.updateValue   = this.updateValue.bind(this);
+	}
+
+	handleKeyUp(e) {
+		if(e.key == 'Enter') {
+			this.toggleEditing();
+			this.props.update(this.props.identifier, e.target.value);
+		}	
+	}
+
+	updateValue(value) {
+		this.props.handleInput(this.props.identifier, value);
+		if(this.props.autocomplete) {
+			fetch(`entry/complete/?identifier=${this.props.identifier}&value=${value}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "application/json"
+			},
+			}).then(response => response.json()).then(json => {
+				console.log(json);
+				if(json.ok) {
+					if(json.suggestions.length == 1 && json.suggestions[0] == value)
+						this.setState({suggestions: []})
+					else 
+						this.setState({suggestions: json.suggestions})
+				}
+			});		
+		}
+	}
+
+	toggleEditing() {this.setState(state => {return {editing: !state.editing}})}
+
+	render() {
+		if(this.state.editing) {
+			return (
+				<div className="playlist-text-cell dbl-clickable" 
+					 onDoubleClick={this.toggleEditing}>
+						<input 
+							type="text" 
+							value={this.props.value || ''}
+							placeholder={this.props.placeholder} 
+							onKeyUp={this.handleKeyUp}
+							autoComplete={'off'}
+							onChange={e => this.updateValue(e.target.value)}/>
+						<SuggestionsBox
+							suggestions={this.state.suggestions}
+							updateValue={this.updateValue} />
+				</div>
+			)
+		}
+		else if(!this.state.editing) {
+			return (
+				<div className="playlist-text-cell dbl-clickable"
+					 onDoubleClick={this.toggleEditing}>
+					{this.props.value || ''}
+				</div>
+			);
+		}
 	}
 }
 
@@ -393,33 +493,27 @@ class PlaylistEntryFormContainer extends React.Component {
 	constructor(props) {
 		super(props)
 		this.addSpinToDB = this.addSpinToDB.bind(this);
+		this.autocomplete= this.autocomplete.bind(this);
 	}
 
-	// makeHeaders() {
-	// 	let headers = new Headers();
-	// 	let csrftoken = common.getCookie('csrftoken')
-	// 	headers.append("X-CSRFToken", csrftoken);
-	// 	return headers;
-	// }
+	autocomplete(identifier, value) {
+		// Make call to server autocomplete
+		console.log('called autocomplete with ...');
+		console.log(`IDENTIFIER: ${identifier}`);
+		console.log(`VALUE:      ${value}`);
+		autocomplete(identifier, value);
+		console.log('called global autocomplete...');
+		return Array.from(value);
+	}
 
 	addSpinToDB() {
-		// Post new spin to the server
 		fetch('entry/add/', {
 			method: "POST",
 			body: new FormData(document.getElementById("add-form")),
-			mode: 'cors',
-			cache: 'default'
-		}).then(response => {
-			return response.json();
-		}).then(data => {
-			if(!data.success) {
-				console.log("Ajax Error:");
-				console.log(data);
-				return;
-			}
-			console.log('add success!');
-			console.log(data);
-			this.props.addSpinToView(data.spin);
+			mode: 'cors'
+		}).then(response => response.json()).then(json => {
+			console.log(json);
+			if(json.ok) this.props.addSpinToView(json.spin);
 		});
 	}
 
@@ -427,8 +521,9 @@ class PlaylistEntryFormContainer extends React.Component {
 		return (
 			<PlaylistEntryForm 
 				spindex={this.props.spindex}
-				addSpinToDB={this.addSpinToDB}/>
-		);
+				addSpinToDB={this.addSpinToDB}
+				autocomplete={this.autocomplete}/>
+			);
 	}
 }
 class PlaylistEntryForm extends React.Component {
@@ -464,36 +559,36 @@ class PlaylistEntryForm extends React.Component {
 					<div className='playlist-movetab' style={{opacity:0.0}} />
 					<div className="playlist-numbering"> {this.state.spindex} </div>
 					<PlaylistEntryFormInput
-						name="title"
+						identifier="title"
 						placeholder="song title"
 						value={this.state.title}
 						submit={this.submit}
 						autoFocus={true}
-						autocomplete={empty => null}
+						autocomplete={this.props.autocomplete}
 					/>
 					<PlaylistEntryFormInput
-						name="artist"
+						identifier="artist"
 						placeholder="artist"
 						value={this.state.artist}
 						submit={this.submit}
 						autoFocus={false}
-						autocomplete={empty => null}
+						autocomplete={this.props.autocomplete}
 					/>
 					<PlaylistEntryFormInput 
-						name="album"
+						identifier="album"
 						placeholder="album"
 						value={this.state.album}
 						submit={this.submit}
 						autoFocus={false}
-						autocomplete={empty => null}
+						autocomplete={this.props.autocomplete}
 					/>
 					<PlaylistEntryFormInput 
-						name="label"
+						identifier="label"
 						placeholder="album label"
 						value={this.state.label}
 						submit={this.submit}
 						autoFocus={false}
-						autocomplete={empty => null}
+						autocomplete={this.props.autocomplete}
 					/>
 					<div onClick={this.submit} className="playlist-plus clickable" id="add-entry-button">
 					</div>
@@ -506,100 +601,104 @@ class PlaylistEntryForm extends React.Component {
 class PlaylistEntryFormInput extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {value: this.props.value};
+		this.state = {
+			value: this.props.value,
+			suggestions: []
+		};
 
-		this.handleKeyDown = this.handleKeyDown.bind(this);
+		this.handleKeyUp = this.handleKeyUp.bind(this);
 		this.updateValue  = this.updateValue.bind(this);
 	}
 
-	handleKeyDown(e) { 
-		if(e.key == 'Enter') this.props.submit(); 
-		else this.props.autocomplete(this.props.name, e.target.value);
-	}
+	handleKeyUp(e) { if(e.key == 'Enter') this.props.submit(); }
 
-	updateValue(e)   { this.setState({value: e.target.value}); }
+	updateValue(value) { 
+		this.setState({value: value});
+		fetch(`entry/complete/?identifier=${this.props.identifier}&value=${value}`, {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					"Accept": "application/json"
+				},
+			}).then(response => response.json()).then(json => {
+				console.log(json);
+				if(json.ok) {
+					if(json.suggestions.length == 1 && json.suggestions[0] == value)
+						this.setState({suggestions: []})
+					else 
+						this.setState({suggestions: json.suggestions})
+				}
+		});		
+	}
 
 	render() { 
 			return (
 				<div className="playlist-text-cell">
 					<input 
 						autoFocus={this.props.autoFocus}
+						autoComplete={'off'}
 						type="text"
 						value={this.state.value} 
-						name={this.props.name}
+						name={this.props.identifier}
 						placeholder={this.props.placeholder} 
-						onChange={this.updateValue}
-						onKeyDown={this.handleKeyDown}/>
+						onChange={e => this.updateValue(e.target.value)}
+						onKeyUp={this.handleKeyUp}/>
+					<SuggestionsBox
+						suggestions={this.state.suggestions} 
+						updateValue  ={this.updateValue}/>
 				</div>
+
 				);
 	}
 }
 
-// Pass update, delete, and autocomplete
-class ReactiveTextInput extends React.Component {
-	constructor(props){
-		super(props);
+// Expects updateValue, a function
+class SuggestionsBox extends React.Component {
+	constructor(props) {
+		super(props)
 		this.state = {
-			value: this.props.value,
-			name:  this.props.name,
-			placeholder: this.props.placeholder,
-			editing: this.props.editing
+			suggestions: this.props.suggestions,
+			selected: 0
 		}
-
-		this.handleKeyDown = this.handleKeyDown.bind(this);
-		this.updateValue  = this.updateValue.bind(this);
-		this.toggleEditing = this.toggleEditing.bind(this);
+		this.renderSuggestions = this.renderSuggestions.bind(this);
 	}
 
-	handleKeyDown(e) {
-		// Delete case
-		if(e.metaKey) {
-			if(e.key == 'Backspace') {
-				this.toggleEditing();
-				this.props.delete();
-				return;
-			}
-		}
-
-		// Update case
-		if(e.key == 'Enter') {
-			this.toggleEditing();
-			this.props.update();
-			return;
-		}
-
-		// Autocomplete case
-		this.props.autocomplete(this.state.name, e.target.value);
+	clickedIt(suggestion, index) {
+		this.setState({selected: index});
+		this.props.updateValue(suggestion);
 	}
 
-	updateValue(e)  {this.setState({value:e.target.value});}
-	toggleEditing() {this.setState(state => {return {editing: !state.editing}})}
+	/* SOMEHOW WE WANT A FUNCTION BINDING KEYSTROKES TO CHANGING SELECTED, 
+	   AND PICKING A VALUE ON KEYPRESS */ 
+	   
+	renderSuggestions() {
+		return ( this.props.suggestions.map((suggestion, index) => {
+
+			let customStyle = {};
+			if(index == this.state.selected)
+				customStyle.backgroundColor = 'blue';
+
+			return(
+					<div
+						key={index} 
+						style={customStyle}
+						onClick={e => this.clickedIt(suggestion, index)}
+						className="playlist-suggestion"> 
+						{suggestion} 
+					</div>
+			);
+		}));
+	}
 
 	render() {
-		if(this.state.editing) {
-			return (
-				<div className="playlist-text-cell dbl-clickable" 
-					 onDoubleClick={this.toggleEditing}>
-						<input 
-							type="text" 
-							name={this.state.name}
-							value={this.state.value}
-							placeholder={this.state.placeholder} 
-							onChange={this.updateValue}
-							onKeyDown={this.handleKeyDown}/>
-				</div>
-			)
-		}
-		else if(!this.state.editing) {
-			return (
-				<div className="playlist-text-cell dbl-clickable"
-					 onDoubleClick={this.toggleEditing}>
-					{this.state.value}
-				</div>
+		return (
+			<div className="playlist-autocomplete-box">
+				{this.renderSuggestions()} 
+			</div>
 			);
-		}
 	}
 }
+
 
 ReactDOM.render(
     React.createElement(Playlist, window.props),
