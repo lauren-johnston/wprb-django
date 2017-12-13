@@ -141,7 +141,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return 'Comment %d: "%s..." by %s, on Playlist %s' \
-            % (self.id, self.text[:15], self.author.username, self.playlist.id)
+            % (self.id, self.text[:15], self.author.username if self.author else 'anon', self.playlist.id)
 
 class Settings(models.Model):
     """ A collection of options that the DJ can set.
