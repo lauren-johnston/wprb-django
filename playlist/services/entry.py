@@ -214,11 +214,6 @@ def update(request, playlist_id):
 	target_spin.delete()
 	new_spin.save()
 
-	print("Received this dict on update...")
-	print(args)
-	print("Returning this dict on update...")
-	print(spin_to_dict(new_spin))
-
 	return JsonResponse({
 		'ok': True,
 		'spin': spin_to_dict(new_spin)
@@ -231,12 +226,9 @@ def update(request, playlist_id):
 def complete(request, playlist_id):
 	""" Updates the specified entry with provided basic spin dict 
 	"""
-	try: 
-		args         = request.GET
-		identifier   = args.get('identifier')
-		value        = args.get('value')
-	except Exception:
-		return error("we don't really know...")
+	args         = request.GET
+	identifier   = args.get('identifier')
+	value        = args.get('value')
 
 	if identifier not in ['title', 'artist', 'album', 'label']:
 		return error('Invalid request - hone identifier!')
@@ -244,7 +236,7 @@ def complete(request, playlist_id):
 	if value is None or value == '':
 		return JsonResponse({'ok': True, 'suggestions':[]})
 
-	if   identifier == 'title':
+	if identifier == 'title':
 		suggestions = [s.name for s in Song.objects.filter(name__startswith=value)]
 	elif identifier == 'artist':
 		suggestions = [a.name for a in Artist.objects.filter(name__startswith=value)]
@@ -253,18 +245,9 @@ def complete(request, playlist_id):
 	elif identifier == 'label':
 		suggestions = [l.name for l in Label.objects.filter(name__startswith=value)]
 	else:
-		print('no match.......')
 		suggestions = []
-
-	# print('Called complete...')
-	# print('Identifier is....')
-	# print(args.get('identifier'))
-	# print('Value is....')
-	# print(args.get('value'))
-	print('Matching songs...')
-	print([s.name for s in Song.objects.filter(name__contains=value)])
 
 	return JsonResponse({
 		'ok': True,
 		'suggestions': suggestions
-		})
+	})

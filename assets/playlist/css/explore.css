@@ -22,13 +22,20 @@ a:hover {
 
 .play-container {
 	position: absolute;
-	left: 5%;
+	left: 15%;
 	width: 70%;
 	margin-top: 1%;
 	background-color: rgb(42, 42, 42);
 	border: 2px solid #959595;
 	border-radius: 0.15em;
 	padding: 2em;
+
+	max-height: 75vh;
+}
+
+.plays {
+	max-height: calc(75vh - 2em);
+	overflow: auto;
 }
 
 .play-container-header > .play-field {
