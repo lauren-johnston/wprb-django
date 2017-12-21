@@ -1,18 +1,62 @@
+/* unvisited link */
+a:link {
+    color: white;
+    text-decoration: none;
+}
+
+/* visited link */
+a:visited {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+    color: pink;
+    text-decoration: none;
+}
+
+.explore-title {
+	font-size: 1.5em;
+	margin-bottom: 0.5em;
+}
+
 .play-container {
 	position: absolute;
-	left: 5%;
+	left: 15%;
 	width: 70%;
 	margin-top: 1%;
 	background-color: rgb(42, 42, 42);
 	border: 2px solid #959595;
 	border-radius: 0.15em;
 	padding: 2em;
+
+	max-height: 75vh;
+}
+
+.plays {
+	max-height: calc(75vh - 2em);
+	overflow: auto;
 }
 
 .play-container-header > .play-field {
-	width: 12%;
+	width: 11.7%;
+	font-size: 1.2em;
+	font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
 	color: rgb(170, 247, 205);
 	cursor: auto;
+}
+
+.section-title-underline {
+	font-size: 0.8em;
+	border-style: solid;
+	border-radius: 0.2em;
+	border-top-color: white;
+	border-top-width: 2px;
+}
+
+.play {
+	border-bottom: 1px solid rgba(255,255,255, 0.1);
+	padding: 0.2em 0;
 }
 
 .play-field {
@@ -24,5 +68,6 @@
 }
 
 .play-field:hover {
-	font-weight: bold;
+	color: pink;
+    text-decoration: none;
 }

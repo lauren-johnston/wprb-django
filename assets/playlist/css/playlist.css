@@ -17,10 +17,10 @@
 	padding: 0.5em;
 
 	width: calc(100% - 3em);
-	max-height: calc(80vh - 3em);
+	max-height: calc(82vh - 3em);
 }
 
-#subgenre-input {
+.section-title-underline {
 	font-size: 0.8em;
 	border-style: solid;
 	border-radius: 0.2em;
@@ -63,30 +63,44 @@
 }
 
 /* Styles within the show details section */
+#show .playlist-text-cell {
+    width: 100%;
+}
+
 .show-section {
 	margin: 1em 0 0em 0;
 }
 
+.show-title-text {
+    margin-bottom: 0.5em;
+}
+
 .show-subtitle-text {
 	font-weight: 100;
+    font-style: italic;
 }
 
 .show-dj-name {
-	
+	font: bold;
+}
+
+.desc-heading {
+    font-size: 1.1em;
+    margin-bottom: 0.5em;
 }
 
 .show-desc-text {
-    border-style: solid;
+    /*border-style: solid;
     border-width: 2px;
     border-color: #d4d4d4;
-    border-radius: 0.3em;
-    padding: 0.2em 0.2em 0.2em 0.2em;
-    font-size: 0.8em;
+    border-radius: 0.3em;*/
+/*    padding: 0.2em;
+    font-size: 0.8em;*/
 }
 
 .genre-heading {
 	font-size: 1.1em;
-	margin-bottom: 0.75em;
+	margin-bottom: 0.5em;
 }
 
 .show-genre-name {
@@ -127,7 +141,7 @@
 	width: 5%;
 	height: 1em;
 
-	cursor: grab;
+	cursor: pointer;
 }
 
 .playlist-numbering {
@@ -136,17 +150,37 @@
 }
 
 .playlist-table-contents {
-	max-height: 25em;
+	max-height: calc(82vh - 5em);
 	overflow-y: scroll;
 }
 
 .playlist-text-cell {
 	display: inline-block;
 	width: 20%;
+	min-width: 4em;
 }
 
 .playlist-artist-name {
 
+}
+/* Autocomplete stuff */
+
+.playlist-autocomplete-box {
+	min-height: 5em;
+	max-height: 10em;
+
+	padding: 0.25em 0.25em;
+	border-radius: 0 0 0.25em 0.25em;
+	background-color: white;
+	overflow-y: auto;
+	z-index: 10;
+
+	color: #000;
+	position: absolute;
+}
+
+.playlist-suggestion {
+	color: black;
 }
 
 .playlist-comment {
@@ -170,11 +204,87 @@
 }
 
 .playlist-minus {
-   background-image: url("media/minus.png");
+   background-image: url("media/x.png");
    background-position: center;
    background-repeat: no-repeat; 
    background-size: 15px 15px;
    display: inline-block;
    width: 5%;
    height: 1em;
+}
+
+/* Comment styles */
+.comment-panel {
+	position: fixed;
+	bottom: 0;
+	left: 70%;
+	width: 25%;
+
+	background-color: #424242;
+	color: #fff;
+	z-index: 10;
+
+	padding: 0.25em 0.5em;
+	border-radius: 0.25em 0.25em 0 0;
+
+	box-shadow: 2px 2px 2px #222;
+	border: 1px solid #fff;
+	border-bottom: none;
+}
+
+.comment-panel.hidden {
+	height: 2em;
+}
+
+.hidden > form, .hidden > div {
+	display: none;
+}
+
+.comment-panel.show {
+	padding-bottom: 1em;
+}
+
+.comment-meta {
+	text-align: right;
+	font-size: 0.75em;
+}
+
+.comment-contents {
+	max-height: 20em;
+	overflow-y: auto;
+}
+
+.comment-text {
+	padding: 0.5em;
+	margin: 0.5em;
+	width: 90%;
+	border-radius: 0.5em;
+
+	background-color: #fef;
+	color: #000;
+}
+
+#new-comment-text {
+	width: 100%;
+	border-radius: 0.25em;
+	margin: 0.5em 0;
+}
+
+#new-comment-form {
+	text-align: right;
+}
+
+.comment-button {
+	border: 1px solid #fff;
+	border-radius: 0.5em;
+	padding: 0.25em 0.5em;
+	margin: 0.5em;
+
+	background-color: #fff;
+	color: #005;
+	cursor: pointer;
+}
+
+.comment-button:active {
+	background-color: #aaa;
 }

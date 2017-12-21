@@ -1,15 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ClickableExploreField from './ClickableExploreField.jsx';
+import CommentPanel from './Comment.jsx';
 
-function ExploreDetails() {
-	return (
-		<div className="details">
-			<h1 className="details-title">{this.props.title}</h1>
-			<h3 className="details-subtitle">{this.props.subtitle}</h3>
-			<div className="details-description">{this.props.desc}</div>
-		</div>
-	)
+class ExploreDetails extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+	
+	render() {
+		return (
+			<div className="details">
+				<h1 className="details-title">{this.props.title}</h1>
+				<h3 className="details-subtitle">{this.props.subtitle}</h3>
+				<div className="details-description">{this.props.desc}</div>
+			</div>
+		);
+	}
 }
 
 class ExploreChart extends React.Component {
@@ -33,7 +40,7 @@ class ExplorePage extends React.Component {
 			<div className="explore">
 				<ExploreDetails />
 				<ExplorePlaysTable plays={this.props.plays} />
-				<ExploreChart />
+				<ExploreChart title={this.props.title}/>
 			</div>
 		);
 	}
@@ -60,13 +67,16 @@ class ExplorePlaysTable extends React.Component {
 function ExplorePlaysHeader() {
 	return (
 		<div className="play-container-header">
+			<div className="explore-title">EXPLORE</div>
 			<div className="play-field artist-field">artist</div>
 			<div className="play-field song-field">song</div>
 			<div className="play-field album-field">album</div>
 			<div className="play-field label-field">label</div>
 			<div className="play-field dj-field">dj</div>
 			<div className="play-field date-field">date</div>
+			<div className="section-title-underline"></div>
 		</div>
+
 	);
 }
 

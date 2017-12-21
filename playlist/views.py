@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import ensure_csrf_cookie
 
+import time, datetime
+
 @login_required
 def landing(request):
     """ Serve the landing page for a dj that allows them to 
@@ -68,8 +70,15 @@ def edit_playlist(request, playlist_id):
         'index' : spin.index,
     } for spin in playlist.spin_set.all()], key=lambda x: x['index'])
 
+    comments = [{
+        'id'        : comment.id,
+        'text'      : comment.text,
+        'timestamp' : time.mktime(comment.timestamp.timetuple()),
+        'author'    : comment.author.username if comment.author else 'anonymous'
+    } for comment in Comment.objects.filter(playlist=playlist_id)]
+
     context = {
-        'props' : {'spins': spins, 'show': showdetails},
+        'props' : {'spins': spins, 'show': showdetails, 'comments': comments},
         'bundle': 'playlist',
         'title' : 'Playlist Editor'
     }
@@ -79,10 +88,11 @@ def edit_playlist(request, playlist_id):
 def explore(request, field, field_id):
     """ Render the page with the explore component and relevant info.
     """
+    p, title = plays(field, int(field_id))
     context = {
         'bundle': 'explore',
         'title': 'Explore %ss' % field.capitalize(),
-        'props': {'plays': plays(field, int(field_id))}
+        'props': {'plays': p, 'title' : title}
     }
 
     return render(request, "component.html", context=context)
