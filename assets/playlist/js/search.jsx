@@ -23,12 +23,14 @@ class Search extends React.Component {
 			cache: 'default'
 		}).then(response => {
 			return response.json();
+		}).then(data => {
+			console.log(data);
 		});
 	}
 
 	render() {
 		let results;
-		if (this.state.results) results = <SearchResults results={this.state.results} />)
+		if (this.state.results) results = <SearchResults results={this.state.results} />;
 		else results = null;
 
 		return (
