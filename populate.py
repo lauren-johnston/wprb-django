@@ -92,4 +92,8 @@ def main(filename):
 
 if __name__=="__main__":
 	import sys
+	if len(sys.argv) != 2:
+		print('usage: python populate.py <filename>')
+		sys.exit(1)
+
 	main(sys.argv[1])
