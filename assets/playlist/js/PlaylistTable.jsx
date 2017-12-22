@@ -154,8 +154,8 @@ class PlaylistEntryContainer extends React.Component {
 			},
 			body: JSON.stringify({id: this.props.spinId}),
 			mode: 'cors'
-		}).then(response => {
-			if (response.json().ok) 
+		}).then(response => response.json()).then(data => {
+			if (data.ok) 
 				this.props.removeSpinFromView(this.props.spindex);
 		});
 	}

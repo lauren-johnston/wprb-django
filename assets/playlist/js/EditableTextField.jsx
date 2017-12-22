@@ -1,5 +1,13 @@
 import React from 'react';
 
+/*****************************************************************
+ * THIS MODULE HAS BEEN REPLACED
+ * playlist.jsx is now using riek (react inline-edit kit)
+ * which includes support for editable textareas, inputs, and TAGS
+ * and also handles a couple extra corner cases for us so we don't
+ * have multiple text-edit fields open at once.
+ *****************************************************************/
+
 // Pass update, handleInput, and (autocomplete)
 // Does not own it's value
 class ResponsiveTextInput extends React.Component {
