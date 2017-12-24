@@ -91,6 +91,7 @@ export default class SortablePlaylistTable extends React.Component {
 						spins={this.state.spins}
 						removeSpinFromView={this.removeSpinFromView}
 						onSortEnd={this.onSortEnd}
+						lockAxis="y"
 						useDragHandle={true} />
 				</div>
 				<PlaylistEntryForm
