@@ -235,7 +235,11 @@ def complete(request, playlist_id):
 		return JsonResponse({'ok': True, 'suggestions':[]})
 
 	if identifier == 'title':
-		suggestions = [s.name for s in Song.objects.filter(name__startswith=value)]
+		suggestions = [{
+			'song'   : s.name,
+			'album'  : s.album.name,
+			'artist' : ' & '.join([a.name for a in s.artist.all()])
+		} for s in Song.objects.filter(name__startswith=value)]
 	elif identifier == 'artist':
 		suggestions = [a.name for a in Artist.objects.filter(name__startswith=value)]
 	elif identifier == 'album':

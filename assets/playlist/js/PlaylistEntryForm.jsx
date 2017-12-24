@@ -57,7 +57,7 @@ export default class PlaylistEntryForm extends React.Component {
                         placeholder="artist"
                         value={this.state.artist}
                         submit={this.submit}
-                        autoFocus={false} />
+                        autoFocus={false}  />
                     <PlaylistEntryFormInput 
                         identifier="album"
                         placeholder="album"
@@ -76,31 +76,6 @@ export default class PlaylistEntryForm extends React.Component {
             </form>
         );
     }
-}
-
-// What does a suggestion look like when it's rendered
-const renderSuggestion = (s, {query, isHighlighted}) => {
-    let className = isHighlighted ? 'playlist-suggestion highlighted' : 'playlist-suggestion';
-    const matches = match(s, query);
-    const parts = parse(s, matches);
-
-    let highlightedParts = parts.map((part, index) => {
-        const weight = {
-            fontWeight: part.highlight ? 'bold' : 'normal'
-        };
-
-        return (
-            <span style={weight} key={index}>
-                {part.text}
-            </span>
-        );
-    })
-
-    return (
-        <div className={className}>
-            {highlightedParts}
-        </div>
-    );
 }
 
 // Pass submit and autocomplete
@@ -137,6 +112,16 @@ class PlaylistEntryFormInput extends React.Component {
             return;
         }
 
+        /****************************************************************************************
+         * NOTE:
+         *     we could totally make this more clever and not send a request to the server
+         *     every single time.  After the first request, we could just filter on the original
+         *     list of stuff??  Somehow just keep track of what the characters used for that search
+         *     were and only research if the root changes
+
+         ** ALSO: we should debounce this function to save spazzing out when someone types fast
+         ***************************************************************************************/
+
         fetch(`entry/complete/?identifier=${this.props.identifier}&value=${value}`, {
             method: "GET",
             headers: {
@@ -158,14 +143,14 @@ class PlaylistEntryFormInput extends React.Component {
     };
 
     shouldRenderSuggestions(value) {
-        return value.trim().length > 2;
+        return value && value.trim().length > 1;
     }
 
     render() {
         const {value, suggestions} = this.state;
 
         const inputProps = {
-            value,
+            value: value || '',
             placeholder: this.props.placeholder,
             autoFocus: this.props.autoFocus,
             onChange: this.onChange
@@ -179,12 +164,47 @@ class PlaylistEntryFormInput extends React.Component {
                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                     onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                     shouldRenderSuggestions={this.shouldRenderSuggestions}
-                    getSuggestionValue={s => s}
+                    getSuggestionValue={s => s.song || s}
                     renderSuggestion={renderSuggestion}
                     inputProps={inputProps} />
             </div>
         );
     }
+}
+
+/**
+ * Render a suggestion, whether it's a simple string or an 
+ * object containing song, artist, album
+ */
+const renderSuggestion = (s, {query, isHighlighted}) => {
+    const className = isHighlighted ? 'playlist-suggestion highlighted' : 'playlist-suggestion';
+    const matches = match(s.song || s, query);
+    const parts = parse(s.song || s, matches);
+
+    const highlightedParts = parts.map((part, index) => {
+        const weight = {
+            fontWeight: part.highlight ? 'bold' : 'normal'
+        };
+
+        return <span style={weight} key={index}>{part.text}</span>;
+    })
+
+    const details = s.artist ? (
+        <span className="suggestion-details">
+            <span className="suggestion-artist">by {s.artist}</span>
+            <span className="suggestion-album">({s.album})</span>
+        </span>
+    ) : null;
+
+    // TODO: HOOK In to render artist and album into the artist and album fields if poss
+    // idk how tho
+
+    return (
+        <div className={className}>
+            {highlightedParts}
+            {details}
+        </div>
+    );
 }
 
 // // Expects updateValue, a function

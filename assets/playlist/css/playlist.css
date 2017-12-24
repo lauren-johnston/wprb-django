@@ -174,38 +174,6 @@
 
 }
 
-/* Autocomplete stuff */
-.react-autosuggest__suggestions-container--open {
-	position: absolute;
-
-	background-color: #fff;
-	color: #000;
-
-	padding: 0.5em;
-
-	border-radius: 0.5em 0.5em 0.5em 0;
-	bottom: 2em;
-
-	box-shadow: 2px 2px 2px #000;
-}
-
-.react-autosuggest__suggestions-list {
-	max-height: 6em;
-	width: 15em;
-	overflow-y: auto;
-}
-
-.playlist-suggestion {
-	padding: 0.1em 0.25em;
-	border-radius: 0.25em;
-
-	cursor: pointer;
-}
-
-.playlist-suggestion.highlighted {
-	background-color: #eef;
-}
-
 .playlist-plus {
 	background-image: url("media/plus.png");
 	background-position: center;
@@ -224,6 +192,46 @@
    display: inline-block;
    width: 5%;
    height: 1em;
+}
+
+
+/* Autocomplete stuff */
+.react-autosuggest__suggestions-container--open {
+	position: absolute;
+
+	background-color: #fff;
+	color: #000;
+
+	padding: 0.5em;
+
+	border-radius: 0.5em 0.5em 0.5em 0;
+	bottom: 2em;
+
+	box-shadow: 2px 2px 2px #000;
+}
+
+.react-autosuggest__suggestions-list {
+	max-height: 6em;
+	width: 25em;
+	overflow-y: auto;
+}
+
+.playlist-suggestion {
+	padding: 0.1em 0.25em;
+	border-radius: 0.25em;
+
+	cursor: pointer;
+}
+
+.playlist-suggestion.highlighted {
+	background-color: #eef;
+}
+
+.suggestion-artist, .suggestion-album {
+	font-style: italic;
+	color: #777;
+
+	margin-left: 0.5em;
 }
 
 /*********************************************************************
