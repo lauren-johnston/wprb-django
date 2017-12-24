@@ -150,7 +150,7 @@
 }
 
 .playlist-table-contents {
-	max-height: calc(82vh - 5em);
+	max-height: calc(82vh - 7em);
 	overflow-y: scroll;
 }
 
@@ -163,34 +163,37 @@
 .playlist-artist-name {
 
 }
+
 /* Autocomplete stuff */
-
-.playlist-autocomplete-box {
-	min-height: 5em;
-	max-height: 10em;
-
-	padding: 0.25em 0.25em;
-	border-radius: 0 0 0.25em 0.25em;
-	background-color: white;
-	overflow-y: auto;
-	z-index: 10;
-
-	color: #000;
+.react-autosuggest__suggestions-container--open {
 	position: absolute;
+
+	background-color: #fff;
+	color: #000;
+
+	padding: 0.5em;
+
+	border-radius: 0.5em 0.5em 0.5em 0;
+	bottom: 2em;
+
+	box-shadow: 2px 2px 2px #000;
+}
+
+.react-autosuggest__suggestions-list {
+	max-height: 6em;
+	width: 15em;
+	overflow-y: auto;
 }
 
 .playlist-suggestion {
-	color: black;
+	padding: 0.1em 0.25em;
+	border-radius: 0.25em;
+
+	cursor: pointer;
 }
 
-.playlist-comment {
-	background-image: url("media/comment.gif");
-	background-position: center;
-	background-repeat: no-repeat; 
-	background-size: 20px 20px;
-	display: inline-block;
-	width: 5%;
-	height: 1em;
+.playlist-suggestion.highlighted {
+	background-color: #eef;
 }
 
 .playlist-plus {
@@ -213,7 +216,10 @@
    height: 1em;
 }
 
-/* Comment styles */
+/*********************************************************************
+ * Comment styles 
+ ********************************************************************/
+
 .comment-panel {
 	position: fixed;
 	bottom: 0;
@@ -288,3 +294,5 @@
 .comment-button:active {
 	background-color: #aaa;
 }
+
+

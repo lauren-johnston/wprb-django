@@ -92,10 +92,10 @@ export default class SortablePlaylistTable extends React.Component {
 						removeSpinFromView={this.removeSpinFromView}
 						onSortEnd={this.onSortEnd}
 						useDragHandle={true} />
-					<PlaylistEntryForm
-						spindex={this.state.spins.length + 1}
-						addSpinToView={this.addSpinToView} />
 				</div>
+				<PlaylistEntryForm
+					spindex={this.state.spins.length + 1}
+					addSpinToView={this.addSpinToView} />
 			</div>
 		);
 	}
