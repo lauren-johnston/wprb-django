@@ -4,41 +4,6 @@ import PlaylistEntryForm from './PlaylistEntryForm.jsx';
 import { RIEInput } from 'riek';
 import { SortableContainer, SortableElement, SortableHandle, arrayMove } from 'react-sortable-hoc';
 
-// Following syntax from online
-const DragHandle = SortableHandle(() => <div className="playlist-movetab"/>);
-
-const SortablePlaylistEntry = SortableElement(({spin, spindex, removeSpinFromView, spinId}) => {
-	// Hacked to remove index keyword (demanded by Sortable Element)
-	return (
-		<PlaylistEntryContainer
-			spinId={spinId}
-			title={spin.title}
-			artist={spin.artist}
-			album={spin.album}
-			label={spin.label||''}
-			spindex={spindex}
-			removeSpinFromView={removeSpinFromView} />
-	);
-});
-
-const SortablePlaylistList = SortableContainer(({spins, removeSpinFromView}) => {
-	// index MUST BE index in array or Sortable will blow up
-	return (
-		<div className='playlist-list-entries'>
-			{spins.map((spin, index) => {
-				return <SortablePlaylistEntry 
-					key={spin.id}
-					spinId={spin.id}
-					spin={spin}
-					spindex={index + 1}
-					index={index}
-					removeSpinFromView={removeSpinFromView} />
-				}
-			)}
-		</div>
-	);
-});
-
 export default class SortablePlaylistTable extends React.Component {
 	constructor(props) {
 		super(props);
@@ -102,32 +67,40 @@ export default class SortablePlaylistTable extends React.Component {
 	}
 }
 
-class PlaylistTableHeader extends React.Component {
-	constructor(props) {
-		super(props)
-	}
+// Following syntax from online
+const DragHandle = SortableHandle(() => <div className="playlist-movetab"/>);
 
-	render() {
-		return (
-			<div id="playlist-header">
-				<span className="playlist-numbering playlist-heading"> </span>
-				<span className="playlist-numbering playlist-heading"> </span>
-				<span className="playlist-text-cell playlist-heading"> {this.props.title} </span>
-				<span className="playlist-text-cell playlist-heading"> {this.props.artist} </span>
-				<span className="playlist-text-cell playlist-heading"> {this.props.album} </span>
-				<span className="playlist-text-cell playlist-heading"> {this.props.label} </span>
-				<span className="playlist-numbering playlist-heading"> </span>
-			</div>
-		);
-	}
-}
+const SortablePlaylistEntry = SortableElement(({spin, spindex, removeSpinFromView, spinId}) => {
+	// Hacked to remove index keyword (demanded by Sortable Element)
+	return (
+		<PlaylistEntryContainer
+			spinId={spinId}
+			title={spin.title}
+			artist={spin.artist}
+			album={spin.album}
+			label={spin.label||''}
+			spindex={spindex}
+			removeSpinFromView={removeSpinFromView} />
+	);
+});
 
-PlaylistTableHeader.defaultProps = {
-	title: 	'title',
-	artist: 'artist',
-	album: 	'album',
-	label: 	'record label'
-}
+const SortablePlaylistList = SortableContainer(({spins, removeSpinFromView}) => {
+	// index MUST BE index in array or Sortable will blow up
+	return (
+		<div className='playlist-list-entries'>
+			{spins.map((spin, index) => {
+				return <SortablePlaylistEntry 
+					key={spin.id}
+					spinId={spin.id}
+					spin={spin}
+					spindex={index + 1}
+					index={index}
+					removeSpinFromView={removeSpinFromView} />
+				}
+			)}
+		</div>
+	);
+});
 
 // All the logic of a Playlist Entry
 class PlaylistEntryContainer extends React.Component {
@@ -239,4 +212,31 @@ class PlaylistEntry extends React.Component {
 			</div>
 		);
 	}
+}
+
+class PlaylistTableHeader extends React.Component {
+	constructor(props) {
+		super(props)
+	}
+
+	render() {
+		return (
+			<div id="playlist-header">
+				<span className="playlist-numbering playlist-heading"> </span>
+				<span className="playlist-numbering playlist-heading"> </span>
+				<span className="playlist-text-cell playlist-heading"> {this.props.title} </span>
+				<span className="playlist-text-cell playlist-heading"> {this.props.artist} </span>
+				<span className="playlist-text-cell playlist-heading"> {this.props.album} </span>
+				<span className="playlist-text-cell playlist-heading"> {this.props.label} </span>
+				<span className="playlist-numbering playlist-heading"> </span>
+			</div>
+		);
+	}
+}
+
+PlaylistTableHeader.defaultProps = {
+	title: 	'title',
+	artist: 'artist',
+	album: 	'album',
+	label: 	'record label'
 }

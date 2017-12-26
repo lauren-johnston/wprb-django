@@ -96,7 +96,10 @@ class PlaylistEntryFormInput extends React.Component {
     }
 
     handleKeyUp(evt) { 
-        if (evt.key == 'Enter') 
+        // TODO: Validate that song/album/artist has all been entered.
+        // IF NOT, then tab to the next empty input box, and maybe highlight it red or something?
+        //      Probs just iterate through form.input, if form.input[i].value === '', form.input[i].focus()
+        if (evt.key == 'Enter')
             this.props.submit(); 
     }
 
