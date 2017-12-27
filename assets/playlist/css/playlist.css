@@ -50,6 +50,16 @@
 .spin {
 	border-top: 1px solid rgba(255,255,255, 0.1);
 	padding: 0.2em 0;
+
+
+	/* Hack to stop it from highlighting shit when you drag */
+	 -webkit-touch-callout: none; /* iOS Safari */
+	   -webkit-user-select: none; /* Safari */
+	    -khtml-user-select: none; /* Konqueror HTML */
+	      -moz-user-select: none; /* Firefox */
+	       -ms-user-select: none; /* Internet Explorer/Edge */
+	           user-select: none; /* Non-prefixed version, currently
+	                                 supported by Chrome and Opera */
 }
 
 .entry-add-form {
@@ -150,7 +160,7 @@
 }
 
 .playlist-table-contents {
-	max-height: calc(82vh - 5em);
+	max-height: calc(82vh - 7em);
 	overflow-y: scroll;
 }
 
@@ -162,35 +172,6 @@
 
 .playlist-artist-name {
 
-}
-/* Autocomplete stuff */
-
-.playlist-autocomplete-box {
-	min-height: 5em;
-	max-height: 10em;
-
-	padding: 0.25em 0.25em;
-	border-radius: 0 0 0.25em 0.25em;
-	background-color: white;
-	overflow-y: auto;
-	z-index: 10;
-
-	color: #000;
-	position: absolute;
-}
-
-.playlist-suggestion {
-	color: black;
-}
-
-.playlist-comment {
-	background-image: url("media/comment.gif");
-	background-position: center;
-	background-repeat: no-repeat; 
-	background-size: 20px 20px;
-	display: inline-block;
-	width: 5%;
-	height: 1em;
 }
 
 .playlist-plus {
@@ -213,7 +194,50 @@
    height: 1em;
 }
 
-/* Comment styles */
+
+/* Autocomplete stuff */
+.react-autosuggest__suggestions-container--open {
+	position: absolute;
+
+	background-color: #fff;
+	color: #000;
+
+	padding: 0.5em;
+
+	border-radius: 0.5em 0.5em 0.5em 0;
+	bottom: 2em;
+
+	box-shadow: 2px 2px 2px #000;
+}
+
+.react-autosuggest__suggestions-list {
+	max-height: 6em;
+	width: 25em;
+	overflow-y: auto;
+}
+
+.playlist-suggestion {
+	padding: 0.1em 0.25em;
+	border-radius: 0.25em;
+
+	cursor: pointer;
+}
+
+.playlist-suggestion.highlighted {
+	background-color: #eef;
+}
+
+.suggestion-artist, .suggestion-album {
+	font-style: italic;
+	color: #777;
+
+	margin-left: 0.5em;
+}
+
+/*********************************************************************
+ * Comment styles 
+ ********************************************************************/
+
 .comment-panel {
 	position: fixed;
 	bottom: 0;
@@ -288,3 +312,5 @@
 .comment-button:active {
 	background-color: #aaa;
 }
+
+

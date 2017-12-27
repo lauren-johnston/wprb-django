@@ -47,11 +47,8 @@ class Song(models.Model):
 
     def __str__(self):
         artists = ' & '.join([artist.name for artist in self.artist.all()])
-        genres = ' & '.join([genre.name for genre in self.genre.all()])
-        subgenres = ' & '.join([subgenre.name for subgenre in self.subgenre.all()])
-        return 'Song %d: Title: %s, Album: %s, Artist(s): %s, Genre(s): %s, Subgenre(s): %s, Info: "%s..."' \
-            % (self.id, self.name, self.album.name, artists, genres, subgenres, self.info[:15])
-
+        return 'Song %d: %s by %s on %s' \
+            % (self.id, self.name, artists, self.album.name)
 
 class Album(models.Model):
     """ An album, which has a name, and was released in a year on a label.
