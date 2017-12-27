@@ -9,7 +9,6 @@ export default class PlaylistEntryForm extends React.Component {
         super(props);
 
         this.state = {
-            spindex: this.props.spindex,
             title: '',
             artist: '',
             album: '',
@@ -22,22 +21,21 @@ export default class PlaylistEntryForm extends React.Component {
     submit() {
         fetch('entry/add/', {
             method: "POST",
-            body: new FormData(document.getElementById("add-form")),
-            mode: 'cors'
+            body: new FormData(document.getElementById("add-form"))
         }).then(response => response.json()).then(json => {
             console.log(json);
-            if (json.ok) this.props.addSpinToView(json.spin);
-        });
-
-        this.setState((state) => {
-            return {
-                spindex: state.spindex + 1,
-                title: '',
-                artist: '',
-                album: '',
-                label: ''
-            }
-        });
+            if (json.ok) {
+                this.props.addSpinToView(json.spin);
+                this.setState((state) => {
+                    return {
+                        title: '',
+                        artist: '',
+                        album: '',
+                        label: ''
+                    }
+                });
+            } 
+        });    
     }
 
     render() {
@@ -45,7 +43,7 @@ export default class PlaylistEntryForm extends React.Component {
             <form className="entry-add-form" name='add-form' id="add-form">
                 <div className="spin" id="new-entry">
                     <div className='playlist-movetab' style={{opacity:0.0}} />
-                    <div className="playlist-numbering"> {this.state.spindex} </div>
+                    <div className="playlist-numbering"> {this.props.spindex} </div>
                     <PlaylistEntryFormInput
                         identifier="title"
                         placeholder="song title"
@@ -70,8 +68,7 @@ export default class PlaylistEntryForm extends React.Component {
                         value={this.state.label}
                         submit={this.submit}
                         autoFocus={false} />
-                    <div onClick={this.submit} className="playlist-plus clickable" id="add-entry-button">
-                    </div>
+                    <div onClick={this.submit} className="playlist-plus clickable" id="add-entry-button"/>
                 </div>
             </form>
         );
@@ -153,6 +150,7 @@ class PlaylistEntryFormInput extends React.Component {
         const {value, suggestions} = this.state;
 
         const inputProps = {
+            name: this.props.identifier,
             value: value || '',
             placeholder: this.props.placeholder,
             autoFocus: this.props.autoFocus,

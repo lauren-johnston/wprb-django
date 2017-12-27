@@ -4,11 +4,13 @@ import PlaylistEntryForm from './PlaylistEntryForm.jsx';
 import { RIEInput } from 'riek';
 import { SortableContainer, SortableElement, SortableHandle, arrayMove } from 'react-sortable-hoc';
 
-export default class SortablePlaylistTable extends React.Component {
+export default class PlaylistTable extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {spins:this.props.spins};
-
+		this.state = {
+			spins:this.props.spins,
+			length: this.props.spins.length
+		};
 		this.onSortEnd = this.onSortEnd.bind(this);
 		this.addSpinToView = this.addSpinToView.bind(this);
 		this.removeSpinFromView = this.removeSpinFromView.bind(this);		
@@ -17,18 +19,27 @@ export default class SortablePlaylistTable extends React.Component {
 	addSpinToView(spin) {
 		let updatedSpins = this.state.spins.slice();
 		updatedSpins.push(spin);
-		this.setState({ spins: updatedSpins});
+		this.setState({ 
+			spins: updatedSpins,
+			length: updatedSpins.length
+		});
 	}
 
 	removeSpinFromView(spindex) {
 		let updatedSpins = this.state.spins.slice();
 		updatedSpins.splice(spindex-1, 1);
-		this.setState({ spins: updatedSpins });
+		this.setState({ 
+			spins: updatedSpins,
+			length: updatedSpins.length
+		});
 	}
 
 	onSortEnd({oldIndex, newIndex}) {
 		let newSpins = arrayMove(this.state.spins, oldIndex, newIndex);
-		this.setState({spins: newSpins});
+		this.setState({
+			spins: newSpins,
+			length: newSpins.length
+		});
 
 		// Move spin in the server
 		if (oldIndex != newIndex) {
@@ -38,11 +49,10 @@ export default class SortablePlaylistTable extends React.Component {
 					"Content-Type": "application/json",
 					"Accept": "application/json"
 				},
-				body: JSON.stringify({oldSpindex: oldIndex+1, newSpindex: newIndex+1}),
-				mode: 'cors',
+				body: JSON.stringify({oldSpindex: oldIndex+1, newSpindex: newIndex+1})
 			}).then(response => response.json()).then(json => {
 				console.log(json);
-				if (json.ok) {} // Something
+				if (!json.ok) { alert('bad move...'); } // Something
 			});
 		}
 	};
@@ -60,7 +70,7 @@ export default class SortablePlaylistTable extends React.Component {
 						useDragHandle={true} />
 				</div>
 				<PlaylistEntryForm
-					spindex={this.state.spins.length + 1}
+					spindex={this.state.length + 1}
 					addSpinToView={this.addSpinToView} />
 			</div>
 		);
