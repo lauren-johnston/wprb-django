@@ -1,0 +1,33 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {ExploreSpinsTable, ExploreDetails} from './Explore.jsx';
+
+class ExploreMusicPage extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+
+	render() {
+		return (
+			<div className="explore">
+				<div id="content-top">
+					<ExploreDetails title={this.props.title} />
+				</div>
+				<div id="content-main">
+					<div id="content-left">
+						<ExploreSpinsTable spins={this.props.spins} />
+					</div>
+					<div id="content-right">
+						Charts go here!
+					</div>
+				</div>
+			</div>
+		);
+	}
+}
+
+ReactDOM.render(
+    React.createElement(ExploreMusicPage, window.props),
+    window.react_mount,
+);
