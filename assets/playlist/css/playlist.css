@@ -14,7 +14,12 @@
 
 #playlist {
 	position: relative;
-	padding: 0.5em;
+
+	/* Slight cleanup */
+	padding-top: .5em;
+	padding-left: .5em;
+	padding-right: .5em;
+	padding-bottom: .1em;
 
 	width: calc(100% - 3em);
 	max-height: calc(82vh - 3em);
@@ -64,6 +69,8 @@
 
 .entry-add-form {
 	margin: 0em;
+	/* This is to compensate for the scrollbar */
+	margin-right: 7px;
 }
 
 /* A text item that lives in a rounded bubble */
@@ -75,6 +82,8 @@
 /* Styles within the show details section */
 #show .playlist-text-cell {
     width: 100%;
+    min-width: 4em;
+    min-height:1em;
 }
 
 .show-section {
@@ -168,6 +177,7 @@
 	display: inline-block;
 	width: 20%;
 	min-width: 4em;
+	min-height: 1em;
 }
 
 .playlist-artist-name {
