@@ -30,14 +30,3 @@ function csrfSafeMethod(method) {
    // these HTTP methods do not require CSRF protection
    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
-
-function autocomplete(identifier, value) {}
-
-//----------------------------------------------------------------------
-
-// function invalidFormException(message) {
-// 	return {
-// 		name: "Invalid Form Error",
-// 		message: message
-// 	}
-// };
