@@ -35,6 +35,10 @@ def add(request, playlist_id):
 	except (KeyError, ValueError):
 		return error('Invalid request')
 
+	if all(arg is '' for arg in (song_title, artist_name, album_name, label_name)):
+		return error('Invalid request')
+
+
 	# Get the artist, album, and song objects, creating each if necessary
 	artist, album, song = get_or_create(artist_name, album_name, song_title)
 
