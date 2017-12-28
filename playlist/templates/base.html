@@ -3,6 +3,9 @@
 {% load static %}
 <html>
 <head>
+<title>
+{% block title %}Human Music{% endblock title%}
+</title>
 {% block styles %}
 	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 	<link rel="stylesheet" href="{% static 'common/css/reset.css' %}">

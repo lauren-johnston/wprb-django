@@ -1,18 +1,46 @@
 /* unvisited link */
-a:link {
-    color: white;
-    text-decoration: none;
-}
-
-/* visited link */
-a:visited {
+a:link, a:visited {
     color: white;
     text-decoration: none;
 }
 
 a:hover {
-    color: pink;
     text-decoration: none;
+}
+
+/* Positioning */
+#content-top {
+	height: calc(20% - 2em);
+	width: 100%;
+	padding: 1em 15%;
+}
+
+#content-main {
+	top: 20%;
+	height: 80%;
+	width: 100%;
+}
+
+#content-left {
+    position: absolute;
+    left: 0;
+    width: 60%;
+}
+
+#content-right {
+    position: absolute;
+    left: 60%;
+    width: 40%;
+}
+
+/* Box styles */
+.details {
+	background-color: rgb(42,42,42);
+	border: 2px solid #959595;
+	width: 70%;
+	height: calc(100% - 1em);
+	padding: 0.5em;
+	border-radius: 0.5em;
 }
 
 .explore-title {
@@ -21,20 +49,18 @@ a:hover {
 }
 
 .play-container {
-	position: absolute;
-	left: 15%;
-	width: 70%;
-	margin-top: 1%;
 	background-color: rgb(42, 42, 42);
 	border: 2px solid #959595;
 	border-radius: 0.15em;
-	padding: 2em;
 
-	max-height: 75vh;
+	margin: 0 0.5em 1em 1em;
+	padding: 1em;
+
+	max-height: calc(100% - 2em);
 }
 
 .plays {
-	max-height: calc(75vh - 2em);
+	max-height: calc(60vh - 3em);
 	overflow: auto;
 }
 
@@ -60,14 +86,88 @@ a:hover {
 }
 
 .play-field {
-/*	margin: 1% 3% 1% 3%;
-*/	padding: 0.25em 0.5em;
+	padding: 0.25em 0.5em;
 	display: inline-block;
 	width: 12%;
 	cursor: pointer;
 }
 
 .play-field:hover {
-	color: pink;
-    text-decoration: none;
+    text-decoration: underline;
 }
+
+/**********************************************************************
+ * Comment stuff
+ *********************************************************************/
+
+.comment-panel {
+	background-color: #424242;
+	color: #fff;
+	z-index: 10;
+
+	padding: 0.25em 0.5em;
+	margin: 0 1em 1em 0.5em;
+	border-radius: 0.25em;
+
+	box-shadow: 2px 2px 2px #222;
+	border: 1px solid #fff;
+}
+
+.comment-panel.hidden {
+	height: 2em;
+}
+
+.hidden > form, .hidden > div {
+	display: none;
+}
+
+.comment-panel.show {
+	padding-bottom: 1em;
+}
+
+.comment-meta {
+	text-align: right;
+	font-size: 0.75em;
+}
+
+.comment-contents {
+	max-height: 20em;
+	overflow-y: auto;
+}
+
+.comment-text {
+	padding: 0.5em;
+	margin: 0.5em;
+	width: 90%;
+	border-radius: 0.5em;
+
+	background-color: #fef;
+	color: #000;
+}
+
+#new-comment-text {
+	width: 100%;
+	border-radius: 0.25em;
+	margin: 0.5em 0;
+}
+
+#new-comment-form {
+	text-align: right;
+}
+
+.comment-button {
+	border: 1px solid #fff;
+	border-radius: 0.5em;
+	padding: 0.25em 0.5em;
+	margin: 0.5em;
+
+	background-color: #fff;
+	color: #005;
+	cursor: pointer;
+}
+
+.comment-button:active {
+	background-color: #aaa;
+}
+
+

@@ -63,7 +63,8 @@ def edit_playlist(request, playlist_id):
         'dj'        : [dj.name for dj in playlist.show.dj.all()],
         'genre'     : playlist.genre.name if playlist.genre else None,
         'subgenre'  : [g.name for g in playlist.subgenre.all()],
-        'desc'      : playlist.desc
+        'desc'      : playlist.desc,
+        'id'        : playlist_id
     }
 
     spins = sorted([{
@@ -114,7 +115,7 @@ def explore_music(request, field, field_id):
     context = {
         'bundle': 'explore-music',
         'title': 'Explore %ss: %s' % (field.capitalize(), title),
-        'props': {'spins': p, 'title' : title}
+        'props': {'spins': p, 'title': title}
     }
 
     return render(request, "component.html", context=context)
@@ -132,7 +133,7 @@ def explore_dj(request, dj_id):
     } for playlist in Playlist.objects.filter(show__dj=dj)], key=lambda x: x['id'], reverse=True)   
 
     context = {
-        'props' : {'dj': dj.name, 'playlists' : playlists},
+        'props' : {'title': dj.name, 'playlists': playlists},
         'bundle': 'explore-dj',
         'title' : 'Explore DJs: %s' % dj.name
     }
@@ -153,7 +154,8 @@ def explore_playlist(request, playlist_id):
         'genre'     : playlist.genre.name if playlist.genre else None,
         'subgenre'  : [g.name for g in playlist.subgenre.all()],
         'desc'      : playlist.desc,
-        'date'      : date_to_str(playlist.date)
+        'date'      : date_to_str(playlist.date),
+        'id'        : playlist_id
     }
 
     # Get spins

@@ -44,14 +44,14 @@ export default class CollabsibleCommentPanel extends React.Component {
 				<div className="comment-contents">
 				{this.state.comments.map((comment) => 
 					<SingleComment 
-						text={comment.text} 
-						author={comment.author} 
-						timestamp={comment.timestamp} 
+						text={comment.text}
+						author={comment.author}
+						timestamp={comment.timestamp}
 						id={comment.id}
 						key={comment.id} />
 				)}
 				</div>
-				<NewCommentForm addComment={this.addComment} />
+				<NewCommentForm playlistId={this.props.playlistId} addComment={this.addComment} />
 			</div>
 		);
 	}
@@ -90,7 +90,7 @@ export class EmbeddedCommentPanel extends React.Component {
 						key={comment.id} />
 				)}
 				</div>
-				<NewCommentForm addComment={this.addComment} />
+				<NewCommentForm playlistId={this.props.playlistId} addComment={this.addComment} />
 			</div>
 		);
 	}
@@ -138,9 +138,8 @@ class NewCommentForm extends React.Component {
 		document.getElementById("new-comment-text").value = '';
 
 		let body = JSON.stringify({text});
-		console.log(body);
 
-		fetch('comment/new/', {
+		fetch(`/playlist/${this.props.playlistId}/comment/new/`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -152,10 +151,8 @@ class NewCommentForm extends React.Component {
 		}).then(response => {
 			return response.json();
 		}).then(data => {
-			console.log(data);
 			this.props.addComment(data);
 		});
-
 	}
 
 	render() {

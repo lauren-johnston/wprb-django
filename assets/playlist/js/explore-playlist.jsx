@@ -20,7 +20,7 @@ class ExplorePlaylistPage extends React.Component {
 						<ExplorePlaylist spins={this.props.spins} />
 					</div>
 					<div id="content-right">
-						<EmbeddedCommentPanel comments={this.props.comments} />
+						<EmbeddedCommentPanel playlistId={this.props.show.id} comments={this.props.comments} />
 					</div>
 				</div>
 			</div>
