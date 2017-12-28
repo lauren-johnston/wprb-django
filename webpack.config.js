@@ -5,11 +5,11 @@ var BundleTracker = require('webpack-bundle-tracker')
 module.exports = {
   context: __dirname,
 
-  // where to find the files that we want! 
+  // where to find the files that we want!
   // entry means "entry-point"
   entry: {
     // bundle name: location
-    'playlist': './assets/playlist/js/playlist-entry',
+    'playlist': './assets/playlist/js/playlist',
     'explore': './assets/playlist/js/explore',
     'details': './assets/playlist/js/details',
     'graph': './assets/playlist/js/graph',
@@ -33,11 +33,11 @@ module.exports = {
   module: {
     // configuration for the javascript compilation
     loaders: [
-      { 
-        test: /\.jsx?$/, 
+      {
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         // babel does the actual compilation
-        loader: 'babel-loader', 
+        loader: 'babel-loader',
         query: {
             // env gives us all modern syntax, react gives JSX
             presets: ['env', 'react']

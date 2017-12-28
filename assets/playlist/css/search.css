@@ -2,11 +2,35 @@
 	margin: 1em;
 	padding: 1em;
 	display: inline-block;
-	background-color: #36e29b;
+	background-color: #36e28b;
 }
 
 
 #search-bar {
 	border-radius: 5px;
 	border-style: 1px;
+}
+
+
+.VirtualSelectGrid {
+  z-index: 1;
+}
+
+.VirtualizedSelectOption {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0 .5rem;
+}
+.VirtualizedSelectFocusedOption {
+  background-color: rgba(0, 126, 255, 0.1);
+}
+.VirtualizedSelectDisabledOption {
+  opacity: 0.5;
+}
+.VirtualizedSelectSelectedOption {
+  font-weight: bold;
 }
