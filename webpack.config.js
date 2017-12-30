@@ -15,7 +15,8 @@ module.exports = {
     'graph': './assets/playlist/js/graph',
     'search': './assets/playlist/js/search',
     'chart': './assets/playlist/js/chart',
-    'shows': './assets/playlist/js/shows'
+    'shows': './assets/playlist/js/shows',
+    'user': './assets/playlist/js/user',
   },
 
   output: {

@@ -13,6 +13,7 @@ import time, datetime
 
 @login_required
 def landing(request):
+    userinfo = get_user_details(request)
     """ Serve the landing page for a dj that allows them to 
     access their previous playlists for editing or create 
     a new playlist.
@@ -28,7 +29,8 @@ def landing(request):
 
     context = {
         'dj'        : dj.name,
-        'playlists' : playlists
+        'playlists' : playlists,
+        'props': {'userinfo' : userinfo}
     }
 
     return render(request, "landing.html", context=context)
@@ -49,6 +51,7 @@ def new_playlist(request):
 
 @login_required(login_url = 'playlist:login')
 def edit_playlist(request, playlist_id):
+    userinfo = get_user_details(request)
     """ Serve the page for editing a single playlist.
     """
     playlist = get_object_or_404(Playlist, pk=playlist_id)
@@ -78,7 +81,7 @@ def edit_playlist(request, playlist_id):
     } for comment in Comment.objects.filter(playlist=playlist_id)]
 
     context = {
-        'props' : {'spins': spins, 'show': showdetails, 'comments': comments},
+        'props' : {'spins': spins, 'show': showdetails, 'comments': comments, 'userinfo' : userinfo},
         'bundle': 'playlist',
         'title' : 'Playlist Editor'
     }
@@ -86,13 +89,14 @@ def edit_playlist(request, playlist_id):
     return render(request, "component.html", context=context)
 
 def explore(request, field, field_id):
+    userinfo = get_user_details(request)
     """ Render the page with the explore component and relevant info.
     """
     p, title = plays(field, int(field_id))
     context = {
         'bundle': 'explore',
         'title': 'Explore %ss' % field.capitalize(),
-        'props': {'plays': p, 'title' : title}
+        'props': {'plays': p, 'title' : title, 'userinfo' : userinfo}
     }
 
     return render(request, "component.html", context=context)

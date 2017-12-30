@@ -1,6 +1,7 @@
 {# admin.html #}
 {# this is the base template for all playlist backend pages #}
 {% load static %}
+{% load render_bundle from webpack_loader %}
 <html>
 <head>
 {% block styles %}
@@ -17,12 +18,15 @@
 				<p id="header-subtitle"> Hmm... I like it!</p>
 			</div>
 		</a>
+
+		<div id="user-area"></div>
+
 	</div>
 
 	<div id="content" class="page-section">
 		{% block content %}
 			This is a template.  Generate real pages based on this template by including the line
-			{% verbatim %} {% extends "admin.html" %} {% endverbatim %}
+			{% verbatim %} {% extends "base.html" %} {% endverbatim %}
 			at the top of the file.
 		{% endblock content %}
 	</div>
@@ -43,3 +47,4 @@
 	{% endblock scripts %}
 </body>
 </html>
+{% render_bundle "user" %}

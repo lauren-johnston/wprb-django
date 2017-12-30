@@ -77,3 +77,55 @@ a, a:visited {
 .clickable {
 	cursor: pointer;
 }
+
+/* link settings */
+
+a:link {
+    color: white;
+    text-decoration: none;
+}
+
+a:visited {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+    color: pink;
+    text-decoration: none;
+}
+
+/* User ID Component Style */
+
+.userid-panel {
+    position: fixed;
+    top: 1em;
+    right: 1em;
+    width: 10em;
+
+    background-color: #424242;
+    color: #fff;
+    z-index: 10;
+
+    padding: 0.25em 0.5em;
+    border-radius: 0.25em;
+
+    border: 1px solid #fff;
+}
+
+.userid-panel.hidden {
+    height: 2em;
+}
+
+.hidden > a {
+    display: none;
+}
+
+.userid-panel.show {
+}
+
+.userid-name {
+	font-size: 1.2em;
+	font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+	margin: 10em 0 2em 3em;
+}
