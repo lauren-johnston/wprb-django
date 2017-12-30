@@ -38,20 +38,20 @@ def get_user_details(request):
         context["is_logged_in"] = True
         context["username"] = request.user.username
         context["id"] = request.user.id
-        print("ssssss")
+        print("user is logged in")
     else:
         context["is_logged_in"] = False
         context["username"] = 'Anonymous'
         context["id"] = None
-        print("sssrrr")
+        print("user is logged out")
 
     if request.user.dj:
         context["is_dj"] = True 
         context["dj_name"] = request.user.dj
-        print("sssfff")
+        print("user is dj")
     else:
         context["is_dj"] = False 
         context["dj_name"] = None
-        print("sssooo")
+        print("user is not dj")
 
     return context
