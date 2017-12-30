@@ -676,7 +676,7 @@ class SuggestionsBox extends React.Component {
 		return this.props.suggestions.map((suggestion, index) => {
 			let customStyle = {};
 			if (index == this.state.selected)
-				customStyle.backgroundColor = 'blue';
+				customStyle.backgroundColor = '#ffd';
 
 			return (
 				<div
