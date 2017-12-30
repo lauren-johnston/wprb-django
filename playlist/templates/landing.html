@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
+{% load filters %}
+{% load render_bundle from webpack_loader %}
 
 {% block styles %}
     {{ block.super }}
@@ -7,29 +9,33 @@
 {% endblock styles %}
 
 {% block content %}
-<div id="col-left" class="col-content">
-    <h1>Welcome {{dj}}!</h1>
-    <h3>What playlist would you like to edit?</h3> <br>
-    <span class="playlist-heading playlist-text-cell">Date</span>
-    <span class="playlist-heading playlist-text-cell">Title</span>
-    <span class="playlist-heading playlist-text-cell">Subtitle</span>
-    <br>
-    {% for playlist in playlists %}
-    <div class="list-entry">
-        <a href="/playlist/{{playlist.id}}" class="playlist-link">
-            <span class="playlist-text-cell">{{playlist.date}}</span>
-            <span class="playlist-text-cell">{{playlist.title}}</span>
-            <span class="playlist-text-cell">{{playlist.subtitle}}</span>
-        </a> 
+    <div id="col-left" class="col-content">
+        <h1>Welcome {{dj}}!</h1>
+        <h3>What playlist would you like to edit?</h3> <br>
+        <span class="playlist-heading playlist-text-cell">Date</span>
+        <span class="playlist-heading playlist-text-cell">Title</span>
+        <span class="playlist-heading playlist-text-cell">Subtitle</span>
         <br>
+        {% for playlist in playlists %}
+        <div class="list-entry">
+            <a href="/playlist/{{playlist.id}}" class="playlist-link">
+                <span class="playlist-text-cell">{{playlist.date}}</span>
+                <span class="playlist-text-cell">{{playlist.title}}</span>
+                <span class="playlist-text-cell">{{playlist.subtitle}}</span>
+            </a> 
+            <br>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
-<div id="col-right" class="button">
-    <a href="/playlist/new"> 
-        <span class="playlist-heading">CREATE NEW PLAYLIST</span>
-    </a>
-</div>
+    <div id="col-right" class="button">
+        <a href="/playlist/new"> 
+            <span class="playlist-heading">CREATE NEW PLAYLIST</span>
+        </a>
+    </div>
+
+    <script>
+        window.props = {{ props|json }};
+    </script>
 
 {% endblock content %}

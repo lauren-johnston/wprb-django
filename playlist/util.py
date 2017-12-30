@@ -47,7 +47,7 @@ def get_user_details(request):
 
     if request.user.dj:
         context["is_dj"] = True 
-        context["dj_name"] = request.user.dj
+        context["dj_name"] = request.user.dj.name
         print("user is dj")
     else:
         context["is_dj"] = False 
