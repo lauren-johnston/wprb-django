@@ -42,7 +42,14 @@ module.exports = {
             // env gives us all modern syntax, react gives JSX
             presets: ['env', 'react']
         },
-      }
+    },
+    {
+        test: /\.css$/,
+        include: /node_modules/,
+        loaders: ['style-loader', 'css-loader'],
+
+    }
+
     ],
   },
 
