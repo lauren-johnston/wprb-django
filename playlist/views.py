@@ -155,7 +155,9 @@ def explore_playlist(request, playlist_id):
         'subgenre'  : [g.name for g in playlist.subgenre.all()],
         'desc'      : playlist.desc,
         'date'      : date_to_str(playlist.date),
-        'id'        : playlist_id
+        'id'        : playlist_id,
+        'time'      : playlist.start_time,
+        'length'    : playlist.length
     }
 
     # Get spins

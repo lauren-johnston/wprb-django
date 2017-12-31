@@ -38,7 +38,7 @@ def plays(field, field_id, max=50):
         'label'     : p.song.album.label.name if p.song.album.label else None,
         'labelId'   : p.song.album.label.id if p.song.album.label else None,
         'dj'        : [{'name': dj.name, 'id': dj.id} for dj in p.playlist.show.dj.all()],
-        'date' : date_to_str(p.playlist.date),
+        'date'      : date_to_str(p.playlist.date),
         'playlistId': p.playlist.id,
     } for p in plays]
 
