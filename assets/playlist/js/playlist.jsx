@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import CollapsibleCommentPanel from './Comment.jsx';
 import PlaylistDetails from './PlaylistDetails.jsx';
-import SortablePlaylistTable from './PlaylistTable.jsx';
+import PlaylistTable from './PlaylistTable.jsx';
 
 class Playlist extends React.Component {
 	constructor(props) {
@@ -23,7 +23,7 @@ class Playlist extends React.Component {
 						desc={this.props.show.desc || ''} />
 				</div>
 				<div id="col-right" className="col">
-					<SortablePlaylistTable spins={this.props.spins} />
+					<PlaylistTable spins={this.props.spins} />
 				</div>
 				<CollapsibleCommentPanel playlistId={this.props.show.id} comments={this.props.comments} />
 			</div>
