@@ -14,6 +14,10 @@ from . import views, services, explore, test_views
 from .views import edit_playlist
 from .services import entry, meta, comment
 
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'home'
+
 playlist_id = r'^(?P<playlist_id>[0-9]+)/'
 
 app_name = 'playlist'
@@ -31,6 +35,7 @@ urlpatterns = [
 	# Authentication
 	url(r'^login/$', auth_views.login, name='login'),
 	url(r'^logout/$', auth_views.logout, name='logout'),
+	#url(r'^oauth/', include('social_django.urls', namespace='social')),
 
 	# Landing Page
 	url(r'^$', views.landing),

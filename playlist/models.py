@@ -32,9 +32,6 @@ class Spin(models.Model):
     """
     # The song that got played
     song = models.ForeignKey('music.Song')
-    # Matt: What if we store the songID? That way we can do a lookup to
-    # find all info included below. SongID provides easy querying into th3
-    # big Song Database
 
     # potentially memoize title/artist/album/label to save joins?
     # title = models.CharField(max_length=100, blank=True)
@@ -46,7 +43,6 @@ class Spin(models.Model):
     timestamp = models.TimeField(auto_now_add=True)
     playlist = models.ForeignKey('Playlist')
     # Which number in the playlist is this?
-    # unclear if this is the best approach, maybe a linked-list instead?
     index = models.IntegerField(validators=[MinValueValidator(1)])
 
     # how did you spin it? sadly, "format" is a python reserved keyword...
@@ -67,7 +63,7 @@ class Playlist(models.Model):
 
     # When did it happen ?
     time_start = models.CharField(max_length=4, choices=TIMES, blank=True)
-    time_end = models.CharField(max_length=4, choices=TIMES, blank=True)
+    length = models.FloatField(default=2)
     date = models.DateField(default=date.today)
 
     # This playlist might have genres and subgenres different from the show in general
@@ -92,8 +88,7 @@ class DJ(models.Model):
 
     # THIS IS THE DJ NAME
     name = models.CharField(max_length=100)
-    # REMEMBER THIS IS THE DJ NAME
-
+    # Real people name
     first_name = models.CharField(max_length=40)
     last_name = models.CharField(max_length=40)
 

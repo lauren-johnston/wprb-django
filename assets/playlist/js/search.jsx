@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ClickableExploreField from './ClickableExploreField.jsx';
 import Select from 'react-select';
 
 import 'react-select/dist/react-select.css';
@@ -85,12 +84,11 @@ class Search extends React.Component {
 		<div id="select-search-bar" style={{ display: 'inline-block', maxWidth: this.myWidth }}>
 	      <Select
 	        options={this.state.options}
-			onChange = {(selectValue) => this.explore({selectValue})}
+			onChange={(selectValue) => this.explore({selectValue})}
 			onInputChange={(selectValue) => this.makeQuery(selectValue)}
 	        value={this.state.selectValue}
 			placeholder="Search"
-			style={styles}
-	      />
+			style={styles} />
   		</div>
     )
   }

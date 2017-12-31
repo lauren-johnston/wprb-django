@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.http import QueryDict, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import F
 
 from ..models import Spin, Playlist
 from ..util import invalid_array_index, error, success, spin_to_dict
@@ -34,6 +35,10 @@ def add(request, playlist_id):
 	except (KeyError, ValueError):
 		return error('Invalid request')
 
+	if any(arg is '' for arg in (song_title, artist_name, album_name)):
+		return error('Invalid request')
+
+
 	# Get the artist, album, and song objects, creating each if necessary
 	artist, album, song = get_or_create(artist_name, album_name, song_title)
 
@@ -45,28 +50,21 @@ def add(request, playlist_id):
 	new_spin.save()
 
 	# Update the playcounts on all our objects
-	song.playcount += 1
-	artist.playcount += 1
-	album.playcount += 1
-
-	# Finally, shift the playlist if need be
-	# spins_to_update = spins.filter(index__gte=spin_index)
-	# for spin in spins_to_update:
-	# 	spin.index = spin.index + 1
-	# 	spin.save()
+	song.playcount = F('playcount') + 1
+	artist.playcount = F('playcount') + 1
+	album.playcount = F('playcount') + 1
 
 	# Hacky, forgive me
 	response = {
 		"ok": True,
 		"spin": spin_to_dict(new_spin)
 	}
+	
 	if label_name is not None:
 		response['spin']['label'] = label_name
 	else:
 		response['spin']['label'] = ''
 
-	print("Returning add response...")
-	print(response)
 	return JsonResponse(response)
 
 @require_http_methods(["GET"])
@@ -99,13 +97,8 @@ def move(request, playlist_id):
 	"""
 	try:
 		args         = json.loads(request.body)
-
-		print("Received this dict on move...")
-		print(args)
-
 		old_index    = int(args['oldSpindex'])
 		new_index    = int(args['newSpindex'])
-		
 		spins        = Spin.objects.filter(playlist__pk=playlist_id)
 		target_spin  = spins.get(index=args['oldSpindex'])
 	except (KeyError, ValueError):
@@ -122,19 +115,21 @@ def move(request, playlist_id):
 		return error('Invalid index')
 
 	# Two sets to update depending on if spin was moved up or down
-	if(old_index == new_index):
+	if (old_index == new_index):
 		return success()
+
 	# If you moved it up, move others down
 	elif(old_index > new_index):
 		spins_to_increment = spins.filter(index__lt=old_index, index__gte=new_index)
 		for spin in spins_to_increment:
-			spin.index = spin.index + 1
+			spin.index = F('index') + 1
 			spin.save()
+
 	# If you moved it down, move others up
 	else:
 		spins_to_decrement = spins.filter(index__gt=old_index, index__lte=new_index)
 		for spin in spins_to_decrement:
-			spin.index = spin.index - 1
+			spin.index = F('index') - 1
 			spin.save()
 		
 
@@ -154,37 +149,31 @@ def delete(request, playlist_id):
 	""" Deletes the spin specified by the given pk from the 
 		playlist specified in the URI. 
 	"""
+
 	try:
-		args         = json.loads(request.body)
-		spins        = Spin.objects.filter(playlist__pk=playlist_id)
-		target_spin  = spins.get(index=args['index'])
-		index        = target_spin.index
+		args = json.loads(request.body)
+		spin = Spin.objects.get(id=args['id'])
+		index = spin.index
 	except KeyError:
 		return error('Invalid request')
 	except Spin.DoesNotExist:
 		return error('No matching spin')
 
-	if invalid_array_index(spins, index):
-		print("Length is %d" %len(spins))
-		print("Index is %d" %index)
-		print(spins)
-		return error('Invalid index')
-
-	print("Received the following dict on delete...")
-	print(args)
-	print("Found the following spin...")
-	print(target_spin)
-	print("Proceeding to delete, and update other spins...")
+	# Update the playcounts
+	spin.song.playcount = F('playcount') - 1
+	spin.song.save()
+	spin.song.album.playcount = F('playcount') - 1
+	spin.song.album.save()
+	spin.song.artist.update(playcount=F('playcount') - 1)
 
 	# Delete the spin from the database and update other playlist indices
-	target_spin.delete()
-	spins_to_update = spins.filter(index__gt=index)
-	for spin in spins_to_update:
-		spin.index = spin.index - 1
-		spin.save()
+	spin.delete()
+	spins_to_update = Spin.objects.filter(playlist_id=playlist_id).filter(index__gt=index)
+	for s in spins_to_update:
+		s.index = F('index') - 1
+		s.save()
 
-	# Update the playcounts
-	return success()
+	return JsonResponse({'ok': True})
 
 #@login_required
 @csrf_exempt
@@ -192,31 +181,44 @@ def delete(request, playlist_id):
 def update(request, playlist_id):
 	""" Updates the specified entry with provided basic spin dict 
 	"""
+
+	args = json.loads(request.body)
+
 	try: 
-		args         = json.loads(request.body)
-		playlist     = Playlist.objects.get(pk=playlist_id)
-		spins        = Spin.objects.filter(playlist__pk=playlist_id)
-		target_spin  = spins.get(index=args['spindex'])
+		spin = Spin.objects.get(id=args['id'])
 	except KeyError:
 		return error('Invalid request')
 	except Spin.DoesNotExist:
 		return error('No matching spin')
-	except Playlist.DoesNotExist:
-		return error('No matching playlist')
 
 	try:
 		artist, album, song = get_or_create(args['artist'], args['album'], args['title'])
 	except KeyError:
 		return error('Invalid request')
 
-	new_spin = Spin(song=song, index=target_spin.index, playlist=playlist)
+	spin.song = song
+	spin.save()
 
-	target_spin.delete()
-	new_spin.save()
+	# if 'title' in args:
+	# 	song = Song.objects.get_or_create(name=args['title'], artist=spin.song.artist, album=spin.song.album)
+
+	# 	song.playcount += 1
+	# 	if spin.song.playcount <= 1: 
+	# 		spin.song.delete()
+
+	# 	spin.update(song=song)
+
+	# elif 'album' in args:
+	# 	album = Album.objects.get_or_create(name=args['album'])
+	# elif 'artist' in args:
+	# 	artist = Artist.objects.get_or_create(name=args['artist'])
+	# elif 'label' in args:
+	# 	label = Label.objects.get_or_create(name=args['label'])
+	
 
 	return JsonResponse({
 		'ok': True,
-		'spin': spin_to_dict(new_spin)
+		'spin': spin_to_dict(spin)
 	})
 
 
@@ -237,7 +239,11 @@ def complete(request, playlist_id):
 		return JsonResponse({'ok': True, 'suggestions':[]})
 
 	if identifier == 'title':
-		suggestions = [s.name for s in Song.objects.filter(name__startswith=value)]
+		suggestions = [{
+			'song'   : s.name,
+			'album'  : s.album.name,
+			'artist' : ' & '.join([a.name for a in s.artist.all()])
+		} for s in Song.objects.filter(name__startswith=value)]
 	elif identifier == 'artist':
 		suggestions = [a.name for a in Artist.objects.filter(name__startswith=value)]
 	elif identifier == 'album':

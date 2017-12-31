@@ -10,19 +10,22 @@ module.exports = {
   entry: {
     // bundle name: location
     'playlist': './assets/playlist/js/playlist',
-    'explore': './assets/playlist/js/explore',
+    'explore-music': './assets/playlist/js/explore-music',
+    'explore-playlist': './assets/playlist/js/explore-playlist',
+    'explore-dj': './assets/playlist/js/explore-dj',
     'details': './assets/playlist/js/details',
     'graph': './assets/playlist/js/graph',
     'search': './assets/playlist/js/search',
     'chart': './assets/playlist/js/chart',
-    'shows': './assets/playlist/js/shows'
+    'shows': './assets/playlist/js/shows',
+    'user': './assets/playlist/js/user',
   },
 
   output: {
       // Where to put the compiled bundles
       path: path.resolve('./assets/bundles/'),
       // What to name the compiled bundles
-      filename: "[name]-[hash].js",
+      filename: "[name].js",
   },
 
   plugins: [

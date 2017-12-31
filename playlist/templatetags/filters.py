@@ -11,3 +11,7 @@ def json(value):
     uncleaned = jsonlib.dumps(value)
     clean = bleach.clean(uncleaned)
     return mark_safe(clean)
+
+@register.filter
+def style(value):
+	return value.split('-')[0]

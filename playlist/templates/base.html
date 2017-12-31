@@ -1,8 +1,12 @@
 {# admin.html #}
 {# this is the base template for all playlist backend pages #}
 {% load static %}
+{% load render_bundle from webpack_loader %}
 <html>
 <head>
+<title>
+{% block title %}Human Music{% endblock title%}
+</title>
 {% block styles %}
 	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 	<link rel="stylesheet" href="{% static 'common/css/reset.css' %}">
@@ -17,12 +21,15 @@
 				<p id="header-subtitle"> Hmm... I like it!</p>
 			</div>
 		</a>
+
+		<div id="user-area"></div>
+
 	</div>
 
 	<div id="content" class="page-section">
 		{% block content %}
 			This is a template.  Generate real pages based on this template by including the line
-			{% verbatim %} {% extends "admin.html" %} {% endverbatim %}
+			{% verbatim %} {% extends "base.html" %} {% endverbatim %}
 			at the top of the file.
 		{% endblock content %}
 	</div>
@@ -35,11 +42,8 @@
 {% endcomment %}
 
 	{% block scripts %}
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script type="text/javascript">
-		window.jQuery || document.write('<script src="{% static "lib/jquery.min.js" %}">\x3C/script>');
-	</script>
-	<script type="text/javascript" src="{% static 'playlist/js/common.js' %}"></script>
+
 	{% endblock scripts %}
+	{% render_bundle "user" %}
 </body>
 </html>

@@ -65,7 +65,7 @@ export default class PlaylistDetails extends React.Component {
 	renderDJs() {
 		// return this.state.djs.map( (dj, index) => (
 		// 	<POOP
-		// 		key={dj}
+		// 		key={dj} 
 		// 		value={dj}
 		// 		identifier={index}
 		// 		handleInput={this.updateDJ} />
@@ -114,7 +114,7 @@ export default class PlaylistDetails extends React.Component {
 					<div className="section-title-underline"></div>
 						<RIEInput
 							value={this.state.genre}
-							change={this.update}
+							change={this.update} 
 							propName="genre" />
 					</div>
 				<div className="show-subgenre show-section">

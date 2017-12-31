@@ -36,6 +36,7 @@ export default class PlaylistEntryForm extends React.Component {
                 });
             }
         });
+
     }
 
     render() {
@@ -207,51 +208,3 @@ const renderSuggestion = (s, {query, isHighlighted}) => {
         </div>
     );
 }
-
-// // Expects updateValue, a function
-// class SuggestionsBox extends React.Component {
-//     constructor(props) {
-//         super(props)
-//         this.state = {
-//             suggestions: this.props.suggestions,
-//             selected: 0
-//         }
-//         this.renderSuggestions = this.renderSuggestions.bind(this);
-//     }
-
-//     clickedIt(suggestion, index) {
-//         this.setState({selected: index});
-//         this.props.updateValue(suggestion);
-//     }
-
-//     /* SOMEHOW WE WANT A FUNCTION BINDING KEYSTROKES TO CHANGING SELECTED,
-//        AND PICKING A VALUE ON KEYPRESS */
-
-//     renderSuggestions() {
-//         return this.props.suggestions.map((suggestion, index) => {
-//             let customStyle = {};
-//             if (index == this.state.selected)
-//                 customStyle.backgroundColor = '#ffd';
-
-//             return (
-//                 <div
-//                     key={index}
-//                     style={customStyle}
-//                     onClick={e => this.clickedIt(suggestion, index)}
-//                     className="playlist-suggestion">
-//                     {suggestion}
-//                 </div>
-//             );
-//         });
-//     }
-
-//     render() {
-//         if (this.props.suggestions.length > 0)
-//             return (
-//                 <div className="playlist-autocomplete-box">
-//                     {this.renderSuggestions()}
-//                 </div>
-//             );
-//         else return null;
-//     }
-// }
