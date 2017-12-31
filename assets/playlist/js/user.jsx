@@ -18,16 +18,16 @@ class user extends React.Component {
         });
     }
 
-
     render() {
         let panelClass = this.state.show ? "userid-panel show" : "userid-panel hidden";
-        let loginDisp = loginDisp = <a href="./login" class="user-link">Login</a>;
-        var djDisp;
+        let loginDisp = <a href="/playlist/login" class="user-link">Login</a>;
+        let djDisp;
 
-        if (this.props.userinfo.is_logged_in) {
-            loginDisp = <a href="./logout" class="user-link">Logout</a>;
+        if (this.props.username) {
+            loginDisp = <a href="/playlist/logout" class="user-link">Logout</a>;
         }
-        if (this.props.userinfo.is_dj) {
+
+        if (this.props.djName) {
             djDisp = <a href="/playlist" class="user-link">My Playlists</a>;
         }
 
@@ -35,7 +35,7 @@ class user extends React.Component {
             <div className={panelClass}>
                 <span onClick={this.toggle} className="userid-box clickable">
                     <span className="userid-pic"></span>
-                    <span className="userid-name">{this.props.userinfo.username}</span>
+                    <span className="userid-name">{this.props.username}</span>
                 </span>
 
                 <div className="userid-menu-element">
@@ -55,6 +55,6 @@ class user extends React.Component {
 }
 
 ReactDOM.render(
-    React.createElement(user, window.props),
+    React.createElement(user, window.props.userinfo),
     document.getElementById('user-area'),
 )

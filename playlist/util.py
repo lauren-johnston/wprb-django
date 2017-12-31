@@ -24,34 +24,27 @@ def invalid_array_index(array, index):
 
 def spin_to_dict(spin):
     return {
-        "id": spin.id,
-        "spindex": spin.index,
-        "title": spin.song.name,
-        "artist": spin.song.artist.all()[0].name,
-        "album": spin.song.album.name,
-        "label": spin.song.album.label
+        'id': spin.id,
+        'spindex': spin.index,
+        'title': spin.song.name,
+        'artist': spin.song.artist.all()[0].name,
+        'album': spin.song.album.name,
+        'label': spin.song.album.label
     }
 
 def get_user_details(request):
-    context = {}
-    if not request.user.is_anonymous:
-        context["is_logged_in"] = True
-        context["username"] = request.user.username
-        context["id"] = request.user.id
-        print("user is logged in")
-    else:
-        context["is_logged_in"] = False
-        context["username"] = 'Anonymous'
-        context["id"] = None
-        print("user is logged out")
 
-    if request.user.dj:
-        context["is_dj"] = True 
-        context["dj_name"] = request.user.dj.name
-        print("user is dj")
+    if not request.user.is_anonymous():
+        context = {
+            'username'      : request.user.username,
+            'id'            : request.user.id,
+            'dj_name'       : request.user.dj.name if request.user.dj else None
+        }
     else:
-        context["is_dj"] = False 
-        context["dj_name"] = None
-        print("user is not dj")
+        context = {
+            'username': None,
+            'id': None,
+            'dj_name': None
+        }
 
     return context
