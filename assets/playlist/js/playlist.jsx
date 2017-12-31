@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import CommentPanel from './Comment.jsx';
+import CollapsibleCommentPanel from './Comment.jsx';
 import PlaylistDetails from './PlaylistDetails.jsx';
 import PlaylistTable from './PlaylistTable.jsx';
 
@@ -25,7 +25,7 @@ class Playlist extends React.Component {
 				<div id="col-right" className="col">
 					<PlaylistTable spins={this.props.spins} />
 				</div>
-				<CommentPanel comments={this.props.comments} />
+				<CollapsibleCommentPanel playlistId={this.props.show.id} comments={this.props.comments} />
 			</div>
 		);
 	}

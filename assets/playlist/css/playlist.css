@@ -35,8 +35,7 @@
 
 .col {
 	position: absolute;
-	top: 10%;
-	height: 80%;
+	height: 90%;
 	display: inline-block;
 
 	background-color: rgba(42, 42, 42);

@@ -5,8 +5,11 @@ from .models import *
 from .util import date_to_str
 
 def plays(field, field_id, max=50):
-    """ Return a list 
-
+    """ Return a list of plays of a given resource of type field with id field_id.
+        
+        e.g. plays('artist', 1234) would return all the spins of songs by that artist,
+        along with the song title/id, album title/id, label title/id, dj who played it,
+        playlst id, and timestamp
     """
 
     # Filter the spins on the appropriate query
@@ -16,18 +19,18 @@ def plays(field, field_id, max=50):
     elif field == 'album':
         plays = Spin.objects.filter(song__album__id=field_id)
         title = Album.objects.get(pk=field_id).name
-    elif field == 'dj':
-        plays = Spin.objects.filter(playlist__show__dj=field_id)
-        title = DJ.objects.get(pk=field_id).name
     elif field == 'song':
         plays = Spin.objects.filter(song=field_id)
         title = Song.objects.get(pk=field_id).name
-    elif field == 'playlist':
-        plays = Spin.objects.filter(playlist=field_id)
-        title = Playlist.objects.get(pk=field_id).show.name
+    elif field == 'label':
+        plays = Spin.objects.filter(song__label__id=field_id)
+        title = Label.objects.get(pk=field_id).name
+    else:
+        raise RuntimeError('Invalid field name')
 
     p = [{
-        'artist'    : [{'name': a.name, 'id': a.id} for a in p.song.artist.all()],
+        'artist'    : p.song.artist.all()[0].name, #[{'name': a.name, 'id': a.id} for a in p.song.artist.all()],
+        'artistId'  : p.song.artist.all()[0].id,
         'song'      : p.song.name,
         'songId'    : p.song.id,
         'album'     : p.song.album.name,
@@ -35,12 +38,17 @@ def plays(field, field_id, max=50):
         'label'     : p.song.album.label.name if p.song.album.label else None,
         'labelId'   : p.song.album.label.id if p.song.album.label else None,
         'dj'        : [{'name': dj.name, 'id': dj.id} for dj in p.playlist.show.dj.all()],
-        'date' : date_to_str(p.playlist.date),
+        'date'      : date_to_str(p.playlist.date),
         'playlistId': p.playlist.id,
     } for p in plays]
 
-
     return p, title
+
+def shows(dj_id):
+    """ Return a list of shows that have been played by the given dj
+    """
+
+    return None
 
 def details(field, id):
     """ Return the details associated with a given resource    

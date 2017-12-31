@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-
 
 class Chart extends React.Component {
 	constructor(props) {
@@ -16,8 +14,3 @@ class Chart extends React.Component {
 		);
 	}
 }
-
-ReactDOM.render(
-    React.createElement(Chart, window.props),
-    window.react_mount,
-)

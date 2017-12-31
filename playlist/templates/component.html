@@ -6,7 +6,7 @@
 {% block title %}{{ title }}{% endblock %}
 {% block styles %}
     {{ block.super }}
-    <link rel="stylesheet" href="/static/playlist/css/{{bundle}}.css" >
+    <link rel="stylesheet" href="/static/playlist/css/{{bundle|style}}.css" >
 {% endblock styles %}
 
 {% block content %}
