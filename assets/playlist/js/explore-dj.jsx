@@ -11,11 +11,9 @@ class ExploreDJPage extends React.Component {
 	render() {
 		return (
 			<div className="explore">
-				<div id="content-top">
-					<ExploreDetails title={this.props.title} />
-				</div>
 				<div id="content-main">
 					<div id="content-left">
+						<ExploreDetails title={this.props.title} />
 						<ExploreShows shows={this.props.shows} />
 					</div>
 					<div id="content-right">

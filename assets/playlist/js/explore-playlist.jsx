@@ -12,11 +12,9 @@ class ExplorePlaylistPage extends React.Component {
 	render() {
 		return (
 			<div className="explore">
-				<div id="content-top">
-					<ExploreDetails title={this.props.title} />
-				</div>
 				<div id="content-main">
 					<div id="content-left">
+						<ExploreDetails title={this.props.title} />
 						<ExplorePlaylist spins={this.props.spins} />
 					</div>
 					<div id="content-right">
@@ -31,4 +29,4 @@ class ExplorePlaylistPage extends React.Component {
 ReactDOM.render(
     React.createElement(ExplorePlaylistPage, window.props),
     window.react_mount,
-)
+);

@@ -30,7 +30,7 @@ def plays(field, field_id, max=50):
 
     p = [{
         'artist'    : p.song.artist.all()[0].name, #[{'name': a.name, 'id': a.id} for a in p.song.artist.all()],
-        'artistId'  : p.song.artist.all()[0].name,
+        'artistId'  : p.song.artist.all()[0].id,
         'song'      : p.song.name,
         'songId'    : p.song.id,
         'album'     : p.song.album.name,

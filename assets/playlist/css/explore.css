@@ -16,20 +16,22 @@ a:hover {
 }
 
 #content-main {
-	top: 20%;
-	height: 80%;
+	top: 0;
+	height: 100%;
 	width: 100%;
 }
 
 #content-left {
     position: absolute;
     left: 0;
+    height: 100%;
     width: 60%;
 }
 
 #content-right {
     position: absolute;
     left: 60%;
+    height: 100%;
     width: 40%;
 }
 
@@ -37,15 +39,15 @@ a:hover {
 .details {
 	background-color: rgb(42,42,42);
 	border: 2px solid #959595;
-	width: 70%;
-	height: calc(100% - 1em);
+	width: calc(100% - 3em);
+	height: 20%;
 	padding: 0.5em;
+	margin: 0.5em 0.5em 0.5em 1em;
 	border-radius: 0.5em;
 }
 
 .explore-title {
 	font-size: 1.5em;
-	margin-bottom: 0.5em;
 }
 
 .play-container {
@@ -54,9 +56,10 @@ a:hover {
 	border-radius: 0.15em;
 
 	margin: 0 0.5em 1em 1em;
-	padding: 1em;
+	width: calc(100% - 3em);
+	padding: 0.5em;
 
-	max-height: calc(100% - 2em);
+	max-height: calc(80% - 2em);
 }
 
 .plays {
@@ -105,8 +108,8 @@ a:hover {
 	color: #fff;
 	z-index: 10;
 
-	padding: 0.25em 0.5em;
-	margin: 0 1em 1em 0.5em;
+	padding: 0.25em 1em;
+	margin: 0 1em 1em 0em;
 	border-radius: 0.25em;
 
 	box-shadow: 2px 2px 2px #222;
