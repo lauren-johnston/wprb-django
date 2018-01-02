@@ -34,8 +34,9 @@ export default class PlaylistEntryForm extends React.Component {
                         label: ''
                     }
                 });
-            } 
-        });    
+            }
+        });
+
     }
 
     render() {
@@ -56,13 +57,13 @@ export default class PlaylistEntryForm extends React.Component {
                         value={this.state.artist}
                         submit={this.submit}
                         autoFocus={false}  />
-                    <PlaylistEntryFormInput 
+                    <PlaylistEntryFormInput
                         identifier="album"
                         placeholder="album"
                         value={this.state.album}
                         submit={this.submit}
                         autoFocus={false} />
-                    <PlaylistEntryFormInput 
+                    <PlaylistEntryFormInput
                         identifier="label"
                         placeholder="record label"
                         value={this.state.label}
@@ -92,12 +93,12 @@ class PlaylistEntryFormInput extends React.Component {
         this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
     }
 
-    handleKeyUp(evt) { 
+    handleKeyUp(evt) {
         // TODO: Validate that song/album/artist has all been entered.
         // IF NOT, then tab to the next empty input box, and maybe highlight it red or something?
         //      Probs just iterate through form.input, if form.input[i].value === '', form.input[i].focus()
         if (evt.key == 'Enter')
-            this.props.submit(); 
+            this.props.submit();
     }
 
     onChange(evt, {newValue}) {
@@ -174,7 +175,7 @@ class PlaylistEntryFormInput extends React.Component {
 }
 
 /**
- * Render a suggestion, whether it's a simple string or an 
+ * Render a suggestion, whether it's a simple string or an
  * object containing song, artist, album
  */
 const renderSuggestion = (s, {query, isHighlighted}) => {
@@ -207,51 +208,3 @@ const renderSuggestion = (s, {query, isHighlighted}) => {
         </div>
     );
 }
-
-// // Expects updateValue, a function
-// class SuggestionsBox extends React.Component {
-//     constructor(props) {
-//         super(props)
-//         this.state = {
-//             suggestions: this.props.suggestions,
-//             selected: 0
-//         }
-//         this.renderSuggestions = this.renderSuggestions.bind(this);
-//     }
-
-//     clickedIt(suggestion, index) {
-//         this.setState({selected: index});
-//         this.props.updateValue(suggestion);
-//     }
-
-//     /* SOMEHOW WE WANT A FUNCTION BINDING KEYSTROKES TO CHANGING SELECTED, 
-//        AND PICKING A VALUE ON KEYPRESS */ 
-       
-//     renderSuggestions() {
-//         return this.props.suggestions.map((suggestion, index) => {
-//             let customStyle = {};
-//             if (index == this.state.selected)
-//                 customStyle.backgroundColor = '#ffd';
-
-//             return (
-//                 <div
-//                     key={index} 
-//                     style={customStyle}
-//                     onClick={e => this.clickedIt(suggestion, index)}
-//                     className="playlist-suggestion"> 
-//                     {suggestion} 
-//                 </div>
-//             );
-//         });
-//     }
-
-//     render() {
-//         if (this.props.suggestions.length > 0)
-//             return (
-//                 <div className="playlist-autocomplete-box">
-//                     {this.renderSuggestions()} 
-//                 </div>
-//             );
-//         else return null;
-//     }
-// }

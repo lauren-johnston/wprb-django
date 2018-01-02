@@ -13,13 +13,13 @@ export default class PlaylistTable extends React.Component {
 		};
 		this.onSortEnd = this.onSortEnd.bind(this);
 		this.addSpinToView = this.addSpinToView.bind(this);
-		this.removeSpinFromView = this.removeSpinFromView.bind(this);		
+		this.removeSpinFromView = this.removeSpinFromView.bind(this);
 	}
 
 	addSpinToView(spin) {
 		let updatedSpins = this.state.spins.slice();
 		updatedSpins.push(spin);
-		this.setState({ 
+		this.setState({
 			spins: updatedSpins,
 			length: updatedSpins.length
 		});
@@ -28,7 +28,7 @@ export default class PlaylistTable extends React.Component {
 	removeSpinFromView(spindex) {
 		let updatedSpins = this.state.spins.slice();
 		updatedSpins.splice(spindex-1, 1);
-		this.setState({ 
+		this.setState({
 			spins: updatedSpins,
 			length: updatedSpins.length
 		});
@@ -62,7 +62,7 @@ export default class PlaylistTable extends React.Component {
 			<div id="playlist" className="col-content">
 				<PlaylistTableHeader />
 				<div className="playlist-table-contents">
-					<SortablePlaylistList 
+					<SortablePlaylistList
 						spins={this.state.spins}
 						removeSpinFromView={this.removeSpinFromView}
 						onSortEnd={this.onSortEnd}
@@ -99,7 +99,7 @@ const SortablePlaylistList = SortableContainer(({spins, removeSpinFromView}) => 
 	return (
 		<div className='playlist-list-entries'>
 			{spins.map((spin, index) => {
-				return <SortablePlaylistEntry 
+				return <SortablePlaylistEntry
 					key={spin.id}
 					spinId={spin.id}
 					spin={spin}
@@ -139,7 +139,7 @@ class PlaylistEntryContainer extends React.Component {
 			body: JSON.stringify({id: this.props.spinId}),
 			mode: 'cors'
 		}).then(response => response.json()).then(data => {
-			if (data.ok) 
+			if (data.ok)
 				this.props.removeSpinFromView(this.props.spindex);
 		});
 	}
@@ -166,15 +166,15 @@ class PlaylistEntryContainer extends React.Component {
 		// Update state to show the change in view
 		this.setState(value);
 	}
-	 				
+
 	render() {
 		return (
-			<PlaylistEntry 
+			<PlaylistEntry
 				spindex={this.props.spindex}
 				title={this.state.title}
 				artist={this.state.artist}
 				album={this.state.album}
-				label={this.state.label} 
+				label={this.state.label}
 				delete={this.deleteSpin}
 				update={this.updateSpin} />
 			);
@@ -187,9 +187,9 @@ class PlaylistEntry extends React.Component {
 	}
 
 	renderArtists() {
-		return this.props.artists.map( (artistName) => 
+		return this.props.artists.map( (artistName) =>
 			// Todo: replace this with a component with support for clicking and editing artists
-			<span key={artistName} className="playlist-artist-name tagged-item">{artistName}</span> 
+			<span key={artistName} className="playlist-artist-name tagged-item">{artistName}</span>
 		);
 	}
 
@@ -198,25 +198,25 @@ class PlaylistEntry extends React.Component {
 			<div className="spin">
 				<DragHandle />
 				<div className="playlist-numbering"> {this.props.spindex} </div>
-				<RIEInput 
+				<RIEInput
 					className="playlist-text-cell"
 					propName='title'
-					value={this.props.title}     
+					value={this.props.title}
 					change={this.props.update} />
-				<RIEInput 
+				<RIEInput
 					className="playlist-text-cell"
 					propName='artist'
-					value={this.props.artist}     
+					value={this.props.artist}
 					change={this.props.update} />
-				<RIEInput 
+				<RIEInput
 					className="playlist-text-cell"
-					propName='album' 
-					value={this.props.album}      
+					propName='album'
+					value={this.props.album}
 					change={this.props.update} />
-				<RIEInput 
+				<RIEInput
 					className="playlist-text-cell"
-					propName='label' 
-					value={this.props.label}      
+					propName='label'
+					value={this.props.label}
 					change={this.props.update} />
 				<div className="playlist-minus clickable" onClick={this.props.delete}> </div>
 			</div>

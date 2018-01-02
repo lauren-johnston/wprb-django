@@ -73,6 +73,7 @@ def add_spins(spins):
 	"""
 
 	for spin_id, spin in spins.items():
+
 		if spin['song'] == "BREAK": continue
 		artist, album, song = get_or_create(spin['artist'], spin['album'], spin['song'])
 		try: playlist = Playlist.objects.get(pk=int(spin['showID']))

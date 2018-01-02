@@ -56,6 +56,7 @@ a, a:visited {
 
 #content {
 	top: 10%;
+	height: 90%;
 }
 
 .page-section {
@@ -78,26 +79,92 @@ a, a:visited {
 	cursor: pointer;
 }
 
+/* link settings */
+
+a:link {
+    color: white;
+    text-decoration: none;
+}
+
+a:visited {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+    color: pink;
+    text-decoration: none;
+}
+
+/* User ID Component Style */
+
+.userid-panel {
+    position: fixed;
+    top: 1em;
+    right: 1em;
+    width: 10em;
+
+    background-color: #424242;
+    color: #fff;
+    z-index: 10;
+
+    padding: 0.25em 0.5em;
+    border-radius: 0.25em;
+
+    border: 1px solid #fff;
+
+}
+
+.userid-panel.hidden {
+    height: 2em;
+}
+
+.hidden > div {
+    display: none;
+}
+
+.userid-panel.show {
+}
+
+.userid-name {
+	font-size: 1.1em;
+	font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+	margin: 2em 0em 0em 1em;
+	padding-top: 2em;
+	text-align: center;
+	top: -0.6em;
+	position: relative;
+}
+
+.userid-pic {
+   background-image: url("media/anon_user.png");
+   background-position: center;
+   background-repeat: no-repeat; 
+   background-size: 30px 30px;
+   display: inline-block;
+   width: 2em;
+   height: 2em;
+}
+
 /* Attempted scrollbar hacks */
+
 ::-webkit-scrollbar-track {
     background: none;
 }
 
 ::-webkit-scrollbar {
-  width: 7px; /* 1px wider than Lion. */
-  /* This is more usable for users trying to click it. */
+  width: 7px;
   background-color: rgba(0,0,0,0);
   -webkit-border-radius: 100px;
 }
 
 ::-webkit-scrollbar-thumb:vertical {
-  /* This is the EXACT color of Mac OS scrollbars. 
-     Yes, I pulled out digital color meter */
   background: rgba(0,0,0,0.5);
   -webkit-border-radius: 100px;
 }
 
+/* darken on click */
 ::-webkit-scrollbar-thumb:vertical:active {
-  background: rgba(0,0,0,0.61); /* Some darker color when you click it */
+  background: rgba(0,0,0,0.61);
   -webkit-border-radius: 100px;
 }
