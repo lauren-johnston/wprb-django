@@ -98,7 +98,6 @@ def edit_playlist(request, playlist_id):
 #****************************************************************************************
 
 def explore(request, field, field_id):
-    userinfo = get_user_details(request)
     """ Render the page with the explore component and relevant info.
     """
 
@@ -113,13 +112,15 @@ def explore(request, field, field_id):
     raise Http404('What is a %s?' % field)
 
 def explore_music(request, field, field_id):
+    userinfo = get_user_details(request)
+
     # Get all the plays
     p, title = plays(field, int(field_id))
 
     context = {
-        'title': 'Explore %ss' % field.capitalize(),
-        'props': {'plays': p, 'title' : title, 'userinfo' : userinfo}
+        'title' : 'Explore %ss' % field.capitalize(),
         'bundle': 'explore-music',
+        'props' : {'plays': p, 'title' : title, 'userinfo' : userinfo},
     }
 
     return render(request, "component.html", context=context)
@@ -127,6 +128,8 @@ def explore_music(request, field, field_id):
 def explore_dj(request, dj_id):
     """ Render the explore page for a particular DJ
     """
+    userinfo = get_user_details(request)
+
     dj = get_object_or_404(DJ, pk=dj_id)
 
     playlists = sorted([{
@@ -148,6 +151,8 @@ def explore_dj(request, dj_id):
 def explore_playlist(request, playlist_id):
     """ Render the explore page for a particular playlist.
     """
+    userinfo = get_user_details(request)
+
     playlist = get_object_or_404(Playlist, pk=playlist_id)
 
     # Get playlist details
@@ -160,7 +165,7 @@ def explore_playlist(request, playlist_id):
         'desc'      : playlist.desc,
         'date'      : date_to_str(playlist.date),
         'id'        : playlist_id,
-        'time'      : playlist.start_time,
+        'time'      : playlist.time_start,
         'length'    : playlist.length
     }
 
