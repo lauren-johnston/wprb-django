@@ -36,16 +36,6 @@ a:hover {
 }
 
 /* Box styles */
-.details {
-	background-color: rgb(42,42,42);
-	border: 2px solid #959595;
-	width: calc(100% - 3em);
-	height: 20%;
-	padding: 0.5em;
-	margin: 0.5em 0.5em 0.5em 1em;
-	border-radius: 0.5em;
-}
-
 .explore-title {
 	font-size: 1.5em;
 }
@@ -97,6 +87,47 @@ a:hover {
 
 .play-field:hover {
     text-decoration: underline;
+}
+
+/**********************************************************************
+ * Search bar
+ *********************************************************************/
+#search-bar {
+	width: calc(60% - 1em);
+
+	margin: 0.5em 1em 0.5em 40%;
+}
+
+/**********************************************************************
+ * Details
+ *********************************************************************/
+
+.details {
+	background-color: rgb(42,42,42);
+	border: 2px solid #959595;
+	width: calc(100% - 3em);
+	height: 20%;
+	padding: 0.5em;
+	margin: 0.5em 0.5em 0.5em 1em;
+	border-radius: 0.5em;
+}
+
+.details-title {
+	margin: 0.25em;
+}
+
+.details-subtitle {
+	margin: 0.25 1em;
+	font-style: italic;
+}
+
+.details-area {
+	display: inline-block;
+	width: 50%;
+}
+
+.details-description {
+	
 }
 
 /**********************************************************************
