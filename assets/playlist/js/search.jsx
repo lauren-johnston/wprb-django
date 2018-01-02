@@ -7,17 +7,17 @@ import 'react-virtualized/styles.css';
 import 'react-virtualized-select/styles.css';
 
 export default class Search extends React.Component {
-  constructor (props) {
-    super(props)
-    this.displayOrder = ['songs', 'artists', 'albums', 'djs', 'shows', 'labels'];
-    this.myWidth = 300;
-    this.state = {
-        query: '',
-        options: [],
-        redirect: false
-    };
-    this.makeQuery = this.makeQuery.bind(this);
-    this.explore = this.explore.bind(this);
+    constructor (props) {
+        super(props)
+        this.displayOrder = ['songs', 'artists', 'albums', 'djs', 'shows', 'labels'];
+        this.myWidth = 300;
+        this.state = {
+            query: '',
+            options: [],
+            redirect: false
+        };
+        this.makeQuery = this.makeQuery.bind(this);
+        this.explore = this.explore.bind(this);
   }
 
   makeQuery(query) {
@@ -35,7 +35,7 @@ export default class Search extends React.Component {
       }).then(response => {
           return response.json();
       }).then(data => {
-          let results = []
+          let results = [];
           //results.append(data['songs'].slice(0:2)['name'])
           //this.setState({options: [], query: query})
           //console.log(this.state.options)
@@ -54,12 +54,12 @@ export default class Search extends React.Component {
                       category: category});
               }
           }
-          console.log(results);
+
           this.setState({
               query: query,
               options: results,
               redirect: false
-            })
+          });
       });
   }
 
@@ -73,22 +73,21 @@ export default class Search extends React.Component {
   }
 
   render () {
-    const styles = {
-        //display: 'inline-block',
-        width: this.myWidth
-    };
+      // const styles = {
+      //     //display: 'inline-block',
+      //     width: this.myWidth
+      // };
 
-    return (
-        <div id="select-search-bar" style={{ display: 'inline-block', maxWidth: this.myWidth }}>
-          <Select
-            options={this.state.options}
-            onChange={(selectValue) => this.explore({selectValue})}
-            onInputChange={(selectValue) => this.makeQuery(selectValue)}
-            value={this.state.selectValue}
-            placeholder="Search"
-            style={styles} />
-        </div>
-    );
-  }
+      return (
+          <div id="search-bar" >
+              <Select
+                  options={this.state.options}
+                  onChange={(selectValue) => this.explore({selectValue})}
+                  onInputChange={(selectValue) => this.makeQuery(selectValue)}
+                  value={this.state.selectValue}
+                  placeholder="Search" />
+          </div>
+      );
+    }
 }
 
