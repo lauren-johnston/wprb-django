@@ -34,9 +34,11 @@ export class ExploreDetails extends React.Component {
 	render() {
 		return (
 			<div className="details">
-				<h1 className="details-title">{this.props.title}</h1>
-				<h3 className="details-subtitle">{this.props.subtitle}</h3>
-				<div className="details-description">{this.props.desc}</div>
+				<div className="details-area">
+					<h1 className="details-title">{this.props.title}</h1>
+					<h3 className="details-subtitle">{this.props.subtitle}</h3>
+				</div>
+				<div className="details-area details-description">{this.props.desc}</div>
 			</div>
 		);
 	}
@@ -51,6 +53,7 @@ export class ExploreSpinsTable extends React.Component {
 	}
 
 	render() {
+		console.log(this.props);
 		return (
 			<div className="play-container">
 				<ExploreHeader 

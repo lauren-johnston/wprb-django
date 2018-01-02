@@ -10,11 +10,17 @@ class ExploreMusicPage extends React.Component {
 	}
 
 	render() {
+		let details = {
+			title: this.props.title,
+			subtitle: `(${this.props.field})`,
+			desc: 'Description goes here!'
+		};
+
 		return (
 			<div className="explore">
 				<div id="content-main">
 					<div id="content-left">
-						<ExploreDetails title={this.props.title} />
+						<ExploreDetails {...details}/>
 						<ExploreSpinsTable spins={this.props.spins} />
 					</div>
 					<div id="content-right">

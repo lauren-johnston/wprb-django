@@ -120,7 +120,7 @@ def explore_music(request, field, field_id):
     context = {
         'title' : 'Explore %ss' % field.capitalize(),
         'bundle': 'explore-music',
-        'props' : {'plays': p, 'title' : title, 'userinfo' : userinfo},
+        'props' : {'spins': p, 'title' : title, 'userinfo' : userinfo, 'field': field},
     }
 
     return render(request, "component.html", context=context)
@@ -192,7 +192,8 @@ def explore_playlist(request, playlist_id):
     } for comment in Comment.objects.filter(playlist=playlist_id)]
 
     context = {
-        'props' : {'spins': spins, 'show': showdetails, 'comments': comments},
+        'props' : {
+            'spins': spins, 'show': showdetails, 'comments': comments},
         'bundle': 'explore-playlist',
         'title' : 'Explore Playlists: %s on %s' % (showdetails['title'], showdetails['date'])
     }

@@ -11,11 +11,17 @@ class ExplorePlaylistPage extends React.Component {
 	}
 
 	render() {
+		let details = {
+			title: `${this.props.show.title} w/${this.props.show.dj.join(' & ')}`,
+			subtitle: `${this.props.show.date} @${this.props.show.time}`,
+			desc: this.props.show.desc
+		}
+
 		return (
 			<div className="explore">
 				<div id="content-main">
 					<div id="content-left">
-						<ExploreDetails title={this.props.title} />
+						<ExploreDetails {...details}/>
 						<ExplorePlaylist spins={this.props.spins} />
 					</div>
 					<div id="content-right">
