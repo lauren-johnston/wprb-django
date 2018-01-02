@@ -20,15 +20,15 @@ class user extends React.Component {
 
     render() {
         let panelClass = this.state.show ? "userid-panel show" : "userid-panel hidden";
-        let loginDisp = <a href="/playlist/login" class="user-link">Login</a>;
+        let loginDisp = <a href="/playlist/login" className="user-link">Login</a>;
         let djDisp;
 
         if (this.props.username) {
-            loginDisp = <a href="/playlist/logout" class="user-link">Logout</a>;
+            loginDisp = <a href="/playlist/logout" className="user-link">Logout</a>;
         }
 
         if (this.props.djName) {
-            djDisp = <a href="/playlist" class="user-link">My Playlists</a>;
+            djDisp = <a href="/playlist" className="user-link">My Playlists</a>;
         }
 
         return (
@@ -39,11 +39,11 @@ class user extends React.Component {
                 </span>
 
                 <div className="userid-menu-element">
-                    <a href="/" class="user-link">Settings</a>
+                    <a href="/" className="user-link">Settings</a>
                 </div>
 
                 <div className="userid-menu-element">
-                    <a href="/explore" class="user-link">Explore</a>
+                    <a href="/explore" className="user-link">Explore</a>
                 </div>
 
                 <div className="userid-menu-element">{djDisp}</div>
