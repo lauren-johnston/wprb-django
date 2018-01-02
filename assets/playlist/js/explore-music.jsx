@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Search from './Search.jsx';
 import {ExploreSpinsTable, ExploreDetails} from './Explore.jsx';
 
 class ExploreMusicPage extends React.Component {
@@ -17,6 +18,7 @@ class ExploreMusicPage extends React.Component {
 						<ExploreSpinsTable spins={this.props.spins} />
 					</div>
 					<div id="content-right">
+						<Search />
 						Charts go here!
 					</div>
 				</div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Search from './Search.jsx';
 import {ExploreDetails, ExplorePlaylist} from './Explore.jsx';
 import {EmbeddedCommentPanel} from './Comment.jsx';
 
@@ -18,6 +19,7 @@ class ExplorePlaylistPage extends React.Component {
 						<ExplorePlaylist spins={this.props.spins} />
 					</div>
 					<div id="content-right">
+						<Search />
 						<EmbeddedCommentPanel playlistId={this.props.show.id} comments={this.props.comments} />
 					</div>
 				</div>

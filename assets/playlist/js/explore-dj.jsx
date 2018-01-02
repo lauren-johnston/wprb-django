@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Search from './Search.jsx';
 import {ExploreDetails, ExploreShows} from './Explore.jsx';
 
 class ExploreDJPage extends React.Component {
@@ -17,6 +18,7 @@ class ExploreDJPage extends React.Component {
 						<ExploreShows shows={this.props.shows} />
 					</div>
 					<div id="content-right">
+						<Search />
 						Charts go here !
 					</div>
 				</div>
