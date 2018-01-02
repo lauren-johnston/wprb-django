@@ -80,12 +80,13 @@ export class ExplorePlaylist extends React.Component {
 		super(props);
 	}
 
-	render() {
-		console.log(this.props.spins);
-	
+	render() {	
 		return (
 			<div className="play-container">
-				<ExploreHeader/>
+				<ExploreHeader 
+					showIndex={true} 
+					showDJ={false} 
+					showDate={false} />
 				<div className="plays">
 					{this.props.spins.map((spin, index) =>
 						<ExploreSpin {...spin} 
@@ -103,7 +104,7 @@ export class ExplorePlaylist extends React.Component {
 /**
  *
  */
-const ExploreHeader = ({title, showIndex, showDJ, showDate}) => {
+const ExploreHeader = ({showIndex, showDJ, showDate}) => {
 	const index = showIndex
 		? <div className="play-field index-field">#</div>
 		: null;
@@ -119,7 +120,6 @@ const ExploreHeader = ({title, showIndex, showDJ, showDate}) => {
 	return (
 		<div className="play-container-header">
 			{index}
-			<div className="explore-title">{title}</div>
 			<div className="play-field artist-field">artist</div>
 			<div className="play-field song-field">song</div>
 			<div className="play-field album-field">album</div>
