@@ -48,24 +48,32 @@ def add_playlists(playlists):
 	and create each one in the new database
 	"""
 
-	for pid, playlist in playlists.items():
+	for pid, playlistdata in playlists.items():
 		# Get playlist and show
-		try: dj = DJ.objects.get(pk=int(playlist['userID']))
+		try: dj = DJ.objects.get(pk=int(playlistdata['userID']))
 		except DJ.DoesNotExist: continue 
 
 		show = Show.objects.filter(dj=dj).first()
 
-		genre, created = Genre.objects.get_or_create(name=playlist['genre'])
+		genre, created = Genre.objects.get_or_create(name=playlistdata['genre'])
+
+		# convert unix epoch timestamp to time of day
+		hour = (int(playlistdata['starttime']) % 86400) // 3600
+		minute = int(playlistdata['starttime']) % 60
+		time = '%d%02d' % (hour, minute)
 
 		# Create playlist object
 		playlist = Playlist(
 			show=show, 
-			date=date.fromtimestamp(int(playlist['starttime'])),
-			subtitle=playlist['subtitle'],
+			date=date.fromtimestamp(int(playlistdata['starttime'])),
+			subtitle=playlistdata['subtitle'],
 			genre=genre,
-			timestamp=datetime.now())
-		playlist.id = int(pid)
+			timestamp=datetime.now(),
+			length=playlistdata['duration'],
+			time=time
+		)
 
+		playlist.id = int(pid)
 		playlist.save()
 
 def add_spins(spins):
@@ -75,7 +83,7 @@ def add_spins(spins):
 	for spin_id, spin in spins.items():
 
 		if spin['song'] == "BREAK": continue
-		artist, album, song = get_or_create(spin['artist'], spin['album'], spin['song'])
+		artist, album, song = get_or_create(spin['artist'], spin['album'], spin['song'], spin['label'])
 		try: playlist = Playlist.objects.get(pk=int(spin['showID']))
 		except Playlist.DoesNotExist: continue
 

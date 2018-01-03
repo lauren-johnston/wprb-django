@@ -4,7 +4,7 @@ General, non-http services for the music app
 
 from .models import Artist, Album, Song
 
-def get_or_create(artist_name, album_name, song_title):
+def get_or_create(artist_name, album_name, song_title, label=''):
 	""" Get the artist, album, and song objects corresponding to the string names
 	of each, creating them if necessary.
 
