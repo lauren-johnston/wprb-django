@@ -1,4 +1,5 @@
 import React from 'react';
+import Moment from 'moment';
 
 /**
  *
@@ -155,11 +156,11 @@ class ExploreSpin extends React.Component {
 				</div>
 			) : null;
 
-		const dateField = this.props.showDate && this.props.date ? (
+		const dateField = this.props.showDate && this.props.datetime ? (
 				<div className="play-field timestamp-field">
 					<ClickableExploreField
 						field="playlist"
-						value={this.props.date}
+						value={Moment(this.props.datetime, 'X').format('MM/DD/YY')}
 						id={this.props.playlistId} />
 				</div>
 			) : null;
@@ -203,14 +204,25 @@ class ExploreSpin extends React.Component {
 /**
  *
  */
-export class ExploreShows extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-
-	render() {
-		return (
-			null
-		);
-	}
+export const ExploreShows = ({playlists}) => {
+	return (
+		<div className="show-container">
+			<div className="show-container-header">
+				<span className="show-heading show-date">Date</span>
+		        <span className="show-heading show-title">Title</span>
+		        <span className="show-heading show-subtitle">Subtitle</span>
+	        </div>
+	        <div className="shows">
+	        {playlists.map((playlist) => (
+	        	<div key={playlist.id} className="show-list-entry">
+	            	<a href={`/explore/playlist/${playlist.id}/`} className="playlist-link">
+	                	<span className="show-text-cell show-date">{playlist.date}</span>
+	                	<span className="show-text-cell show-title">{playlist.title}</span>
+	                	<span className="show-text-cell show-subtitle">{playlist.subtitle}</span>
+	            	</a> 
+		        </div>
+	        ))}
+	        </div>
+        </div>
+	);
 }

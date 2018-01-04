@@ -2,9 +2,9 @@
 General, non-http services for the music app
 """
 
-from .models import Artist, Album, Song
+from .models import Artist, Album, Song, Label
 
-def get_or_create(artist_name, album_name, song_title, label=''):
+def get_or_create(artist_name, album_name, song_title, label_name=''):
 	""" Get the artist, album, and song objects corresponding to the string names
 	of each, creating them if necessary.
 
@@ -21,6 +21,13 @@ def get_or_create(artist_name, album_name, song_title, label=''):
 		album = Album(name=album_name, artist=artist)
 		album.save()
 
+	if album.label is None and label_name != '':
+		label = Label(name=label_name)
+		label.save()
+		album.label = label
+	else: 
+		label = album.label
+
 	song = Song.objects.filter(name__iexact=song_title, album=album, artist=artist).first()
 	if not song: 
 		song = Song(name=song_title, album=album)
@@ -29,4 +36,4 @@ def get_or_create(artist_name, album_name, song_title, label=''):
 		song.artist.add(artist)
 		song.save()
 
-	return artist, album, song
+	return artist, album, song, label

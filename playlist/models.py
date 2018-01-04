@@ -9,13 +9,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 
-from datetime import date
-
-# Integer/string tuple representation of times of day
-TIMES = [
-    (int(i), '{}00'.format(i))
-    for i in range(24)
-]
+from datetime import datetime
 
 # Character/string tuple representation of musical formats
 FORMATS = (
@@ -26,6 +20,15 @@ FORMATS = (
     ('L', 'Live'),
     ('O', 'Other')
 )
+
+def now_to_half_hour():
+    """ Return the current time to the nearest half hour that has already passed.
+    """
+    now = datetime.now()
+    rounded = 30 if now.minute >= 30 else 0
+
+    return now.replace(microsecond=0, second=0, minute=rounded)
+
 
 class Spin(models.Model):
     """ An instance of a single song being played; an entry in a playlist.
@@ -62,9 +65,8 @@ class Playlist(models.Model):
     subtitle = models.CharField(max_length=250, blank=True, null=True)
 
     # When did it happen ?
-    time_start = models.CharField(max_length=4, choices=TIMES, blank=True)
+    datetime = models.DateTimeField(default=now_to_half_hour)
     length = models.FloatField(default=2)
-    date = models.DateField(default=date.today)
 
     # This playlist might have genres and subgenres different from the show in general
     genre = models.ForeignKey('music.Genre', blank=True, null=True)

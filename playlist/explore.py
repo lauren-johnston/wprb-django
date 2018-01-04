@@ -23,7 +23,7 @@ def plays(field, field_id, max=50):
         plays = Spin.objects.filter(song=field_id)
         title = Song.objects.get(pk=field_id).name
     elif field == 'label':
-        plays = Spin.objects.filter(song__label__id=field_id)
+        plays = Spin.objects.filter(song__album__label__id=field_id)
         title = Label.objects.get(pk=field_id).name
     else:
         raise RuntimeError('Invalid field name')
@@ -38,17 +38,11 @@ def plays(field, field_id, max=50):
         'label'     : p.song.album.label.name if p.song.album.label else None,
         'labelId'   : p.song.album.label.id if p.song.album.label else None,
         'dj'        : [{'name': dj.name, 'id': dj.id} for dj in p.playlist.show.dj.all()],
-        'date'      : date_to_str(p.playlist.date),
+        'datetime'  : p.playlist.datetime.timestamp(),
         'playlistId': p.playlist.id,
     } for p in plays]
 
     return p, title
-
-def shows(dj_id):
-    """ Return a list of shows that have been played by the given dj
-    """
-
-    return None
 
 def details(field, id):
     """ Return the details associated with a given resource    

@@ -40,7 +40,7 @@ def add(request, playlist_id):
 
 
 	# Get the artist, album, and song objects, creating each if necessary
-	artist, album, song = get_or_create(artist_name, album_name, song_title)
+	artist, album, song, label = get_or_create(artist_name, album_name, song_title)
 
 	# Add the medium if it's provided
 	new_spin = Spin(song=song, index=spin_index, playlist=playlist)
@@ -60,11 +60,6 @@ def add(request, playlist_id):
 		"spin": spin_to_dict(new_spin)
 	}
 	
-	if label_name is not None:
-		response['spin']['label'] = label_name
-	else:
-		response['spin']['label'] = ''
-
 	return JsonResponse(response)
 
 @require_http_methods(["GET"])
