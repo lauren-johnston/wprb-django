@@ -24,7 +24,7 @@ SECRET_KEY = 'pzimhen+)9(jxa5y^^+r87ci^@9^kawwk@lr*1j%r(nou4vst)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ec2-34-229-250-102.compute-1.amazonaws.com']
+ALLOWED_HOSTS = ['localhost', 'ec2-34-229-250-102.compute-1.amazonaws.com']
 
 
 # Application definition
@@ -124,7 +124,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 # Define paths to the project as is
 PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))

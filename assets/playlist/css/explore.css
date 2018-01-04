@@ -40,7 +40,7 @@ a:hover {
 	font-size: 1.5em;
 }
 
-.play-container {
+.play-container, .show-container {
 	background-color: rgb(42, 42, 42);
 	border: 2px solid #959595;
 	border-radius: 0.15em;
@@ -52,12 +52,12 @@ a:hover {
 	max-height: calc(80% - 2em);
 }
 
-.plays {
+.plays, .shows {
 	max-height: calc(60vh - 3em);
 	overflow: auto;
 }
 
-.play-container-header > .play-field {
+.play-container-header > .play-field, .show-heading {
 	font-size: 1.2em;
 	font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
 	color: rgb(170, 247, 205);
@@ -72,12 +72,32 @@ a:hover {
 	border-top-width: 2px;
 }
 
-.play, .play-container-header {
+.play, .play-container-header, .show-list-entry, .show-container-header {
 	display: flex;
 	justify-content: space-between;
 
 	border-bottom: 1px solid rgba(255,255,255, 0.1);
 	padding: 0.1em 0;
+}
+
+.playlist-link {
+	width: 100%;
+}
+
+.show-text-cell, .show-heading {
+	display: inline-block;
+}
+
+.show-title {
+	width: 20%;
+}
+
+.show-date {
+	width: 30%;
+}
+
+.show-subtitle {
+	width: 50%;
 }
 
 .play-field {

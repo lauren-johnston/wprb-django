@@ -15,7 +15,7 @@ class ExploreDJPage extends React.Component {
 				<div id="content-main">
 					<div id="content-left">
 						<ExploreDetails title={this.props.title} />
-						<ExploreShows shows={this.props.shows} />
+						<ExploreShows playlists={this.props.playlists} />
 					</div>
 					<div id="content-right">
 						<Search />

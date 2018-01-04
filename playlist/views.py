@@ -28,7 +28,7 @@ def landing(request):
         'id'        : playlist.id,
         'title'     : playlist.show.name,
         'subtitle'  : playlist.subtitle,
-        'date'      : date_to_str(playlist.date)
+        'date'      : date_to_str(playlist.datetime)
     } for playlist in Playlist.objects.filter(show__dj=dj)], key=lambda x: x['id'], reverse=True)   
 
     context = {
@@ -67,7 +67,8 @@ def edit_playlist(request, playlist_id):
         'genre'     : playlist.genre.name if playlist.genre else None,
         'subgenre'  : [g.name for g in playlist.subgenre.all()],
         'desc'      : playlist.desc,
-        'id'        : playlist_id
+        'id'        : playlist_id,
+        'datetime'  : playlist.datetime.timestamp()
     }
 
     spins = sorted([{
@@ -136,7 +137,7 @@ def explore_dj(request, dj_id):
         'id'        : playlist.id,
         'title'     : playlist.show.name,
         'subtitle'  : playlist.subtitle,
-        'date'      : date_to_str(playlist.date)
+        'date'      : date_to_str(playlist.datetime)
     } for playlist in Playlist.objects.filter(show__dj=dj)], key=lambda x: x['id'], reverse=True)   
 
     context = {
@@ -157,15 +158,14 @@ def explore_playlist(request, playlist_id):
 
     # Get playlist details
     showdetails = {
+        'id'        : playlist_id,
         'title'     : playlist.show.name,
         'subtitle'  : playlist.subtitle,
         'dj'        : [dj.name for dj in playlist.show.dj.all()],
         'genre'     : playlist.genre.name if playlist.genre else None,
         'subgenre'  : [g.name for g in playlist.subgenre.all()],
         'desc'      : playlist.desc,
-        'date'      : date_to_str(playlist.date),
-        'id'        : playlist_id,
-        'time'      : playlist.time_start,
+        'datetime'  : playlist.datetime.timestamp(),
         'length'    : playlist.length
     }
 
@@ -192,10 +192,9 @@ def explore_playlist(request, playlist_id):
     } for comment in Comment.objects.filter(playlist=playlist_id)]
 
     context = {
-        'props' : {
-            'spins': spins, 'show': showdetails, 'comments': comments},
+        'props' : {'spins': spins, 'show': showdetails, 'comments': comments},
         'bundle': 'explore-playlist',
-        'title' : 'Explore Playlists: %s on %s' % (showdetails['title'], showdetails['date'])
+        'title' : 'Explore Playlists: %s' % (showdetails['title'])
     }
 
     return render(request, "component.html", context=context)

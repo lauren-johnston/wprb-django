@@ -58,19 +58,18 @@ def add_playlists(playlists):
 		genre, created = Genre.objects.get_or_create(name=playlistdata['genre'])
 
 		# convert unix epoch timestamp to time of day
-		hour = (int(playlistdata['starttime']) % 86400) // 3600
-		minute = int(playlistdata['starttime']) % 60
-		time = '%d%02d' % (hour, minute)
+		# hour = (int(playlistdata['starttime']) % 86400) // 3600
+		# minute = int(playlistdata['starttime']) % 60
+		# time = '%02d:%02d' % (hour, minute)
 
 		# Create playlist object
 		playlist = Playlist(
 			show=show, 
-			date=date.fromtimestamp(int(playlistdata['starttime'])),
+			datetime=datetime.fromtimestamp(int(playlistdata['starttime'])),
 			subtitle=playlistdata['subtitle'],
 			genre=genre,
 			timestamp=datetime.now(),
 			length=playlistdata['duration'],
-			time=time
 		)
 
 		playlist.id = int(pid)
@@ -83,7 +82,7 @@ def add_spins(spins):
 	for spin_id, spin in spins.items():
 
 		if spin['song'] == "BREAK": continue
-		artist, album, song = get_or_create(spin['artist'], spin['album'], spin['song'], spin['label'])
+		artist, album, song, _ = get_or_create(spin['artist'], spin['album'], spin['song'], spin['label'])
 		try: playlist = Playlist.objects.get(pk=int(spin['showID']))
 		except Playlist.DoesNotExist: continue
 
