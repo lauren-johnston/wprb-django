@@ -52,7 +52,7 @@ def add_playlists(playlists):
 
 	for pid, playlistdata in playlists.items():
 		# keep count
-		print('%.2f%% complete\r' % (100*(count / total)), end='')
+		print(' %.2f%% complete\r' % (100*(count / total)), end='')
 		count += 1
 
 		# Get playlist and show
@@ -89,7 +89,7 @@ def add_spins(spins):
 
 	for spin_id, spin in spins.items():
 		# keep count
-		print('%.2f%% complete\r' % (100*(count / total)), end='')
+		print(' %.2f%% complete\r' % (100*(count / total)), end='')
 		count += 1
 
 		# attempt to salvage classical
