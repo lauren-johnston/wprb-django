@@ -44,6 +44,13 @@ def plays(field, field_id, max=50):
 
     return p, title
 
+def charts(queryset):
+    """ Return the top albums, artists, and songs from a queryset.
+    """
+    
+    
+
+
 def details(field, id):
     """ Return the details associated with a given resource    
     """

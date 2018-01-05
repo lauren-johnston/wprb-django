@@ -16,7 +16,7 @@ from datetime import datetime
 class Artist(models.Model):
     """ An artist, with a name, and some things.
     """
-    name = models.CharField(max_length=100)
+    name = models.CharField(db_index=True, max_length=100)
 
     genre = models.ManyToManyField('Genre', blank=True)
     subgenre = models.ManyToManyField('Subgenre', blank=True)
@@ -34,7 +34,7 @@ class Artist(models.Model):
 class Song(models.Model):
     """ A song, with a name, and many other things
     """
-    name = models.CharField(max_length=100)
+    name = models.CharField(db_index=True, max_length=100)
     info = models.CharField(max_length=1500, blank=True)
 
     artist = models.ManyToManyField('Artist', blank=True)
@@ -53,7 +53,7 @@ class Song(models.Model):
 class Album(models.Model):
     """ An album, which has a name, and was released in a year on a label.
     """
-    name = models.CharField(max_length=100)
+    name = models.CharField(db_index=True, max_length=100)
     year = models.IntegerField(default=datetime.now().year)
     info = models.CharField(max_length=1500, blank=True)
 
@@ -75,7 +75,7 @@ class Album(models.Model):
 class Label(models.Model):
     """ A record label, which has a name and maybe a location.
     """
-    name = models.CharField(max_length=100)
+    name = models.CharField(db_index=True, max_length=100)
 
     def __str__(self):
         return 'Label %d: Title: %s' \

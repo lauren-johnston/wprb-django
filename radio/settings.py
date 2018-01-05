@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'webpack_loader',
     'music',
     'playlist',
+    'django_extensions',
 #    'social_django',
 ]
 

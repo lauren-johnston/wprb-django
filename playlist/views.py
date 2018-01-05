@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from .models import *
 from .util import *
-from .explore import plays, details
+from .explore import plays, details, charts
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -139,6 +139,8 @@ def explore_dj(request, dj_id):
         'subtitle'  : playlist.subtitle,
         'date'      : date_to_str(playlist.datetime)
     } for playlist in Playlist.objects.filter(show__dj=dj)], key=lambda x: x['id'], reverse=True)   
+
+    dj_charts = charts(Spin.objects.filter(playlist__show__dj=dj))
 
     context = {
         'props' : {'title': dj.name, 'playlists': playlists},

@@ -13,6 +13,11 @@ from playlist.models import *
 from music.models import *
 from music.common import get_or_create
 
+def progress_bar(count, total, size=50):
+	filled = int(size*count/total)
+	bar = ("#" * filled) + (" " * (size-filled))
+	print(' [%s] %.2f%% complete\r' % (bar, 100*(count/total)), end='')
+
 def add_djs(djs, logins):
 	""" Iterate through a list of DJ objects and add them to the database
 	along with their show
@@ -52,7 +57,7 @@ def add_playlists(playlists):
 
 	for pid, playlistdata in playlists.items():
 		# keep count
-		print(' %.2f%% complete\r' % (100*(count / total)), end='')
+		progress_bar(count, total)
 		count += 1
 
 		# Get playlist and show
@@ -89,7 +94,7 @@ def add_spins(spins):
 
 	for spin_id, spin in spins.items():
 		# keep count
-		print(' %.2f%% complete\r' % (100*(count / total)), end='')
+		progress_bar(count, total)
 		count += 1
 
 		# attempt to salvage classical

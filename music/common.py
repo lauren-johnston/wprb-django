@@ -22,8 +22,7 @@ def get_or_create(artist_name, album_name, song_title, label_name=''):
 		album.save()
 
 	if album.label is None and label_name != '':
-		label = Label(name=label_name)
-		label.save()
+		label = Label.objects.get_or_create(name=label_name)
 		album.label = label
 		album.save()
 	else: 

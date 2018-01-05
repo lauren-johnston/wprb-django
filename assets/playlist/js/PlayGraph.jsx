@@ -26,15 +26,20 @@ export default class PlayGraph extends React.Component {
 
 		// Do the binning
 		for (let point of this.props.data) {
-			let idx = start.diff(Moment(point, 'X'), this.state.unit);
+			let idx = Moment(point, 'X').diff(start, this.state.unit);
+			console.log(`point: ${point}, idx: ${idx}`);
 			bins[idx] += 1;
 		}
+
+		console.log(`Raw bins: ${bins}`);
 
 		// Trim trailing zeros while there are multiple
 		while (bins[bins.length-1] === 0 && bins[bins.length-2] === 0) {
 			bins.pop();
 			binEdges.pop();
 		}
+
+		console.log(`Trimmed bins: ${bins}`);
 
 		return {bins, binEdges}
 	}
@@ -58,20 +63,21 @@ export default class PlayGraph extends React.Component {
 						textAnchor="middle"
 						text="Popularity over time"/>
 					<VictoryAxis 
-						label="Time"
 						style= {{
 							axisLabel: { fontSize: 10, padding: 10 },
 							ticks: {size: 1},
 							tickLabels: {fontSize: 8}
 						}}
+						fixLabelOverlap={true}
 						tickValues={points.map((val, idx) => idx)}
-						tickFormat={(idx) => binEdges[idx].format('MM/DD/YY')} />
+						tickFormat={(idx) => binEdges[idx].format('MMM \'YY')} />
 					<VictoryAxis dependentAxis
-						label="Plays"
+						label={`Plays per ${this.state.unit}`}
 						style= {{ 
 							axisLabel: { fontSize: 10, padding: 20 },
 							tickLabels: {fontSize: 10, padding: 2}
-						}} />
+						}} 
+						tickFormat={(val) => val === parseInt(val) ? val : ''} />
 
 					<VictoryLine data={points} />
 				</VictoryChart>
