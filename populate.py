@@ -47,8 +47,14 @@ def add_playlists(playlists):
 	""" Iterate through a list of playlist objects (from old WPRB db) 
 	and create each one in the new database
 	"""
+	count = 0
+	total = len(playlists)
 
 	for pid, playlistdata in playlists.items():
+		# keep count
+		print('%.2f%% complete\r' % (100*(count / total)), end='')
+		count += 1
+
 		# Get playlist and show
 		try: dj = DJ.objects.get(pk=int(playlistdata['userID']))
 		except DJ.DoesNotExist: continue 
@@ -83,12 +89,15 @@ def add_spins(spins):
 
 	for spin_id, spin in spins.items():
 		# keep count
-		if count % 1000 == 0:
-			print('%.2f%% complete\r' % (100*(count / total)), end='')
+		print('%.2f%% complete\r' % (100*(count / total)), end='')
 		count += 1
 
+		# attempt to salvage classical
+		if spin['album'] is None: spin['album'] = spin['ensemble']
+
 		# skip breaks
-		if spin['song'] == "BREAK": continue
+		if spin['song'] == "BREAK" or not all((spin['album'],spin['song'],spin['artist'])): continue
+
 		# find stuff
 		artist, album, song, _ = get_or_create(spin['artist'], spin['album'], spin['song'], spin['label'])
 		try: playlist = Playlist.objects.get(pk=int(spin['showID']))

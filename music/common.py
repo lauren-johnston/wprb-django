@@ -25,6 +25,7 @@ def get_or_create(artist_name, album_name, song_title, label_name=''):
 		label = Label(name=label_name)
 		label.save()
 		album.label = label
+		album.save()
 	else: 
 		label = album.label
 
