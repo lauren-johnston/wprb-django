@@ -13,7 +13,6 @@ module.exports = {
     'explore-music': './assets/playlist/js/explore-music',
     'explore-playlist': './assets/playlist/js/explore-playlist',
     'explore-dj': './assets/playlist/js/explore-dj',
-    'graph': './assets/playlist/js/graph',
     'user': './assets/playlist/js/user',
   },
 

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Search from './Search.jsx';
+import PlayGraph from './PlayGraph.jsx';
 import {ExploreSpinsTable, ExploreDetails} from './Explore.jsx';
 
 class ExploreMusicPage extends React.Component {
@@ -25,7 +26,7 @@ class ExploreMusicPage extends React.Component {
 					</div>
 					<div id="content-right">
 						<Search />
-						Charts go here!
+						<PlayGraph data={this.props.spins.map(spin => spin.datetime)}/>
 					</div>
 				</div>
 			</div>
