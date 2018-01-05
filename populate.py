@@ -78,10 +78,18 @@ def add_playlists(playlists):
 def add_spins(spins):
 	""" Iterate through a list of spins and add them to the proper playlist
 	"""
+	count = 0
+	total = len(spins)
 
 	for spin_id, spin in spins.items():
+		# keep count
+		if count % 1000 == 0:
+			print('%.2f%% complete\r' % (100*(count / total)), end='')
+		count += 1
 
+		# skip breaks
 		if spin['song'] == "BREAK": continue
+		# find stuff
 		artist, album, song, _ = get_or_create(spin['artist'], spin['album'], spin['song'], spin['label'])
 		try: playlist = Playlist.objects.get(pk=int(spin['showID']))
 		except Playlist.DoesNotExist: continue
@@ -97,14 +105,22 @@ def add_spins(spins):
 		spin = Spin(song=song, playlist=playlist, index=index)
 		spin.save()
 
-def main(filename):
 
+def main(filename):
+	print('loading file...', end='')
 	with open(filename) as file:
 		db = json.load(file)
+	print('done!')
 
-	add_djs(db['users'], db['logins'])
-	add_playlists(db['shows'])
-	add_spins(db['playlist'])
+	if 'users' in db and 'logins' in db:
+		print('\nadding users\n')
+		add_djs(db['users'], db['logins'])
+	if 'shows' in db:
+		print('\nadding shows\n')
+		add_playlists(db['shows'])
+	if 'playlist' in db:
+		print('\nadding spins\n')
+		add_spins(db['playlist'])
 
 if __name__=="__main__":
 	import sys
