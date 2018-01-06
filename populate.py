@@ -143,7 +143,7 @@ if __name__=="__main__":
 		print('usage: python populate.py <filename> <min_id>?')
 		sys.exit(1)
 
-	if len(sys.arv) == 3:
+	if len(sys.argv) == 3:
 		main(sys.argv[1], int(sys.argv[2]))
 	else:
 		main(sys.argv[1])
