@@ -12,7 +12,7 @@ from django.contrib.auth import views as auth_views
 
 from . import views, services, explore, test_views
 from .views import edit_playlist
-from .services import entry, meta, comment
+from .services import entry, meta, comment, charts
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
@@ -24,7 +24,10 @@ app_name = 'playlist'
 
 urlpatterns = [
 	# Explore View
-	url(r'^explore/(?P<field>[a-zA-Z]+)/(?P<field_id>[0-9]+)/$', views.explore, name='explore'),
+	url(r'^explore/', include([
+		url(r'^(?P<field>[a-zA-Z]+)/(?P<field_id>[0-9]+)/$', views.explore, name='explore'),
+		url(r'^charts/$', charts.charts, name='charts'),
+	])),
 	url(r'^playlist/', include([
 		# playlist edit
 		url(playlist_id + '$', views.edit_playlist, name='edit-playlist'),

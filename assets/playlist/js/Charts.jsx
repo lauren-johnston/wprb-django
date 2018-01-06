@@ -5,8 +5,18 @@ export default class Charts extends React.Component {
 		super(props);
 
 		this.state = {field: 'artist'};
+	}
 
-		console.log(this.props);
+	componentDidMount() {
+		fetch(`/explore/charts?djId=${this.props.dj}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+        }).then(response => response.json()).then(charts => {
+            this.setState({charts});
+        });
 	}
 
 	render() {
@@ -28,22 +38,22 @@ export default class Charts extends React.Component {
 				</div>
 				<ChartHeading title={this.state.field} />
 				<div className="chart-row-container">
-				{this.props.charts[this.state.field].map((item, index) => 
+				{this.state.charts ? this.state.charts[this.state.field].map((item, index) => 
 					<ChartRow key={item.id}
 						field={this.state.field}
 						title={item.name} 
 						id={item.id} 
 						index={index+1}
 						plays={item.plays} />
-				)}
+				) : <div className="charts-loading">Loading charts...<br />
+						<img src="/static/playlist/css/media/loading.gif" height="50" width="50"/>
+					</div>}
 				</div>
 			</div>
 		);
 	}
 }
 
-
-	
 const ChartRow = ({plays, title, id, index, field}) => {
 	return (
 		<div className="chart-row" 

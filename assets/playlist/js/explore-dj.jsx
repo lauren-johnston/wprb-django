@@ -20,7 +20,7 @@ class ExploreDJPage extends React.Component {
 					</div>
 					<div id="content-right">
 						<Search />
-						<Charts charts={this.props.charts} for={this.props.title}/>
+						<Charts dj={this.props.djId} for={this.props.title} />
 					</div>
 				</div>
 			</div>

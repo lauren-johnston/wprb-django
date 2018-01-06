@@ -181,7 +181,16 @@ a:hover {
 .chart-field, .chart-heading-field {
 	display: inline-block;
 	text-align: center;
+}
 
+.charts-loading {
+	text-align: center;
+	font-style: italic;
+	padding: 2em;
+}
+
+.charts-loading img {
+	margin-top: 2em;
 }
 
 .chart-heading {

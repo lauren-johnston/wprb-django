@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from .models import *
 from .util import *
-from .explore import plays, details, charts
+from .explore import plays
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -17,11 +17,12 @@ import time, datetime
 
 @login_required
 def landing(request):
-    userinfo = get_user_details(request)
     """ Serve the landing page for a dj that allows them to 
     access their previous playlists for editing or create 
     a new playlist.
     """ 
+    userinfo = get_user_details(request)
+
     dj = request.user.dj
 
     playlists = sorted([{
@@ -140,10 +141,10 @@ def explore_dj(request, dj_id):
         'date'      : date_to_str(playlist.datetime)
     } for playlist in Playlist.objects.filter(show__dj=dj)], key=lambda x: x['id'], reverse=True)   
 
-    dj_charts = charts(Spin.objects.filter(playlist__show__dj=dj))
+    # dj_charts = charts(Spin.objects.filter(playlist__show__dj=dj))
 
     context = {
-        'props' : {'title': dj.name, 'playlists': playlists, 'charts': dj_charts},
+        'props' : {'title': dj.name, 'djId': dj.id, 'playlists': playlists, 'userinfo': userinfo},
         'bundle': 'explore-dj',
         'title' : 'Explore DJs: %s' % dj.name
     }
@@ -194,7 +195,7 @@ def explore_playlist(request, playlist_id):
     } for comment in Comment.objects.filter(playlist=playlist_id)]
 
     context = {
-        'props' : {'spins': spins, 'show': showdetails, 'comments': comments},
+        'props' : {'spins': spins, 'show': showdetails, 'comments': comments, 'userinfo': userinfo},
         'bundle': 'explore-playlist',
         'title' : 'Explore Playlists: %s' % (showdetails['title'])
     }
