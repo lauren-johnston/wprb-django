@@ -86,7 +86,7 @@ def add_playlists(playlists):
 		playlist.id = int(pid)
 		playlist.save()
 
-def add_spins(spins):
+def add_spins(spins, min_id=0):
 	""" Iterate through a list of spins and add them to the proper playlist
 	"""
 	count = 0
@@ -96,6 +96,7 @@ def add_spins(spins):
 		# keep count
 		progress_bar(count, total)
 		count += 1
+		if int(spin_id) < min_id: continue
 
 		# attempt to salvage classical
 		if spin['album'] is None: spin['album'] = spin['ensemble']
@@ -120,7 +121,7 @@ def add_spins(spins):
 		spin.save()
 
 
-def main(filename):
+def main(filename, min_id=0):
 	print('loading file...', end='')
 	with open(filename) as file:
 		db = json.load(file)
@@ -134,12 +135,16 @@ def main(filename):
 		add_playlists(db['shows'])
 	if 'playlist' in db:
 		print('\nadding spins\n')
-		add_spins(db['playlist'])
+		add_spins(db['playlist'], min_id)
 
 if __name__=="__main__":
 	import sys
-	if len(sys.argv) != 2:
-		print('usage: python populate.py <filename>')
+	if len(sys.argv) not in [2,3]:
+		print('usage: python populate.py <filename> <min_id>?')
 		sys.exit(1)
 
-	main(sys.argv[1])
+	if len(sys.arv) == 3:
+		main(sys.argv[1], int(sys.argv[2]))
+	else:
+		main(sys.argv[1])
+

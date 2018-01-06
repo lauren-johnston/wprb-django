@@ -47,9 +47,43 @@ def plays(field, field_id, max=50):
 def charts(queryset):
     """ Return the top albums, artists, and songs from a queryset.
     """
-    
-    
 
+    # Build a list of all the artists
+    artists = {}
+    albums = {}
+    songs = {}
+    for spin in queryset:
+        # Add each artist to the running dictionary
+        for a in spin.song.artist.all():
+            if a in artists:
+                artists[a] += 1
+            else:
+                artists[a] = 1
+
+        if spin.song.album in albums:
+            albums[spin.song.album] += 1
+        else:
+            albums[spin.song.album] = 1
+
+        if spin.song in songs:
+            albums[spin.song] += 1
+        else:
+            albums[spin.song] = 1
+
+    charts = {
+        'artists' : [
+                {'name': a.name, 'id': a.id} 
+                for a in sorted(artists, key=lambda x: artists[x])[:30]
+            ],
+        'albums'  : [
+                {'name': a.name, 'id': a.id} 
+                for a in sorted(albums, key=lambda x: albums[x])[:30]
+            ],
+        'songs'   : [
+                {'name': s.name, 'id': s.id} 
+                for s in sorted(songs, key=lambda x: songs[x])[:30]
+            ],
+    }
 
 def details(field, id):
     """ Return the details associated with a given resource    

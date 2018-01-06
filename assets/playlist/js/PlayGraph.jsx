@@ -5,12 +5,17 @@ import {
 	VictoryLine, VictoryChart, VictoryAxis, VictoryTheme, VictoryLabel
 } from 'victory';
 
+const UNITS = {
+	'week' : 'MM/DD/YY',
+	'month': 'MMM \'YY',
+	'year' : 'YYYY'
+}
+
 export default class PlayGraph extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = { unit: 'month' };
-		console.log(this.props.data);
 	}
 
 	binData() {
@@ -51,7 +56,7 @@ export default class PlayGraph extends React.Component {
 			return {x: idx, y: val}
 		});
 
-		console.log(points);
+		let dateFormat = UNITS[this.state.unit];
 
 		return (
 			<div className="graph">
@@ -70,7 +75,7 @@ export default class PlayGraph extends React.Component {
 						}}
 						fixLabelOverlap={true}
 						tickValues={points.map((val, idx) => idx)}
-						tickFormat={(idx) => binEdges[idx].format('MMM \'YY')} />
+						tickFormat={(idx) => binEdges[idx].format(dateFormat)} />
 					<VictoryAxis dependentAxis
 						label={`Plays per ${this.state.unit}`}
 						style= {{ 
