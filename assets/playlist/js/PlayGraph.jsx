@@ -32,19 +32,14 @@ export default class PlayGraph extends React.Component {
 		// Do the binning
 		for (let point of this.props.data) {
 			let idx = Moment(point, 'X').diff(start, this.state.unit);
-			console.log(`point: ${point}, idx: ${idx}`);
 			bins[idx] += 1;
 		}
-
-		console.log(`Raw bins: ${bins}`);
 
 		// Trim trailing zeros while there are multiple
 		while (bins[bins.length-1] === 0 && bins[bins.length-2] === 0) {
 			bins.pop();
 			binEdges.pop();
 		}
-
-		console.log(`Trimmed bins: ${bins}`);
 
 		return {bins, binEdges}
 	}
@@ -67,6 +62,7 @@ export default class PlayGraph extends React.Component {
 						x={200}
 						textAnchor="middle"
 						text="Popularity over time"/>
+
 					<VictoryAxis 
 						style= {{
 							axisLabel: { fontSize: 10, padding: 10 },

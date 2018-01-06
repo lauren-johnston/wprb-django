@@ -72,7 +72,8 @@ a:hover {
 	border-top-width: 2px;
 }
 
-.play, .play-container-header, .show-list-entry, .show-container-header {
+.play, .play-container-header, 
+.show-list-entry, .show-container-header {
 	display: flex;
 	justify-content: space-between;
 
@@ -130,11 +131,91 @@ a:hover {
 }
 
 /**********************************************************************
- * Graph
+ * Graph & Charts
  *********************************************************************/
 
 .graph {
 	height: 80%;
+}
+
+.chart {
+	background-color: rgb(42,42,42);
+	padding: 0.5em;
+	margin: 0.5em 1em 0.5em 0;
+	width: calc(100% - 2em);
+
+	border: 2px solid #959595;
+	border-radius: 0.5em;
+
+	height: 80%;
+}
+
+.chart-row-container {
+	height: 80%;
+	overflow-y: scroll;
+}
+
+.chart-main-title {
+	width: 100%;
+	text-align: center;
+}
+
+.chart-row {
+	border-bottom: 1px solid rgba(255,255,255, 0.1);
+	padding: 0.1em 0;
+}
+
+.chart-heading {
+	border-bottom: 1px solid #fff;
+	padding: 0.1em 0;
+}
+
+.chart-row {
+	cursor: pointer;
+}
+
+.chart-row:hover {
+	background-color: #424242;
+}
+
+.chart-field, .chart-heading-field {
+	display: inline-block;
+	text-align: center;
+
+}
+
+.chart-heading {
+	font-size: 1.5em;
+}
+
+.chart-title {
+	width: 70%;
+}
+
+.chart-plays, .chart-index {
+	width: 15%;
+}
+
+.chart-control {
+	display: flex;
+	justify-content: space-around;
+
+	padding: 0.5em 6em;
+}
+
+.chart-option {
+	border-radius: 0.25em;
+	border: 1px solid #fff;
+	padding: 0.25em 0.5em;
+	margin: 0 0.1em;
+	cursor: pointer;
+}
+
+.chart-selected {
+	background-color: rgb(170, 247, 205);
+	border-color: rgb(170, 247, 205);
+	color: rgb(42,42,42);
+	cursor: auto;
 }
 
 /**********************************************************************
@@ -144,11 +225,12 @@ a:hover {
 .details {
 	background-color: rgb(42,42,42);
 	border: 2px solid #959595;
+	border-radius: 0.5em;
+
 	width: calc(100% - 3em);
 	height: 20%;
 	padding: 0.5em;
 	margin: 0.5em 0.5em 0.5em 1em;
-	border-radius: 0.5em;
 }
 
 .details-title {

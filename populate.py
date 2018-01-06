@@ -92,34 +92,37 @@ def add_spins(spins, min_id=0):
 	count = 0
 	total = len(spins)
 
-	for spin_id, spin in spins.items():
-		# keep count
-		progress_bar(count, total)
-		count += 1
-		if int(spin_id) < min_id: continue
+	try: 
+		for spin_id, spin in spins.items():
+			# keep count
+			progress_bar(count, total)
+			count += 1
+			if int(spin_id) < min_id: continue
 
-		# attempt to salvage classical
-		if spin['album'] is None: spin['album'] = spin['ensemble']
+			# attempt to salvage classical
+			if spin['album'] is None: spin['album'] = spin['ensemble']
 
-		# skip breaks
-		if spin['song'] == "BREAK" or not all((spin['album'],spin['song'],spin['artist'])): continue
+			# skip breaks
+			if spin['song'] == "BREAK" or not all((spin['album'],spin['song'],spin['artist'])): continue
 
-		# find stuff
-		artist, album, song, _ = get_or_create(spin['artist'], spin['album'], spin['song'], spin['label'])
-		try: playlist = Playlist.objects.get(pk=int(spin['showID']))
-		except Playlist.DoesNotExist: continue
+			# find stuff
+			artist, album, song, _ = get_or_create(spin['artist'], spin['album'], spin['song'], spin['label'])
+			try: playlist = Playlist.objects.get(pk=int(spin['showID']))
+			except Playlist.DoesNotExist: continue
 
-		artist.playcount += 1
-		album.playcount += 1
-		song.playcount += 1
-		artist.save()
-		album.save()
-		song.save()
-		
-		index = Spin.objects.filter(playlist=playlist).count() + 1
-		spin = Spin(song=song, playlist=playlist, index=index)
-		spin.save()
-
+			artist.playcount += 1
+			album.playcount += 1
+			song.playcount += 1
+			artist.save()
+			album.save()
+			song.save()
+			
+			index = Spin.objects.filter(playlist=playlist).count() + 1
+			spin = Spin(song=song, playlist=playlist, index=index)
+			spin.save()
+	except KeyboardInterrupt as e:
+		print('Last spin: %d' % spin_id)
+		raise e	
 
 def main(filename, min_id=0):
 	print('loading file...', end='')

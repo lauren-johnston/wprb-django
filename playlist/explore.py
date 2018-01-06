@@ -66,24 +66,26 @@ def charts(queryset):
             albums[spin.song.album] = 1
 
         if spin.song in songs:
-            albums[spin.song] += 1
+            songs[spin.song] += 1
         else:
-            albums[spin.song] = 1
+            songs[spin.song] = 1
 
     charts = {
-        'artists' : [
-                {'name': a.name, 'id': a.id} 
-                for a in sorted(artists, key=lambda x: artists[x])[:30]
+        'artist' : [
+                {'name': a.name, 'id': a.id, 'plays': artists[a]} 
+                for a in sorted(artists, key=lambda x: artists[x], reverse=True)[:30]
             ],
-        'albums'  : [
-                {'name': a.name, 'id': a.id} 
-                for a in sorted(albums, key=lambda x: albums[x])[:30]
+        'album'  : [
+                {'name': a.name, 'id': a.id, 'plays': albums[a]} 
+                for a in sorted(albums, key=lambda x: albums[x], reverse=True)[:30]
             ],
-        'songs'   : [
-                {'name': s.name, 'id': s.id} 
-                for s in sorted(songs, key=lambda x: songs[x])[:30]
+        'song'   : [
+                {'name': s.name, 'id': s.id, 'plays': songs[s]} 
+                for s in sorted(songs, key=lambda x: songs[x], reverse=True)[:30]
             ],
     }
+
+    return charts
 
 def details(field, id):
     """ Return the details associated with a given resource    
