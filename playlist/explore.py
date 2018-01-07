@@ -28,7 +28,7 @@ def plays(field, field_id, max=50):
     else:
         raise RuntimeError('Invalid field name')
 
-    p = [{
+    p = sorted([{
         'artist'    : p.song.artist.all()[0].name, #[{'name': a.name, 'id': a.id} for a in p.song.artist.all()],
         'artistId'  : p.song.artist.all()[0].id,
         'song'      : p.song.name,
@@ -40,7 +40,7 @@ def plays(field, field_id, max=50):
         'dj'        : [{'name': dj.name, 'id': dj.id} for dj in p.playlist.show.dj.all()],
         'datetime'  : p.playlist.datetime.timestamp(),
         'playlistId': p.playlist.id,
-    } for p in plays]
+    } for p in plays], key=lambda x: int(x['datetime']), reverse=True)
 
     return p, title
 
