@@ -137,8 +137,23 @@ def main(filename, min_id=0):
 		print('\nadding shows\n')
 		add_playlists(db['shows'])
 	if 'playlist' in db:
+		if min_id == 0:
+			min_id = find_latest(db['playlist'])
 		print('\nadding spins\n')
 		add_spins(db['playlist'], min_id)
+
+def find_latest(spins):
+	""" Find the latest spinid not in the database
+	"""
+
+	for sid, spin in spins.items():
+	    if spin['song'] == 'BREAK' or not all((spin['artist'],spin['album'],spin['song'])): continue
+	    try: p = Playlist.objects.get(pk=int(spin['showID']))
+	    except: continue
+	    if Spin.objects.filter(playlist=p).filter(song__name__iexact=spin['song']).count() == 0:
+	        return int(sid)
+
+	return float('inf')
 
 if __name__=="__main__":
 	import sys

@@ -31,11 +31,6 @@ export default class Charts extends React.Component {
 			<div className="chart">
 				<h3 className="chart-main-title">{`Top Charts for ${this.props.for}`}
 				</h3>
-				<div className="chart-control">
-					<ChartToggle field="artist" />
-					<ChartToggle field="album" />
-					<ChartToggle field="song" />
-				</div>
 				<ChartHeading title={this.state.field} />
 				<div className="chart-row-container">
 				{this.state.charts ? this.state.charts[this.state.field].map((item, index) => 
@@ -48,6 +43,12 @@ export default class Charts extends React.Component {
 				) : <div className="charts-loading">Loading charts...<br />
 						<img src="/static/playlist/css/media/loading.gif" height="50" width="50"/>
 					</div>}
+				</div>
+				<div className="chart-control">
+					<ChartToggle field="artist" />
+					<ChartToggle field="label" />
+					<ChartToggle field="album" />
+					<ChartToggle field="song" />
 				</div>
 			</div>
 		);

@@ -178,7 +178,7 @@ a:hover {
 	background-color: #424242;
 }
 
-.chart-field, .chart-heading-field {
+.chart-field {
 	display: inline-block;
 	text-align: center;
 }
@@ -193,12 +193,19 @@ a:hover {
 	margin-top: 2em;
 }
 
-.chart-heading {
-	font-size: 1.5em;
-}
-
 .chart-title {
 	width: 70%;
+	text-align: left;
+}
+
+.chart-heading {
+	font-size: 1.5em;
+	text-align: center;
+}
+
+.chart-heading-field {
+	display: inline-block;
+	text-align: center;
 }
 
 .chart-plays, .chart-index {
