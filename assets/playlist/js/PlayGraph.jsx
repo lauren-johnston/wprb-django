@@ -62,6 +62,8 @@ export default class PlayGraph extends React.Component {
 
 		let field = this.props.field.charAt(0).toUpperCase() + this.props.field.slice(1);
 
+		console.log(binEdges);
+
 		return (
 			<div className="graph-container">
 				<div className="graph-title">
