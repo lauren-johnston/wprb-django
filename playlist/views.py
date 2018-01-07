@@ -144,7 +144,7 @@ def explore_dj(request, dj_id):
     # dj_charts = charts(Spin.objects.filter(playlist__show__dj=dj))
 
     context = {
-        'props' : {'title': dj.name, 'djId': dj.id, 'playlists': playlists, 'userinfo': userinfo},
+        'props' : {'title': dj.name, 'djId': dj_id, 'playlists': playlists, 'userinfo': userinfo},
         'bundle': 'explore-dj',
         'title' : 'Explore DJs: %s' % dj.name
     }
