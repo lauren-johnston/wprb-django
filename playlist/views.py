@@ -138,7 +138,7 @@ def explore_dj(request, dj_id):
         'id'        : playlist.id,
         'title'     : playlist.show.name,
         'subtitle'  : playlist.subtitle,
-        'date'      : date_to_str(playlist.datetime)
+        'date'      : playlist.datetime.timestamp()
     } for playlist in Playlist.objects.filter(show__dj=dj)], key=lambda x: x['id'], reverse=True)   
 
     # dj_charts = charts(Spin.objects.filter(playlist__show__dj=dj))

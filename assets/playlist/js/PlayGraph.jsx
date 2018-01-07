@@ -53,35 +53,52 @@ export default class PlayGraph extends React.Component {
 
 		let dateFormat = UNITS[this.state.unit];
 
+		const GraphToggle = ({unit}) => (
+			<span 
+				className={this.state.unit === unit ? 'chart-selected chart-option' : 'chart-option'}
+				onClick={() => this.setState({unit})} >{unit}
+			</span>
+		);
+
+		let field = this.props.field.charAt(0).toUpperCase() + this.props.field.slice(1);
+
 		return (
-			<div className="graph">
-				<VictoryChart
-					theme={VictoryTheme.grayscale}
-					domainPadding={10} >
-					<VictoryLabel
-						x={200}
-						textAnchor="middle"
-						text="Popularity over time"/>
+			<div className="graph-container">
+				<div className="graph-title">
+					<h3>{`${field} popularity over time`}</h3>
+				</div>
+				<div className="graph">
+					<VictoryChart
+						theme={VictoryTheme.grayscale}
+						domainPadding={10} >
+						
 
-					<VictoryAxis 
-						style= {{
-							axisLabel: { fontSize: 10, padding: 10 },
-							ticks: {size: 1},
-							tickLabels: {fontSize: 8}
-						}}
-						fixLabelOverlap={true}
-						tickValues={points.map((val, idx) => idx)}
-						tickFormat={(idx) => binEdges[idx].format(dateFormat)} />
-					<VictoryAxis dependentAxis
-						label={`Plays per ${this.state.unit}`}
-						style= {{ 
-							axisLabel: { fontSize: 10, padding: 20 },
-							tickLabels: {fontSize: 10, padding: 2}
-						}} 
-						tickFormat={(val) => val === parseInt(val) ? val : ''} />
+						<VictoryAxis 
+							style= {{
+								axisLabel: { fontSize: 10, padding: 10 },
+								ticks: {size: 1},
+								tickLabels: {fontSize: 8}
+							}}
+							fixLabelOverlap={true}
+							tickValues={points.map((val, idx) => idx)}
+							tickFormat={(idx) => binEdges[idx].format(dateFormat)} />
+						<VictoryAxis dependentAxis
+							label={`Plays per ${this.state.unit}`}
+							style= {{ 
+								axisLabel: { fontSize: 10, padding: 20 },
+								tickLabels: {fontSize: 10, padding: 2}
+							}} 
+							tickFormat={(val) => val === parseInt(val) ? val : ''} />
 
-					<VictoryLine data={points} />
-				</VictoryChart>
+						<VictoryLine data={points} />
+					</VictoryChart>
+				</div>
+				<div className="graph-control">
+					<span style={{padding: '0.25em 0.5em'}}> Show plays per: </span>
+					<GraphToggle unit="year" />
+					<GraphToggle unit="month" />
+					<GraphToggle unit="week" />
+				</div>
 			</div>
 		);
 	}

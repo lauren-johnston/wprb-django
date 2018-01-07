@@ -26,7 +26,9 @@ class ExploreMusicPage extends React.Component {
 					</div>
 					<div id="content-right">
 						<Search />
-						<PlayGraph data={this.props.spins.map(spin => spin.datetime)}/>
+						<PlayGraph 
+							field={this.props.field} 
+							data={this.props.spins.map(spin => spin.datetime)} />
 					</div>
 				</div>
 			</div>

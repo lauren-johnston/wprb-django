@@ -29,8 +29,8 @@ export default class Charts extends React.Component {
 
 		return (
 			<div className="chart">
-				<h3 className="chart-main-title">{`Top Charts for ${this.props.for}`}
-				</h3>
+				<h2 className="chart-main-title">{`Top Charts for ${this.props.for}`}
+				</h2>
 				<ChartHeading title={this.state.field} />
 				<div className="chart-row-container">
 				{this.state.charts ? this.state.charts[this.state.field].map((item, index) => 

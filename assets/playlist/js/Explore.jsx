@@ -216,7 +216,7 @@ export const ExploreShows = ({playlists}) => {
 	        {playlists.map((playlist) => (
 	        	<div key={playlist.id} className="show-list-entry">
 	            	<a href={`/explore/playlist/${playlist.id}/`} className="playlist-link">
-	                	<span className="show-text-cell show-date">{playlist.date}</span>
+	                	<span className="show-text-cell show-date">{Moment(playlist.date, 'X').format('dddd, MM/DD/YY @h:mma')}</span>
 	                	<span className="show-text-cell show-title">{playlist.title}</span>
 	                	<span className="show-text-cell show-subtitle">{playlist.subtitle}</span>
 	            	</a> 
