@@ -62,8 +62,6 @@ export default class PlayGraph extends React.Component {
 
 		let field = this.props.field.charAt(0).toUpperCase() + this.props.field.slice(1);
 
-		console.log(binEdges);
-
 		return (
 			<div className="graph-container">
 				<div className="graph-title">
@@ -83,7 +81,7 @@ export default class PlayGraph extends React.Component {
 							}}
 							fixLabelOverlap={true}
 							tickValues={points.map((val, idx) => idx)}
-							tickFormat={(idx) => binEdges ? binEdges[idx].format(dateFormat) : ''} />
+							tickFormat={(idx) => binEdges.length ? binEdges[idx].format(dateFormat) : ''} />
 
 						<VictoryAxis dependentAxis
 							label={`Plays per ${this.state.unit}`}
