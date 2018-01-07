@@ -81,7 +81,8 @@ export default class PlayGraph extends React.Component {
 							}}
 							fixLabelOverlap={true}
 							tickValues={points.map((val, idx) => idx)}
-							tickFormat={(idx) => binEdges[idx].format(dateFormat)} />
+							tickFormat={(idx) => binEdges ? binEdges[idx].format(dateFormat) : ''} />
+
 						<VictoryAxis dependentAxis
 							label={`Plays per ${this.state.unit}`}
 							style= {{ 
