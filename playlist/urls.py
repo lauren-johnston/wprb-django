@@ -12,7 +12,7 @@ from django.contrib.auth import views as auth_views
 
 from . import views, services, explore
 from .views import edit_playlist
-from .services import entry, meta, comment, charts
+from .services import entry, meta, comment, charts, search
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
