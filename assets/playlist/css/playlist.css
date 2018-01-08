@@ -203,6 +203,46 @@
 }
 
 
+.tag-default-plus {
+	background-image: url("media/tag-plus.png");
+	background-position: center;
+	background-repeat: no-repeat; 
+	background-size: 15px 15px;
+	width: 15px;
+	height: 15px;
+
+	display:  inline-block;
+	position: relative;
+	margin-bottom: 4.5%;
+}
+
+.tag-plus {
+	background-image: url("media/tag-plus.png");
+	background-position: center;
+	background-repeat: no-repeat; 
+	background-size: 8px 8px;
+	width: 8px;
+	height: 8px;
+
+	display:  inline-block;
+	position: relative;
+	margin-bottom: 4.5%;
+}
+
+.tag-delete {
+	background-image: url("media/tag-x.png");
+	background-position: center;
+	background-repeat: no-repeat; 
+	background-size: 8px 8px;
+	width: 8px;
+	height: 8px;
+
+	display:  inline-block;
+	position: relative;
+	margin-left: 5px;
+}
+
+
 /* Autocomplete stuff */
 .react-autosuggest__suggestions-container--open {
 	position: absolute;

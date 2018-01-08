@@ -74,7 +74,7 @@ def genre(request, playlist_id):
 	return success()
 
 @csrf_exempt
-@require_http_methods(["POST"])
+@require_http_methods(["PUT"])
 def add_subgenre(request, playlist_id):
 	""" Does what it says to the playlist.
 	"""

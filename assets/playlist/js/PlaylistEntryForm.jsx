@@ -195,7 +195,6 @@ const renderSuggestion = (s, {query, isHighlighted}) => {
 
     // TODO: HOOK In to render artist and album into the artist and album fields if poss
     // idk how tho
-
     return (
         <div className={className}>
             {highlightedParts}

@@ -133,7 +133,7 @@ export default class TagBox extends React.Component {
             return;
         }
 
-        if(value.substring(0, 3) == this.prevSearch.value.substring(0, 3))
+        if(value.substring(0, 3) == this.state.prevSearch.substring(0, 3))
             this.setState(state => {
                 return {suggestions: state.suggestions.filter(s => s.startsWith(value))}
             });
@@ -153,10 +153,10 @@ export default class TagBox extends React.Component {
 	render() {
 		const { tags, suggestions, classNames, editing } = this.state;
 		const adjElement = editing? '' : 'tag-plus clickable';
-
+        const trueTags = (tags.length == 0? [{id:0, text: 'add a tag!'},] : tags)
 		return (
 			<div className="tagbox">
-				<ReactTags tags={[{id: 1, text:'Write a subgenre!'},]}
+				<ReactTags tags={trueTags}
 						id={this.props.inputId || ''}
 	                    suggestions={suggestions}
 	                    classNames={classNames} 

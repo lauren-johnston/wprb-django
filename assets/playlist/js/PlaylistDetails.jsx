@@ -38,7 +38,7 @@ export default class PlaylistDetails extends React.Component {
 
 	addSubgenre(value) {
 		console.log('TRYNA ADD BROH');
-		fetch(`meta/addSubgenre/`, {
+		fetch(`meta/add_subgenre/`, {
 			method: "PUT",
 			body: JSON.stringify({subgenre: value}),
 			headers: {
@@ -51,7 +51,7 @@ export default class PlaylistDetails extends React.Component {
 	}
 
 	delSubgenre(value) {
-		fetch(`meta/delSubgenre/`, {
+		fetch(`meta/del_subgenre/`, {
 			method: "DELETE",
 			body: JSON.stringify({subgenre:value}),
 			headers: {
