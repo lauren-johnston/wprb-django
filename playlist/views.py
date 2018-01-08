@@ -201,3 +201,23 @@ def explore_playlist(request, playlist_id):
     }
 
     return render(request, "component.html", context=context)
+
+def explore_landing(request):
+    """ 
+    """
+    userinfo = get_user_details(request)
+
+    playlists = sorted([{
+        'id'        : playlist.id,
+        'title'     : playlist.show.name,
+        'subtitle'  : playlist.subtitle,
+        'date'      : playlist.datetime.timestamp()
+    } for playlist in Playlist.objects.filter(show__dj=dj)], key=lambda x: x['id'], reverse=True)   
+
+    context = {
+        'props' : {'userinfo': userinfo},
+        'bundle': 'explore-landing',
+        'title' : 'WPRB 103.3FM: Explore Music and Playlists'
+    }
+
+    return render(request, "component.html", context=context)

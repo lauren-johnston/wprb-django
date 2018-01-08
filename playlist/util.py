@@ -42,13 +42,13 @@ def get_user_details(request):
         context = {
             'username'      : request.user.username,
             'id'            : request.user.id,
-            'dj_name'       : request.user.dj.name if request.user.dj else None
+            'djName'       : request.user.dj.name if request.user.dj else None
         }
     else:
         context = {
             'username': None,
             'id': None,
-            'dj_name': None
+            'djName': None
         }
 
     return context
