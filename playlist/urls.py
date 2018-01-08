@@ -10,7 +10,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
-from . import views, services, explore, test_views
+from . import views, services, explore
 from .views import edit_playlist
 from .services import entry, meta, comment, charts
 
@@ -36,7 +36,7 @@ urlpatterns = [
 		url(r'^new/$', views.new_playlist, name='new-playlist'),
 
 		# Authentication
-		url(r'^login/$', auth_views.login, name='login'),
+		url(r'^login/$',  auth_views.login,  name='login'),
 		url(r'^logout/$', auth_views.logout, name='logout'),
 		
 		#url(r'^oauth/', include('social_django.urls', namespace='social')),
