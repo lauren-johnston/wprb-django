@@ -72,7 +72,7 @@ a:hover {
 	border-top-width: 2px;
 }
 
-.play, .play-container-header, 
+.play, .play-container-header,
 .show-list-entry, .show-container-header {
 	display: flex;
 	justify-content: space-between;
@@ -133,9 +133,8 @@ a:hover {
  * Search bar
  *********************************************************************/
 #search-bar {
-	width: calc(60% - 1em);
-
-	margin: 0.5em 1em 0.5em 40%;
+	width: calc(100% - 1em);
+	margin: 0.5em 1em 0.5em 0%;
 }
 
 /**********************************************************************
@@ -376,5 +375,3 @@ a:hover {
 .comment-button:active {
 	background-color: #aaa;
 }
-
-
