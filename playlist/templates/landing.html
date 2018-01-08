@@ -9,7 +9,7 @@
 {% endblock styles %}
 
 {% block content %}
-    <div id="col-left" class="col-content">
+    <div id="playlist-list-box" class="content">
         <h1>Welcome {{dj}}!</h1>
         <h3>What playlist would you like to edit?</h3> <br>
         <span class="playlist-heading playlist-text-cell">Date</span>
@@ -28,7 +28,7 @@
         {% endfor %}
     </div>
 
-    <div id="col-right" class="button">
+    <div id="new-playlist-button" class="button">
         <a href="/playlist/new"> 
             <span class="playlist-heading">CREATE NEW PLAYLIST</span>
         </a>

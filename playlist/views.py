@@ -34,11 +34,11 @@ def landing(request):
 
     context = {
         'dj'        : dj.name,
-        'playlists' : playlists,
-        'props': {'userinfo' : userinfo}
+        'bundle'    : 'landing',
+        'props'     : {'userinfo' : userinfo, 'playlists' : playlists, 'dj' : dj.name}
     }
 
-    return render(request, "landing.html", context=context)
+    return render(request, "component.html", context=context)
 
 
 @login_required
@@ -198,6 +198,30 @@ def explore_playlist(request, playlist_id):
         'props' : {'spins': spins, 'show': showdetails, 'comments': comments, 'userinfo': userinfo},
         'bundle': 'explore-playlist',
         'title' : 'Explore Playlists: %s' % (showdetails['title'])
+    }
+
+    return render(request, "component.html", context=context)
+
+def explore_landing(request):
+    """ the main landing page for the whole darn site
+    """
+
+    userinfo = get_user_details(request)
+
+    n_recent = 20
+
+    playlists = [{
+        'id'        : playlist.id,
+        'title'     : playlist.show.name,
+        'dj'        : playlist.show.dj.all().first().name,
+        'subtitle'  : playlist.subtitle,
+        'date'      : playlist.datetime.timestamp()
+    } for playlist in Playlist.objects.all().order_by('-id')[:n_recent]]
+
+    context = {
+        'props' : {'userinfo': userinfo, 'playlists': playlists},
+        'bundle': 'explore-landing',
+        'title' : 'WPRB 103.3FM: Explore Music and Playlists'
     }
 
     return render(request, "component.html", context=context)

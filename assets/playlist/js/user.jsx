@@ -20,36 +20,41 @@ class user extends React.Component {
 
     render() {
         let panelClass = this.state.show ? "userid-panel show" : "userid-panel hidden";
-        let loginDisp = <a href="/playlist/login" className="user-link">Login</a>;
-        let djDisp;
+        let loginDependentContent = (
+            <div className="userid-panel">
+                <a href="/playlist/login" className="user-link">
+                    <span className="userid-box clickable">
+                        <span className="userid-pic"></span>
+                        <span className="userid-name">DJ Login</span>
+                    </span>
+                </a>
+            </div>
+        );
 
         if (this.props.username) {
-            loginDisp = <a href="/playlist/logout" className="user-link">Logout</a>;
-        }
+            loginDependentContent = (
+                <div className={panelClass}>
+                    <span onClick={this.toggle} className="userid-box clickable">
+                        <span className="userid-pic"></span>
+                        <span className="userid-name">{this.props.username}</span>
+                    </span>
+                    <div className="userid-menu-element">
+                        <a href="/explore" className="user-link">Explore</a>
+                    </div>
 
-        if (this.props.djName) {
-            djDisp = <a href="/playlist" className="user-link">My Playlists</a>;
+                    <div className="userid-menu-element">
+                        <a href="/playlist" className="user-link">My Playlists</a>
+                    </div>
+                    
+                    <div className="userid-menu-element">
+                        <a href="/logout">Logout</a>
+                    </div>
+                </div>
+            );
         }
 
         return (
-            <div className={panelClass}>
-                <span onClick={this.toggle} className="userid-box clickable">
-                    <span className="userid-pic"></span>
-                    <span className="userid-name">{this.props.username}</span>
-                </span>
-
-                <div className="userid-menu-element">
-                    <a href="/" className="user-link">Settings</a>
-                </div>
-
-                <div className="userid-menu-element">
-                    <a href="/explore" className="user-link">Explore</a>
-                </div>
-
-                <div className="userid-menu-element">{djDisp}</div>
-                
-                <div className="userid-menu-element">{loginDisp}</div>
-            </div>
+            loginDependentContent
         );
     }
 }
@@ -57,4 +62,4 @@ class user extends React.Component {
 ReactDOM.render(
     React.createElement(user, window.props.userinfo),
     document.getElementById('user-area'),
-)
+);

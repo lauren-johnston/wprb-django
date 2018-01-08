@@ -36,6 +36,7 @@
     "react": "^16.1.1",
     "react-autosuggest": "^9.3.2",
     "react-dom": "^16.1.1",
+    "react-select-plus": "^1.1.0",
     "react-sortable-hoc": "^0.6.8",
     "react-tag-input": "^4.7.2",
     "react-virtualized": "^9.14.1",

@@ -18,9 +18,9 @@ def search(request):
     cutoff = 5
     try:
         query = request.GET['query']
-        song_matches = Song.objects.filter(name__icontains=query)
-        artist_matches = Artist.objects.filter(name__icontains=query)
-        album_matches = Album.objects.filter(name__icontains=query)
+        song_matches = Song.objects.filter(name__icontains=query).order_by('-playcount')
+        artist_matches = Artist.objects.filter(name__icontains=query).order_by('-playcount')
+        album_matches = Album.objects.filter(name__icontains=query).order_by('-playcount')
         dj_matches = DJ.objects.filter(name__icontains=query)
         show_matches = Show.objects.filter(name__icontains=query)
         label_matches = Label.objects.filter(name__icontains=query)
@@ -33,7 +33,7 @@ def search(request):
         "artists"   : [{'name': a.name, 'id': a.id} for a in artist_matches[:cutoff]],
         "albums"    : [{'name': a.name, 'id': a.id} for a in album_matches[:cutoff]],
         "djs"       : [{'name': d.name, 'id': d.id} for d in dj_matches[:cutoff]],
-        "shows"     : [{'name': s.name, 'id': s.id} for s in show_matches[:cutoff]],
+        "shows"     : [{'name': s.name, 'id': s.dj.all().first().id} for s in show_matches[:cutoff]],
         "labels"    : [{'name': l.name, 'id': l.id} for l in label_matches[:cutoff]]
     }
 

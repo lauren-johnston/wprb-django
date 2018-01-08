@@ -8,7 +8,7 @@ export default class Charts extends React.Component {
 	}
 
 	componentDidMount() {
-		fetch(`/explore/charts?djId=${this.props.dj}`, {
+		fetch(`/explore/charts?dj=${this.props.dj}&after=${this.props.after}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -29,8 +29,7 @@ export default class Charts extends React.Component {
 
 		return (
 			<div className="chart">
-				<h2 className="chart-main-title">{`Top Charts for ${this.props.for}`}
-				</h2>
+				<h2 className="chart-main-title">{`Top Charts for ${this.props.for}`}</h2>
 				<ChartHeading title={this.state.field} />
 				<div className="chart-row-container">
 				{this.state.charts ? this.state.charts[this.state.field].map((item, index) => 

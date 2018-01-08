@@ -72,7 +72,7 @@ a:hover {
 	border-top-width: 2px;
 }
 
-.play, .play-container-header, 
+.play, .play-container-header,
 .show-list-entry, .show-container-header {
 	display: flex;
 	justify-content: space-between;
@@ -95,6 +95,7 @@ a:hover {
 
 .show-text-cell, .show-heading {
 	display: inline-block;
+	vertical-align: middle;
 }
 
 .show-title {
@@ -133,9 +134,8 @@ a:hover {
  * Search bar
  *********************************************************************/
 #search-bar {
-	width: calc(60% - 1em);
-
-	margin: 0.5em 1em 0.5em 40%;
+	width: calc(100% - 1em);
+	margin: 0.5em 1em 0.5em 0%;
 }
 
 /**********************************************************************
@@ -274,7 +274,7 @@ a:hover {
  * Details
  *********************************************************************/
 
-.details {
+.details, .now-playing {
 	background-color: rgb(42,42,42);
 	border: 2px solid #959595;
 	border-radius: 0.5em;
@@ -377,4 +377,17 @@ a:hover {
 	background-color: #aaa;
 }
 
+.now-playing-title, .now-playing-link {
+	font-style: italic;
+	text-align: center;
+	margin-bottom: 0.5em;
+}
 
+.now-playing-show {
+	color: rgb(170, 247, 205);
+	font-weight: bold;
+}
+
+.now-playing-dj {
+	color: rgb(170, 247, 205);
+}

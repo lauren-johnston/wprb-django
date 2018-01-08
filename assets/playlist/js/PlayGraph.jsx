@@ -95,7 +95,7 @@ export default class PlayGraph extends React.Component {
 					</VictoryChart>
 				</div>
 				<div className="graph-control">
-					<span style={{padding: '0.25em 0.5em'}}> Show plays per: </span>
+					<span style={{padding: '0.25em 0.5em'}}> plays per: </span>
 					<GraphToggle unit="year" />
 					<GraphToggle unit="month" />
 					<GraphToggle unit="week" />

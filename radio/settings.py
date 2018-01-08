@@ -148,3 +148,5 @@ WEBPACK_LOADER = {
 }
 
 LOGIN_URL = '/playlist/login/'
+LOGIN_REDIRECT_URL = '/playlist/'
+LOGOUT_REDIRECT_URL = '/explore/'

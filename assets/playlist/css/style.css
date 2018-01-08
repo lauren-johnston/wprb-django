@@ -22,14 +22,9 @@ h3 {
 	margin: 0;
 }
 
-a, a:visited {
-	text-decoration: none;
-	color: #fff;
-}
-
 #header {
 	top: 0;
-	height: 5%;
+	height: 3em;
 	left: 0;
 	right:0;
 	background-color: #2a2a2a
@@ -55,7 +50,7 @@ a, a:visited {
 }
 
 #content {
-	top: 10%;
+	top: 5em;
 	height: 90%;
 }
 
@@ -80,13 +75,12 @@ a, a:visited {
 }
 
 /* link settings */
-
-a:link {
-    color: white;
-    text-decoration: none;
+a, a:visited {
+	text-decoration: none;
+	color: #fff;
 }
 
-a:visited {
+a:link {
     color: white;
     text-decoration: none;
 }
@@ -99,7 +93,7 @@ a:hover {
 /* User ID Component Style */
 
 .userid-panel {
-    position: fixed;
+    position: absolute;
     top: 1em;
     right: 1em;
     width: 10em;
@@ -144,6 +138,10 @@ a:hover {
    display: inline-block;
    width: 2em;
    height: 2em;
+}
+
+.userid-menu-element {
+	padding: 0.1em;
 }
 
 /* Attempted scrollbar hacks */

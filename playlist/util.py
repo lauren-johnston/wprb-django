@@ -23,13 +23,17 @@ def invalid_array_index(array, index):
     return False
 
 def spin_to_dict(spin):
+    if spin.song.album.label is not None:
+        label = spin.song.album.label.name
+    else: label = ''
+
     return {
-        'id': spin.id,
-        'spindex': spin.index,
-        'title': spin.song.name,
-        'artist': spin.song.artist.all()[0].name,
-        'album': spin.song.album.name,
-        'label': spin.song.album.label
+        'id'        : spin.id,
+        'spindex'   : spin.index,
+        'title'     : spin.song.name,
+        'artist'    : spin.song.artist.all()[0].name,
+        'album'     : spin.song.album.name,
+        'label'     : label
     }
 
 def get_user_details(request):
@@ -38,13 +42,13 @@ def get_user_details(request):
         context = {
             'username'      : request.user.username,
             'id'            : request.user.id,
-            'dj_name'       : request.user.dj.name if request.user.dj else None
+            'djName'       : request.user.dj.name if request.user.dj else None
         }
     else:
         context = {
             'username': None,
             'id': None,
-            'dj_name': None
+            'djName': None
         }
 
     return context

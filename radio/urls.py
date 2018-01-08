@@ -19,7 +19,7 @@ from django.views.generic import RedirectView
 
 
 urlpatterns = [
-    url(r'^$', RedirectView.as_view(url='/playlist/')),
+    url(r'^$', RedirectView.as_view(url='/explore/')),
     url(r'^admin/', admin.site.urls),
     url(r'^', include('playlist.urls')),
 ]
