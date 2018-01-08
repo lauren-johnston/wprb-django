@@ -33,7 +33,7 @@ def search(request):
         "artists"   : [{'name': a.name, 'id': a.id} for a in artist_matches[:cutoff]],
         "albums"    : [{'name': a.name, 'id': a.id} for a in album_matches[:cutoff]],
         "djs"       : [{'name': d.name, 'id': d.id} for d in dj_matches[:cutoff]],
-        "shows"     : [{'name': s.name, 'id': s.id} for s in show_matches[:cutoff]],
+        "shows"     : [{'name': s.name, 'id': s.dj.all().first().id} for s in show_matches[:cutoff]],
         "labels"    : [{'name': l.name, 'id': l.id} for l in label_matches[:cutoff]]
     }
 

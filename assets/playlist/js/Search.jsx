@@ -68,7 +68,7 @@ export default class Search extends React.Component {
                                 options: results})
           }
 
-          console.log(superresults)
+          //console.log(superresults)
           this.setState({
               query: query,
               options: superresults,
@@ -82,6 +82,9 @@ export default class Search extends React.Component {
       let category = selection.selectValue.category;
       category = category.substring(0, category.length-1);
       let id = selection.selectValue.value.substring(category.length+1);
+      if (category === "show") {
+          category = "dj";
+      }
       window.location.href = `/explore/${category}/${id}/`;
   }
 
@@ -98,7 +101,7 @@ export default class Search extends React.Component {
                   valueKey={this.state.selectValue}
 
                   noResultsText = {this.state.query == "" ? "" : "No results"}
-                  placeholder="Search songs, artists, playlists, djs, shows, labels" />
+                  placeholder="Search songs, artists, djs, shows, labels" />
           </div>
       );
     }
