@@ -1,4 +1,5 @@
 import React from 'react';
+import TagBox from './TagBox.jsx'
 import { RIEInput, RIETextArea, RIETags } from 'riek';
 
 export default class PlaylistDetails extends React.Component {
@@ -35,11 +36,11 @@ export default class PlaylistDetails extends React.Component {
 		this.setState(value);
 	}
 
-	addSubgenre(identifier, value) {
+	addSubgenre(value) {
 		console.log('TRYNA ADD BROH');
-		fetch(`meta/${endpoint}/`, {
+		fetch(`meta/addSubgenre/`, {
 			method: "PUT",
-			body: JSON.stringify(value),
+			body: JSON.stringify({subgenre: value}),
 			headers: {
 				"Content-Type": "application/json",
 				"Accept": "application/json"
@@ -49,10 +50,10 @@ export default class PlaylistDetails extends React.Component {
 		});
 	}
 
-	deleteSubgenre(identifier, value) {
-		fetch(`meta/${endpoint}/`, {
-			method: "PUT",
-			body: JSON.stringify(value),
+	delSubgenre(value) {
+		fetch(`meta/delSubgenre/`, {
+			method: "DELETE",
+			body: JSON.stringify({subgenre:value}),
 			headers: {
 				"Content-Type": "application/json",
 				"Accept": "application/json"
@@ -100,10 +101,14 @@ export default class PlaylistDetails extends React.Component {
 				<div className="show-subgenre show-section">
 					<div className="genre-heading">Sub-genres</div>
 					<div className="section-title-underline"></div>
-					<RIETags
-						value={this.state.subgenre || ['add some subgenres!',]}
-						change={this.addSubgenre}
-						propName="subgenre" />
+					<TagBox 
+						tags={this.state.subgenre}
+						type="sub-genre"
+						inputId="subgenre-input"
+						placeholder="Add a tag!"
+						allownone="True"
+						addTag={this.addSubgenre}
+						delTag={this.delSubgenre} />
 				</div>
 			</div>
 		);

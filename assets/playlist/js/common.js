@@ -23,11 +23,6 @@ export function formDict(form) {
     return dict;
 }
 
-export function setGlobalStyles() {
-    document.getElementById('col-right').style.width = 
-    `calc(${window.innerWidth}px - 200px - 1em`;
-}
-
 /** 
  * Return a cookie by name
  */

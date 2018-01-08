@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { WithContext as ReactTags } from 'react-tag-input';
 
-import { smartComplete } from './async.jsx';
-import { tagArrayFromArray }  from './common.jsx';
+import { tagArrayFromArray }  from './common.js';
 
+// Expects tags, type, inputId, placeholder, allownone, addTag, delTag 
 export default class TagBox extends React.Component {
 	constructor(props) {
 		super(props)
@@ -33,8 +33,6 @@ export default class TagBox extends React.Component {
 		this.startMouseOut  = this.startMouseOut.bind(this);
 		this.updateSuggestions = this.updateSuggestions.bind(this);
 		this.componentDidMount = this.componentDidMount.bind(this);
-
-        console.log('hello momma');
 	}
 
 
@@ -158,7 +156,7 @@ export default class TagBox extends React.Component {
 
 		return (
 			<div className="tagbox">
-				<ReactTags tags={tags}
+				<ReactTags tags={[{id: 1, text:'Write a subgenre!'},]}
 						id={this.props.inputId || ''}
 	                    suggestions={suggestions}
 	                    classNames={classNames} 
