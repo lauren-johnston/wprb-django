@@ -1,16 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Select from 'react-select';
+//import Select from 'react-select';
 
-import 'react-select/dist/react-select.css';
-import 'react-virtualized/styles.css';
-import 'react-virtualized-select/styles.css';
+//import Select from 'react-virtualized-select'
+import Select from 'react-select-plus';
+import 'react-select-plus/dist/react-select-plus.css';
+//import 'react-select/dist/react-select.css';
+//import 'react-virtualized/styles.css';
+//import 'react-virtualized-select/styles.css';
 
 export default class Search extends React.Component {
     constructor (props) {
         super(props)
         this.displayOrder = ['songs', 'artists', 'albums', 'djs', 'shows', 'labels'];
-        this.myWidth = 300;
         this.state = {
             query: '',
             options: [],
@@ -22,7 +24,15 @@ export default class Search extends React.Component {
 
   makeQuery(query) {
       // don't search on empty query
-      if (query == '') return
+      this.state.query = query
+      if (query.length < 1) {
+          this.setState({
+              query: query,
+              options: [],
+              redirect: false
+          })
+          return;}
+
       // make ajax request
       fetch('/playlist/search/?query=' + query, {
           method: "GET",
@@ -35,12 +45,11 @@ export default class Search extends React.Component {
       }).then(response => {
           return response.json();
       }).then(data => {
-          let results = [];
-          //results.append(data['songs'].slice(0:2)['name'])
-          //this.setState({options: [], query: query})
-          //console.log(this.state.options)
+          let superresults = [];
 
           for (let i = 0; i < this.displayOrder.length; i++) {
+
+              let results = [];
               let category = this.displayOrder[i]
               let upperBound = 3;
               if (data[category].length < 3) {
@@ -50,44 +59,47 @@ export default class Search extends React.Component {
               for (let j = 0; j < upperBound; j++) {
                   results.push({
                       label: data[category][j]['name'],
-                      value: data[category][j]['id'],
-                      category: category});
+                      value: category + data[category][j]['id'],
+                      category: category}
+                      );
               }
+              superresults.push({label: category,
+                                value: category,
+                                options: results})
           }
 
+          console.log(superresults)
           this.setState({
               query: query,
-              options: results,
+              options: superresults,
               redirect: false
           });
       });
   }
 
   explore(selection) {
-      console.log(selection);
 
       let category = selection.selectValue.category;
       category = category.substring(0, category.length-1);
-      let id = selection.selectValue.value;
+      let id = selection.selectValue.value.substring(category.length+1);
       window.location.href = `/explore/${category}/${id}/`;
   }
 
   render () {
-      // const styles = {
-      //     //display: 'inline-block',
-      //     width: this.myWidth
-      // };
+
+      //value={this.state.selectValue}
 
       return (
           <div id="search-bar" >
               <Select
                   options={this.state.options}
                   onChange={(selectValue) => this.explore({selectValue})}
-                  onInputChange={(selectValue) => this.makeQuery(selectValue)}
-                  value={this.state.selectValue}
-                  placeholder="Search" />
+                  onInputChange={(selectValue) => {this.makeQuery(selectValue)}}
+                  valueKey={this.state.selectValue}
+
+                  noResultsText = {this.state.query == "" ? "" : "No results"}
+                  placeholder="Search songs, artists, playlists, djs, shows, labels" />
           </div>
       );
     }
 }
-
