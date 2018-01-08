@@ -1,5 +1,6 @@
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
+import debounce from 'debounce';
 
 const match = require('autosuggest-highlight/match');
 const parse = require('autosuggest-highlight/parse');
@@ -108,32 +109,28 @@ class PlaylistEntryFormInput extends React.Component {
     // Autosuggest will call this function every time you need to update suggestions.
     // You already implemented this logic above, so just use it.
     onSuggestionsFetchRequested({ value }) {
-        if (value.length === 0) {
+        if (value.length == 0 || value.length < 3) {
             this.setState({suggestions: []});
             return;
         }
 
-        /****************************************************************************************
-         * NOTE:
-         *     we could totally make this more clever and not send a request to the server
-         *     every single time.  After the first request, we could just filter on the original
-         *     list of stuff??  Somehow just keep track of what the characters used for that search
-         *     were and only research if the root changes
-
-         ** ALSO: we should debounce this function to save spazzing out when someone types fast
-         ***************************************************************************************/
-
-        fetch(`entry/complete/?identifier=${this.props.identifier}&value=${value}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-        }).then(response => response.json()).then(data => {
-            if (data.ok) {
-                this.setState({suggestions: data.suggestions})
-            }
-        });
+        debounce(f => {
+            if(value.substring(0, 3) == this.props.value.substring(0, 3))
+                this.setState(state => {
+                    return {suggestions: state.suggestions.filter(s => s.startsWith(value))}
+                });
+            else 
+                fetch(`entry/complete/?identifier=${this.props.identifier}&value=${value}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                }).then(response => response.json()).then(data => {
+                    if (data.ok) 
+                        this.setState({suggestions: data.suggestions})
+                });
+        }, 100);
     };
 
     // Autosuggest will call this function every time you need to clear suggestions.
