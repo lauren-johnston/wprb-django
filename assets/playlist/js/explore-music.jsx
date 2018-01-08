@@ -14,7 +14,7 @@ class ExploreMusicPage extends React.Component {
 		// Get artist if applicable
 		let by = '';
 		if (this.props.field === 'song' || this.props.field === 'album')
-			by = ` by ${this.props.spins[0].artist}`;
+			by = this.props.spins.length ? ` by ${this.props.spins[0].artist}` : null;
 
 		let details = {
 			title: this.props.title,
