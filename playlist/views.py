@@ -203,19 +203,23 @@ def explore_playlist(request, playlist_id):
     return render(request, "component.html", context=context)
 
 def explore_landing(request):
-    """ 
+    """ the main landing page for the whole darn site
     """
+
     userinfo = get_user_details(request)
 
-    playlists = sorted([{
+    n_recent = 20
+
+    playlists = [{
         'id'        : playlist.id,
         'title'     : playlist.show.name,
+        'dj'        : playlist.show.dj.all().first().name,
         'subtitle'  : playlist.subtitle,
         'date'      : playlist.datetime.timestamp()
-    } for playlist in Playlist.objects.filter(show__dj=dj)], key=lambda x: x['id'], reverse=True)   
+    } for playlist in Playlist.objects.all().order_by('-id')[:n_recent]]
 
     context = {
-        'props' : {'userinfo': userinfo},
+        'props' : {'userinfo': userinfo, 'playlists': playlists},
         'bundle': 'explore-landing',
         'title' : 'WPRB 103.3FM: Explore Music and Playlists'
     }

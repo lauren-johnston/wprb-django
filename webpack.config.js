@@ -9,11 +9,12 @@ module.exports = {
   // entry means "entry-point"
   entry: {
     // bundle name: location
-    'playlist': './assets/playlist/js/playlist',
-    'explore-music': './assets/playlist/js/explore-music',
+    'playlist'        : './assets/playlist/js/playlist',
+    'explore-landing' : './assets/playlist/js/explore-landing',
+    'explore-music'   : './assets/playlist/js/explore-music',
     'explore-playlist': './assets/playlist/js/explore-playlist',
-    'explore-dj': './assets/playlist/js/explore-dj',
-    'user': './assets/playlist/js/user',
+    'explore-dj'      : './assets/playlist/js/explore-dj',
+    'user'            : './assets/playlist/js/user',
   },
 
   output: {

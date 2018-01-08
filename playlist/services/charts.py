@@ -5,6 +5,7 @@ Charts services
 from django.http import JsonResponse
 from playlist.models import DJ, Playlist, Spin
 
+from datetime import datetime
 import json
 
 def charts(request):
@@ -20,12 +21,15 @@ def charts(request):
     except (TypeError, ValueError):
         pass
 
+
     # Filter by timestamp
-    try:       
+    try:
         queryset = queryset.filter(
-            playlist__datetime__gte=int(request.GET['after']))
+            playlist__datetime__gte=datetime.fromtimestamp(int(request.GET['after'])))
     except (TypeError, ValueError):
         pass
+
+    print(datetime.fromtimestamp(int(request.GET['after'])))
 
     # Compute charts
     charts = charts_from_queryset(queryset)
