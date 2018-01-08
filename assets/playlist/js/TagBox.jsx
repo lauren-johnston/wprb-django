@@ -127,9 +127,27 @@ export default class TagBox extends React.Component {
     	setTimeout(f => {document.getElementById(id).focus()}, 0);
     }
 
-    async updateSuggestions(value) {
-    	
-        this.setState({suggestions: suggestions});
+    updateSuggestions(value) {
+    	if (value.length == 0 || value.length < 3) {
+            this.setState({suggestions: []});
+            return;
+        }
+
+        if(value.substring(0, 3) == this.prevSearch.value.substring(0, 3))
+            this.setState(state => {
+                return {suggestions: state.suggestions.filter(s => s.startsWith(value))}
+            });
+        else 
+            fetch(`entry/complete/?identifier=${this.props.type}&value=${value}`)
+                .then(response => response.json())
+                .then(json => {
+                    if (json.ok) {
+                        this.setState({
+                            suggestions: data.suggestions,
+                            prevSearch: value
+                        })
+                    }
+                });
     }
 
 	render() {

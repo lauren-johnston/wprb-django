@@ -114,23 +114,21 @@ class PlaylistEntryFormInput extends React.Component {
             return;
         }
 
-        debounce(f => {
-            if(value.substring(0, 3) == this.props.value.substring(0, 3))
-                this.setState(state => {
-                    return {suggestions: state.suggestions.filter(s => s.startsWith(value))}
-                });
-            else 
-                fetch(`entry/complete/?identifier=${this.props.identifier}&value=${value}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    },
-                }).then(response => response.json()).then(data => {
-                    if (data.ok) 
-                        this.setState({suggestions: data.suggestions})
-                });
-        }, 100);
+        if(value.substring(0, 3) == this.props.value.substring(0, 3))
+            this.setState(state => {
+                return {suggestions: state.suggestions.filter(s => s.startsWith(value))}
+            });
+        else 
+            fetch(`entry/complete/?identifier=${this.props.identifier}&value=${value}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+            }).then(response => response.json()).then(data => {
+                if (data.ok) 
+                    this.setState({suggestions: data.suggestions})
+        });
     };
 
     // Autosuggest will call this function every time you need to clear suggestions.
@@ -160,7 +158,7 @@ class PlaylistEntryFormInput extends React.Component {
                 <Autosuggest
                     id={this.props.identifier}
                     suggestions={suggestions}
-                    onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                    onSuggestionsFetchRequested={debounce(this.onSuggestionsFetchRequested, 100)}
                     onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                     shouldRenderSuggestions={this.shouldRenderSuggestions}
                     getSuggestionValue={s => s.song || s}
