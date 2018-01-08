@@ -104,7 +104,7 @@ export default class PlaylistDetails extends React.Component {
 				<div className="section-title-underline"></div>
 					<div className="show-desc-text">
 						<RIETextArea
-							value={this.state.desc}
+							value={this.state.desc || 'write your own description!'}
 							change={this.update}
 							propName="desc" />
 					</div>
@@ -113,16 +113,15 @@ export default class PlaylistDetails extends React.Component {
 					<div className="genre-heading">Genre</div>
 					<div className="section-title-underline"></div>
 						<RIEInput
-							value={this.state.genre}
+							value={this.state.genre || 'write your own genre!'}
 							change={this.update} 
 							propName="genre" />
 					</div>
 				<div className="show-subgenre show-section">
 					<div className="genre-heading">Sub-genres</div>
 					<div className="section-title-underline"></div>
-					{/*<div className="subgenre-add-button">ADD</div>*/}
 					<RIETags
-						value={this.state.subgenre}
+						value={this.state.subgenre || ['add some subgenres!',]}
 						change={this.addSubgenre}
 						propName="subgenre" />
 				</div>
