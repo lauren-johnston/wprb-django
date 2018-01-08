@@ -17,61 +17,135 @@ a:hover {
     text-decoration: none;
 }
 
-#col-left {
+
+/**********************************************************************
+ * Styles for Welcome Box
+ *********************************************************************/
+#welcome-box {
     position: absolute;
-    top: 20;
-    left: 15%;
-    width: 45%;
+    top: 3.5em;
+    left: 5%;
+    width: 22em;
+    height: 3em;
+
+    background-color: rgb(42, 42, 42);
+    border: 2px solid #959595;
+    border-radius: 0.15em;
+
+    margin: 0 0.5em 1em 1em;
+    padding: 1em;
 }
 
-#col-right {
-    position: absolute;
-    left: 65%;
-    top: 40;
+.welcome-text-dj {
+    font-size: 1.5em;
+    /*margin: 0 0.5em 1em 1em;*/
+}
+.welcome-text-prompt {
+    font-size: 1.2em;
+    /*margin: 0.5em 0.5em 1em 1em;*/
 }
 
-.playlist-heading {
+/**********************************************************************
+ * Styles for Show Container
+ *********************************************************************/
+
+#playlist-list-box {
+    position: absolute;
+    top: 10em;
+    left: 5%;
+    width: 90%;
+}
+
+.play-container, .show-container {
+    background-color: rgb(42, 42, 42);
+    border: 2px solid #959595;
+    border-radius: 0.15em;
+
+    margin: 0 0.5em 1em 1em;
+    width: calc(100% - 3em);
+    padding: 0.5em;
+
+    max-height: calc(80% - 2em);
+}
+
+.plays, .shows {
+    max-height: calc(60vh - 3em);
+    overflow: auto;
+}
+
+.play-container-header > .play-field, .show-heading {
     font-size: 1.2em;
     font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    color: rgb(170, 247, 205);
+    cursor: auto;
 }
 
-.playlist-text-cell {
-    display: inline-block;
-    width: calc(30% - .2em);
-}
 
-.playlist-item {
-    position: relative;
-    padding: 0.2em;
-    width: 100%;
-    border-top: 1px solid #959595;
-}
-
-.list-entry {
-    margin-top: 0.1em;
-    padding-top: 0.1em;
-    border-top: 1px solid #959595;
-}
-
-.col-content {
-    margin: 1em;
-    padding: 1em;
-    border-radius: 0.15em;
+.section-title-underline {
+    font-size: 0.8em;
     border-style: solid;
-    border-width: 2px;
-    border-color: #959595;
-    background-color: #2a2a2a;
+    border-radius: 0.2em;
+    border-top-color: white;
+    border-top-width: 2px;
+}
 
-    height: 20em;
-    overflow-y: scroll;
+.play, .play-container-header,
+.show-list-entry, .show-container-header {
+    display: flex;
+    justify-content: space-between;
+
+    border-bottom: 1px solid rgba(255,255,255, 0.1);
+    padding: 0.1em 0;
+}
+
+.show-list-entry, .show-container-header {
+    padding: 0.2em 0;
+}
+
+.show-list-entry:hover {
+    background-color: #424242;
+}
+
+.playlist-link {
+    width: 100%;
+}
+
+.show-text-cell, .show-heading {
+    display: inline-block;
+}
+
+.show-title {
+    width: 30%;
+}
+
+.show-date {
+    width: 35%;
+}
+
+.show-subtitle {
+    width: 35%;
+}
+
+
+/**********************************************************************
+ * Styles for Create New Show Button
+ *********************************************************************/
+
+#new-playlist-button {
+    position: absolute;
+    left: 50%;
+    top: 4.25em;
+    width: 13em;
 }
 
 .button {
     padding: 1em 1.5em 1em 1.5em;
-    border-radius: 2em;
-    border-style: solid;
-    border-width: 2px;
-    border-color: #959595;
+    border-radius: 0.25em;
+    border: 1px solid #fff;
     background-color: #2a2a2a;
 }
 
+.button-text {
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-size: 1.2em;
+}

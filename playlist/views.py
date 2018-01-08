@@ -34,11 +34,11 @@ def landing(request):
 
     context = {
         'dj'        : dj.name,
-        'playlists' : playlists,
-        'props': {'userinfo' : userinfo}
+        'bundle'    : 'landing',
+        'props'     : {'userinfo' : userinfo, 'playlists' : playlists, 'dj' : dj.name}
     }
 
-    return render(request, "landing.html", context=context)
+    return render(request, "component.html", context=context)
 
 
 @login_required

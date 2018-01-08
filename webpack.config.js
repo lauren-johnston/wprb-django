@@ -14,6 +14,7 @@ module.exports = {
     'explore-playlist': './assets/playlist/js/explore-playlist',
     'explore-dj': './assets/playlist/js/explore-dj',
     'user': './assets/playlist/js/user',
+    'landing': './assets/playlist/js/landing',
   },
 
   output: {
