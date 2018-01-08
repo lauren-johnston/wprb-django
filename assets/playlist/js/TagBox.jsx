@@ -32,23 +32,6 @@ export default class TagBox extends React.Component {
 		this.startMouseOver = this.startMouseOver.bind(this);
 		this.startMouseOut  = this.startMouseOut.bind(this);
 		this.updateSuggestions = this.updateSuggestions.bind(this);
-		this.componentDidMount = this.componentDidMount.bind(this);
-	}
-
-
-	// A total hack to gain control over a very tough style issue 
-	// without cracking open the box on react-tag-input
-	componentDidMount() {
-		let input = document.getElementById(this.props.inputId);
-		input.insertAdjacentHTML('afterend',
-			`<div class="ReactTags__tagInputExitButton clickable"
-			      id="exit-button-for-${this.props.inputId}" />`);
-		input.style.width = '90%';
-		input.style['max-width'] = '130px';
-
-		let tagbox = this;
-		let exitButton = document.getElementById(`exit-button-for-${this.props.inputId}`);
-		exitButton.addEventListener('click', f => tagbox.toggleEditing());
 	}
 
     handleDelete(i) {
@@ -65,7 +48,7 @@ export default class TagBox extends React.Component {
  
     handleAddition(tag) {
         let tags = this.state.tags;
-        if(tags.map(t => t.text).includes(tag)) return;
+        if(tags.map(t => t.text).includes(tag)) return this.toggleEditing();
 
         tags.push({
             id: tags.length + 1,
@@ -107,13 +90,12 @@ export default class TagBox extends React.Component {
     	if(this.state.editing) {
     		classes['tagInput'] = 'ReactTags__tagInput';
     		classes['tagInputField'] = 'ReactTags__tagInputField';
-    		setTimeout(f => {document.getElementById(id).value = ''}, 0);
+            setTimeout(f => {document.getElementById(this.props.inputId).value = ''}, 0);
     	} else {
     		classes['tagInput'] = 'ReactTags__tagInputEditing';
     		classes['tagInputField'] = 'ReactTags__tagInputFieldEditing';
     	}
 
-    	
     	this.setState(state => {
     		return { classNames: classes,
     				 editing: !state.editing }
@@ -153,25 +135,35 @@ export default class TagBox extends React.Component {
 	render() {
 		const { tags, suggestions, classNames, editing } = this.state;
 		const adjElement = editing? '' : 'tag-plus clickable';
-        const trueTags = (tags.length == 0? [{id:0, text: 'add a tag!'},] : tags)
-		return (
-			<div className="tagbox">
-				<ReactTags tags={trueTags}
-						id={this.props.inputId || ''}
-	                    suggestions={suggestions}
-	                    classNames={classNames} 
-	      				placeholder={this.props.placeholder}
-	      				onMouseOver={this.startMouseOver}
-	      				onMouseOut={this.startMouseOut}
-	      				handleInputChange={this.updateSuggestions}
-	                    handleDelete={this.handleDelete}
-	                    handleAddition={this.handleAddition}
-	                    handleDrag={this.handleDrag}
-	                    allowDeleteFromEmptyInput={false}
-	                    />
-	           	<div className={adjElement}
-	           		 onClick={this.toggleEditing} />
-	       </div>
+        const notags = (tags.length == 0 && !editing);
+        const notagsElement = (
+                <div className="tagbox">
+                    <div className="clickable"
+                         onClick={this.toggleEditing}>
+                        {"Add a tag!"}
+                    </div>
+                </div>
             );
+		return (
+            <div className = "tagbox">
+                <div style={notags? {display:'none'}:{}} >
+                    <ReactTags tags={tags}
+                        id={this.props.inputId || ''}
+                        suggestions={suggestions}
+                        classNames={classNames} 
+                        placeholder={this.props.placeholder}
+                        onMouseOver={this.startMouseOver}
+                        onMouseOut={this.startMouseOut}
+                        handleInputChange={this.updateSuggestions}
+                        handleDelete={this.handleDelete}
+                        handleAddition={this.handleAddition}
+                        handleDrag={this.handleDrag}
+                        allowDeleteFromEmptyInput={false} />
+                    <div className={adjElement}
+                        onClick={this.toggleEditing} />
+                </div>
+                {notags? notagsElement : ''}
+            </div>
+        );
 	}
 }

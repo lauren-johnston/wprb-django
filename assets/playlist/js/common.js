@@ -23,6 +23,19 @@ export function formDict(form) {
     return dict;
 }
 
+export function autocompleteFilter(array, value, type) {
+    const name = (type == 'title'? 'song': type);
+    return array.filter(element => {
+        if(typeof element == undefined) 
+            return false;
+        if(typeof element == 'string') 
+            return element.toUpperCase().startsWith(value.toUpperCase());
+        if(element[name] && typeof element[name] == 'string')
+            return element[name].toUpperCase().startsWith(value.toUpperCase());
+        return false;
+    })
+}
+
 /** 
  * Return a cookie by name
  */

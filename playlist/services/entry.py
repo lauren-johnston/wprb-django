@@ -23,15 +23,16 @@ def add(request, playlist_id):
 		at the position specified by index. 
 	"""
 	print('Add received...')
-	print(request.POST)
-	
+	print(json.loads(request.body))
+	args = json.loads(request.body)
+
 	try:
 		playlist    = Playlist.objects.get(pk=playlist_id)
 		spins       = Spin.objects.filter(playlist__pk=playlist_id)
-		song_title  = request.POST['title']
-		artist_name = request.POST['artist']
-		album_name  = request.POST['album']
-		label_name  = request.POST['label']
+		song_title  = args['title']
+		artist_name = args['artist']
+		album_name  = args['album']
+		label_name  = args['label']
 		spin_index  = spins.count() + 1
 	except Playlist.DoesNotExist:
 		return error('Invalid URI')
@@ -179,7 +180,8 @@ def delete(request, playlist_id):
 def update(request, playlist_id):
 	""" Updates the specified entry with provided basic spin dict 
 	"""
-
+	print('Update received...')
+	print(json.loads(request.body))
 	args = json.loads(request.body)
 
 	try: 
@@ -190,8 +192,8 @@ def update(request, playlist_id):
 		return error('No matching spin')
 
 	try:
-		artist, album, song = get_or_create(args['artist'], args['album'], args['title'])
-	except KeyError:
+		artist, album, song, label = get_or_create(args['artist'], args['album'], args['title'])
+	except (KeyError, ValueError):
 		return error('Invalid request')
 
 	spin.song = song

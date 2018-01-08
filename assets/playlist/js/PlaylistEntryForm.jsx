@@ -2,6 +2,8 @@ import React from 'react';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'debounce';
 
+import {autocompleteFilter, formDict} from './common.js'
+
 const match = require('autosuggest-highlight/match');
 const parse = require('autosuggest-highlight/parse');
 
@@ -9,45 +11,43 @@ export default class PlaylistEntryForm extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            title: '',
-            artist: '',
-            album: '',
-            label: ''
-        };
-
+        this.inputs = {};
         this.submit = this.submit.bind(this);
     }
 
     submit() {
-        let form = document.forms['add-form'].elements;
+        let form = document.forms['add-form']
+        let inputs = form.elements;
         let requiredFields = ['title', 'artist', 'album'];
         for(let field of requiredFields) { 
-            if(!form[field].value) 
+            if(!inputs[field].value) 
                 return document.getElementById(`add-form-${field}`).focus(); 
         }
 
+        let reactForm = this;
         fetch('entry/add/', {
             method: "POST",
-            body: new FormData(form)
+            body: JSON.stringify(formDict(form))
         }).then(response => response.json()).then(json => {
             console.log(json);
             if (json.ok) {
                 this.props.addSpinToView(json.spin);
-                this.setState((state) => {
-                    return {
-                        title: '',
-                        artist: '',
-                        album: '',
-                        label: ''
-                    }
-                });
+                for(let input in this.inputs) {
+                    this.inputs[input].setState({
+                        value: '',
+                        suggestions: [],
+                        cachedSuggestions: [],
+                        prevSearch: ''
+                    });
+                }
             }
         });
 
     }
 
     render() {
+        let inputs = this.inputs;
+
         return (
             <form className="entry-add-form" name='add-form' id="add-form">
                 <div className="spin" id="new-entry">
@@ -56,27 +56,31 @@ export default class PlaylistEntryForm extends React.Component {
                     <PlaylistEntryFormInput
                         identifier="title"
                         placeholder="song title"
-                        value={this.state.title}
+                        value={''}
                         submit={this.submit}
-                        autoFocus={true} />
+                        autoFocus={true}
+                        ref={el => this.inputs['title'] = el} />
                     <PlaylistEntryFormInput
                         identifier="artist"
                         placeholder="artist"
-                        value={this.state.artist}
+                        value={''}
                         submit={this.submit}
-                        autoFocus={false}  />
+                        autoFocus={false}
+                        ref={el => this.inputs['artist'] = el}  />
                     <PlaylistEntryFormInput
                         identifier="album"
                         placeholder="album"
-                        value={this.state.album}
+                        value={''}
                         submit={this.submit}
-                        autoFocus={false} />
+                        autoFocus={false} 
+                        ref={el => this.inputs['album'] = el}/>
                     <PlaylistEntryFormInput
                         identifier="label"
                         placeholder="record label"
-                        value={this.state.label}
+                        value={''}
                         submit={this.submit}
-                        autoFocus={false} />
+                        autoFocus={false}
+                        ref={el => this.inputs['label'] = el} />
                     <div onClick={this.submit} className="playlist-plus clickable" id="add-entry-button"/>
                 </div>
             </form>
@@ -90,7 +94,9 @@ class PlaylistEntryFormInput extends React.Component {
         super(props);
         this.state = {
             value: this.props.value,
-            suggestions: []
+            suggestions: [],
+            cachedSuggestions: [],
+            prevSearch: ''
         };
 
         this.onChange = this.onChange.bind(this);
@@ -102,11 +108,7 @@ class PlaylistEntryFormInput extends React.Component {
     }
 
     handleKeyUp(evt) {
-        // TODO: Validate that song/album/artist has all been entered.
-        // IF NOT, then tab to the next empty input box, and maybe highlight it red or something?
-        //      Probs just iterate through form.input, if form.input[i].value === '', form.input[i].focus()
-        if (evt.key == 'Enter')
-            this.props.submit();
+         if (evt.key == 'Enter') this.props.submit();
     }
 
     onChange(evt, {newValue}) {
@@ -121,11 +123,14 @@ class PlaylistEntryFormInput extends React.Component {
             return;
         }
 
-        if(value.substring(0, 3) == this.props.value.substring(0, 3))
+        if(value.substring(0, 3) == this.state.prevSearch.substring(0, 3)) {
             this.setState(state => {
-                return {suggestions: state.suggestions.filter(s => s.startsWith(value))}
+                return ({
+                    suggestions: autocompleteFilter(state.cachedSuggestions, value, this.props.identifier)
+                })
             });
-        else 
+        }
+        else  {
             fetch(`entry/complete/?identifier=${this.props.identifier}&value=${value}`, {
                 method: "GET",
                 headers: {
@@ -134,8 +139,13 @@ class PlaylistEntryFormInput extends React.Component {
                 },
             }).then(response => response.json()).then(data => {
                 if (data.ok) 
-                    this.setState({suggestions: data.suggestions})
-        });
+                    this.setState({
+                        suggestions: data.suggestions,
+                        cachedSuggestions: data.suggestions,
+                        prevSearch: value
+                    })
+            });
+        }
     };
 
     // Autosuggest will call this function every time you need to clear suggestions.
@@ -153,6 +163,7 @@ class PlaylistEntryFormInput extends React.Component {
         const {value, suggestions} = this.state;
 
         const inputProps = {
+            id: `add-form-${this.props.identifier}`,
             name: this.props.identifier,
             value: value || '',
             placeholder: this.props.placeholder,
@@ -168,12 +179,27 @@ class PlaylistEntryFormInput extends React.Component {
                     onSuggestionsFetchRequested={debounce(this.onSuggestionsFetchRequested, 100)}
                     onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                     shouldRenderSuggestions={this.shouldRenderSuggestions}
-                    getSuggestionValue={s => s.song || s}
+                    getSuggestionValue={s => getSuggestionValue(s, this.props.identifier)}
                     renderSuggestion={renderSuggestion}
                     inputProps={inputProps} />
             </div>
         );
     }
+}
+
+/* On selection of a suggestion, we call this */
+const getSuggestionValue = (s, type) => {
+    if(!s.song) return s;   
+
+    let fields = ['title', 'artist', 'album', 'label'];
+    fields.splice(fields.indexOf(type), 1);
+
+    for(let field of fields) {
+        let name = (field == 'title'? 'song': field);
+        document.getElementById(`add-form-${field}`).value = s[name] || '';
+    }
+
+    return s.song;
 }
 
 /**
