@@ -22,6 +22,9 @@ def add(request, playlist_id):
 		album, and label to the playlist specified by the playlist_id 
 		at the position specified by index. 
 	"""
+	print('Add received...')
+	print(request.POST)
+	
 	try:
 		playlist    = Playlist.objects.get(pk=playlist_id)
 		spins       = Spin.objects.filter(playlist__pk=playlist_id)

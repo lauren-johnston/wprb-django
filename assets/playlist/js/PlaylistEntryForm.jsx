@@ -20,9 +20,16 @@ export default class PlaylistEntryForm extends React.Component {
     }
 
     submit() {
+        let form = document.forms['add-form'].elements;
+        let requiredFields = ['title', 'artist', 'album'];
+        for(let field of requiredFields) { 
+            if(!form[field].value) 
+                return document.getElementById(`add-form-${field}`).focus(); 
+        }
+
         fetch('entry/add/', {
             method: "POST",
-            body: new FormData(document.getElementById("add-form"))
+            body: new FormData(form)
         }).then(response => response.json()).then(json => {
             console.log(json);
             if (json.ok) {
