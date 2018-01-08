@@ -62,26 +62,6 @@ export default class PlaylistDetails extends React.Component {
 		});
 	}
 
-	renderDJs() {
-		// return this.state.djs.map( (dj, index) => (
-		// 	<POOP
-		// 		key={dj} 
-		// 		value={dj}
-		// 		identifier={index}
-		// 		handleInput={this.updateDJ} />
-		// ));
-	}
-
-	renderSubgenres() {
-		// return this.props.subgenre.map( (subgenre, index) => (
-		// 	<PooP
-		// 		key={subgenre}
-		// 		value={subgenre}
-		// 		identifier={index}
-		// 		handleInput={this.updateSubgenre} />
-		// ));
-	}
-
 	render() {
 		return (
 			<div id="show" className="col-content">

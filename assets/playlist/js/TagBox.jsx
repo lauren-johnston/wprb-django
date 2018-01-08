@@ -33,6 +33,8 @@ export default class TagBox extends React.Component {
 		this.startMouseOut  = this.startMouseOut.bind(this);
 		this.updateSuggestions = this.updateSuggestions.bind(this);
 		this.componentDidMount = this.componentDidMount.bind(this);
+
+        console.log('hello momma');
 	}
 
 

@@ -5,6 +5,30 @@
 //------------------------------------------------------------------
 
 /** 
+*   A helper function to transform String arrays
+*   into arrays usable by the TagBox component.
+*/
+export function tagArrayFromArray(array) {
+    if(!array) return [];
+
+    let newArray = [];
+    Array.from(array).forEach((entry, index) => 
+        newArray.push({id: index, text:entry}));
+    return newArray;
+}
+
+export function formDict(form) {
+    let dict = {};
+    Array.from(form.elements).forEach(el => dict[el.name] = el.value);
+    return dict;
+}
+
+export function setGlobalStyles() {
+    document.getElementById('col-right').style.width = 
+    `calc(${window.innerWidth}px - 200px - 1em`;
+}
+
+/** 
  * Return a cookie by name
  */
 function getCookie(name) {
@@ -30,3 +54,14 @@ function csrfSafeMethod(method) {
    // these HTTP methods do not require CSRF protection
    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
+
+
+
+//----------------------------------------------------------------------
+
+// function invalidFormException(message) {
+// 	return {
+// 		name: "Invalid Form Error",
+// 		message: message
+// 	}
+// };
