@@ -25,6 +25,7 @@ app_name = 'playlist'
 urlpatterns = [
 	# Explore View
 	url(r'^explore/', include([
+		url(r'^$', views.explore_landing, name='home'),
 		url(r'^(?P<field>[a-zA-Z]+)/(?P<field_id>[0-9]+)/$', views.explore, name='explore'),
 		url(r'^charts/$', charts.charts, name='charts'),
 	])),

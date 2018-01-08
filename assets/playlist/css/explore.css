@@ -95,6 +95,7 @@ a:hover {
 
 .show-text-cell, .show-heading {
 	display: inline-block;
+	vertical-align: middle;
 }
 
 .show-title {
@@ -273,7 +274,7 @@ a:hover {
  * Details
  *********************************************************************/
 
-.details {
+.details, .now-playing {
 	background-color: rgb(42,42,42);
 	border: 2px solid #959595;
 	border-radius: 0.5em;
@@ -374,4 +375,19 @@ a:hover {
 
 .comment-button:active {
 	background-color: #aaa;
+}
+
+.now-playing-title, .now-playing-link {
+	font-style: italic;
+	text-align: center;
+	margin-bottom: 0.5em;
+}
+
+.now-playing-show {
+	color: rgb(170, 247, 205);
+	font-weight: bold;
+}
+
+.now-playing-dj {
+	color: rgb(170, 247, 205);
 }

@@ -57,4 +57,4 @@ class user extends React.Component {
 ReactDOM.render(
     React.createElement(user, window.props.userinfo),
     document.getElementById('user-area'),
-)
+);
