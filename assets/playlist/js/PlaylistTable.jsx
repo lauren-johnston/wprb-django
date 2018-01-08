@@ -198,26 +198,38 @@ class PlaylistEntry extends React.Component {
 			<div className="spin">
 				<DragHandle />
 				<div className="playlist-numbering"> {this.props.spindex} </div>
-				<RIEInput
-					className="playlist-text-cell"
-					propName='title'
-					value={this.props.title}
-					change={this.props.update} />
-				<RIEInput
-					className="playlist-text-cell"
-					propName='artist'
-					value={this.props.artist}
-					change={this.props.update} />
-				<RIEInput
-					className="playlist-text-cell"
-					propName='album'
-					value={this.props.album}
-					change={this.props.update} />
-				<RIEInput
-					className="playlist-text-cell"
-					propName='label'
-					value={this.props.label}
-					change={this.props.update} />
+				<span className="playlist-text-cell">
+					<span className="playlist-text editable clickable">
+						<RIEInput
+							propName='title'
+							value={this.props.title}
+							change={this.props.update} />
+					</span>
+				</span>
+				<span className="playlist-text-cell">
+					<span className="playlist-text editable clickable">
+						<RIEInput
+							propName='artist'
+							value={this.props.artist}
+							change={this.props.update} />
+					</span>
+				</span>
+				<span className="playlist-text-cell">
+					<span className="playlist-text editable clickable">
+						<RIEInput
+							propName='album'
+							value={this.props.album}
+							change={this.props.update} />
+					</span>
+				</span>
+				<span className="playlist-text-cell">
+					<span className="playlist-text editable clickable">
+						<RIEInput
+							propName='label'
+							value={this.props.label}
+							change={this.props.update} />
+					</span>
+				</span>
 				<div className="playlist-minus clickable" onClick={this.props.delete}> </div>
 			</div>
 		);

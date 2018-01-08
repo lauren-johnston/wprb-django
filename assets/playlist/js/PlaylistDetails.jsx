@@ -1,4 +1,5 @@
 import React from 'react';
+import TagBox from './TagBox.jsx'
 import { RIEInput, RIETextArea, RIETags } from 'riek';
 
 export default class PlaylistDetails extends React.Component {
@@ -35,11 +36,11 @@ export default class PlaylistDetails extends React.Component {
 		this.setState(value);
 	}
 
-	addSubgenre(identifier, value) {
+	addSubgenre(value) {
 		console.log('TRYNA ADD BROH');
-		fetch(`meta/${endpoint}/`, {
+		fetch(`meta/add_subgenre/`, {
 			method: "PUT",
-			body: JSON.stringify(value),
+			body: JSON.stringify({subgenre: value}),
 			headers: {
 				"Content-Type": "application/json",
 				"Accept": "application/json"
@@ -49,10 +50,10 @@ export default class PlaylistDetails extends React.Component {
 		});
 	}
 
-	deleteSubgenre(identifier, value) {
-		fetch(`meta/${endpoint}/`, {
-			method: "PUT",
-			body: JSON.stringify(value),
+	delSubgenre(value) {
+		fetch(`meta/del_subgenre/`, {
+			method: "DELETE",
+			body: JSON.stringify({subgenre:value}),
 			headers: {
 				"Content-Type": "application/json",
 				"Accept": "application/json"
@@ -60,26 +61,6 @@ export default class PlaylistDetails extends React.Component {
 		}).then(response => {
 			console.log(response.json());
 		});
-	}
-
-	renderDJs() {
-		// return this.state.djs.map( (dj, index) => (
-		// 	<POOP
-		// 		key={dj} 
-		// 		value={dj}
-		// 		identifier={index}
-		// 		handleInput={this.updateDJ} />
-		// ));
-	}
-
-	renderSubgenres() {
-		// return this.props.subgenre.map( (subgenre, index) => (
-		// 	<PooP
-		// 		key={subgenre}
-		// 		value={subgenre}
-		// 		identifier={index}
-		// 		handleInput={this.updateSubgenre} />
-		// ));
 	}
 
 	render() {
@@ -89,9 +70,9 @@ export default class PlaylistDetails extends React.Component {
 					<h2 className="show-title-text">
 						{this.props.title}
 					</h2>
-					<h3 className="show-subtitle-text">
+					<h3 className="show-subtitle-text editable clickable">
 						<RIEInput
-							value={this.state.subtitle}
+							value={this.state.subtitle || 'write your own subtitle!'}
 							change={this.update}
 							propName="subtitle" />
 					</h3>
@@ -102,7 +83,7 @@ export default class PlaylistDetails extends React.Component {
 				<div className="show-desc show-section">
 				<div className="desc-heading">Description</div>
 				<div className="section-title-underline"></div>
-					<div className="show-desc-text">
+					<div className="show-desc-text editable clickable">
 						<RIETextArea
 							value={this.state.desc || 'write your own description!'}
 							change={this.update}
@@ -112,18 +93,24 @@ export default class PlaylistDetails extends React.Component {
 				<div className="show-genre show-section">
 					<div className="genre-heading">Genre</div>
 					<div className="section-title-underline"></div>
-						<RIEInput
-							value={this.state.genre || 'write your own genre!'}
-							change={this.update} 
-							propName="genre" />
+						<div className="show-genre-text editable clickable">
+							<RIEInput
+								value={this.state.genre || 'write your own genre!'}
+								change={this.update} 
+								propName="genre" />
+						</div>
 					</div>
 				<div className="show-subgenre show-section">
 					<div className="genre-heading">Sub-genres</div>
 					<div className="section-title-underline"></div>
-					<RIETags
-						value={this.state.subgenre || ['add some subgenres!',]}
-						change={this.addSubgenre}
-						propName="subgenre" />
+					<TagBox 
+						tags={this.state.subgenre}
+						type="sub-genre"
+						inputId="subgenre-input"
+						placeholder="Add a tag!"
+						allownone="True"
+						addTag={this.addSubgenre}
+						delTag={this.delSubgenre} />
 				</div>
 			</div>
 		);

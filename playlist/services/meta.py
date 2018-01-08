@@ -74,12 +74,14 @@ def genre(request, playlist_id):
 	return success()
 
 @csrf_exempt
-@require_http_methods(["POST"])
+@require_http_methods(["PUT"])
 def add_subgenre(request, playlist_id):
-	""" Request contains 'subgenre' and uri contains playlist_id
-	    POST: Adds the subgenre 'subgenre' to playlist_id 
-	    DELETE: Removes the subgenre 'subgenre' from playlist_id
+	""" Does what it says to the playlist.
 	"""
+
+	print('Add_Subgenre Received...')
+	print(json.loads(request.body))
+
 	try: 
 		args     = json.loads(request.body)
 		playlist = Playlist.objects.get(pk=playlist_id)
@@ -89,12 +91,12 @@ def add_subgenre(request, playlist_id):
 	except KeyError:
 		return error('Query does not contain required arguments')
 	except Subgenre.DoesNotExist:
-		playlist.subgenre_set.create(name=args['subgenre'], author=request.user)
+		playlist.subgenre.create(name=args['subgenre'])
 		playlist.save()
 		return success()
 
-	if not (playlist.subgenre_set.filter(pk=subgenre.pk).exists()):
-		playlist.subgenre_set.add(subgenre)
+	if not (playlist.subgenre.filter(pk=subgenre.pk).exists()):
+		playlist.subgenre.add(subgenre)
 		playlist.save()
 
 	return success()
@@ -102,10 +104,12 @@ def add_subgenre(request, playlist_id):
 @csrf_exempt
 @require_http_methods(["DELETE"])
 def del_subgenre(request, playlist_id):
-	""" Request contains 'subgenre' and uri contains playlist_id
-	    POST: Adds the subgenre 'subgenre' to playlist_id 
-	    DELETE: Removes the subgenre 'subgenre' from playlist_id
+	""" Does what it says to the playlist
 	"""
+
+	print('Del_Subgenre Received...')
+	print(json.loads(request.body))
+
 	try: 
 		args     = json.loads(request.body)
 		playlist = Playlist.objects.get(pk=playlist_id)
@@ -117,7 +121,7 @@ def del_subgenre(request, playlist_id):
 	except Subgenre.DoesNotExist: 
 		return success()
 
-	matching_contents = playlist.subgenre_set.filter(pk=subgenre.pk)
+	matching_contents = playlist.subgenre.filter(pk=subgenre.pk)
 	if (matching_contents.exists()):
 		matching_contents.delete()
 
