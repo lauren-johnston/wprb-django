@@ -11,9 +11,14 @@ class ExploreMusicPage extends React.Component {
 	}
 
 	render() {
+		// Get artist if applicable
+		let by = '';
+		if (this.props.field === 'song' || this.props.field === 'album')
+			by = ` by ${this.props.spins[0].artist}`;
+
 		let details = {
 			title: this.props.title,
-			subtitle: `(${this.props.field})`,
+			subtitle: `${this.props.field}${by}`,
 			desc: 'Description goes here!'
 		};
 
