@@ -11,6 +11,7 @@ export default class TagBox extends React.Component {
 		this.state = {
 			tags: tagArrayFromArray(this.props.tags),
 			suggestions: [],
+            prevSearch: '',
 			classNames: {
 		      tags: 'ReactTags__tags',
 		      tagInput: 'ReactTags__tagInput',
@@ -47,7 +48,6 @@ export default class TagBox extends React.Component {
 
 		let tagbox = this;
 		let exitButton = document.getElementById(`exit-button-for-${this.props.inputId}`);
-		console.log(exitButton);
 		exitButton.addEventListener('click', f => tagbox.toggleEditing());
 	}
 
@@ -107,7 +107,7 @@ export default class TagBox extends React.Component {
     	if(this.state.editing) {
     		classes['tagInput'] = 'ReactTags__tagInput';
     		classes['tagInputField'] = 'ReactTags__tagInputField';
-    		document.getElementById(this.props.inputId).value = '';
+    		setTimeout(f => {document.getElementById(id).value = ''}, 0);
     	} else {
     		classes['tagInput'] = 'ReactTags__tagInputEditing';
     		classes['tagInputField'] = 'ReactTags__tagInputFieldEditing';
@@ -128,11 +128,7 @@ export default class TagBox extends React.Component {
     }
 
     async updateSuggestions(value) {
-    	let suggestions = await smartComplete({
-    		type: this.props.type,
-    		value: value
-    	});
-
+    	
         this.setState({suggestions: suggestions});
     }
 
