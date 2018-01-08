@@ -29,7 +29,7 @@ def spin_to_dict(spin):
         'title': spin.song.name,
         'artist': spin.song.artist.all()[0].name,
         'album': spin.song.album.name,
-        'label': spin.song.album.label.name
+        'label': spin.song.album.label.name if spin.song.album.label else ''
     }
 
 def get_user_details(request):
