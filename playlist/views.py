@@ -29,7 +29,7 @@ def landing(request):
         'id'        : playlist.id,
         'title'     : playlist.show.name,
         'subtitle'  : playlist.subtitle,
-        'date'      : date_to_str(playlist.datetime)
+        'date'      : playlist.datetime.timestamp()
     } for playlist in Playlist.objects.filter(show__dj=dj)], key=lambda x: x['id'], reverse=True)   
 
     context = {
