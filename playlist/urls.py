@@ -9,6 +9,7 @@ and editing
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.views.generic.base import RedirectView
 
 from . import views, services, explore
 from .views import edit_playlist
@@ -21,8 +22,12 @@ LOGIN_REDIRECT_URL = 'home'
 playlist_id = r'^(?P<playlist_id>[0-9]+)/'
 
 app_name = 'playlist'
+favicon_view = RedirectView.as_view(url='static/favicon.ico', permanent=True)
 
 urlpatterns = [
+
+	url(r'^favicon.ico$', favicon_view),
+
 	# Explore View
 	url(r'^explore/', include([
 		url(r'^$', views.explore_landing, name='home'),

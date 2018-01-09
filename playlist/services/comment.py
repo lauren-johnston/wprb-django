@@ -6,13 +6,14 @@ Add, update, and delete comments on playlists.
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
+from django.middleware.csrf import get_token
 
 from django.http import QueryDict, JsonResponse
 
 from ..models import Spin, Comment, Playlist
 import json, time, datetime
 
-@csrf_exempt
+#@csrf_exempt
 @require_http_methods(['POST'])
 def new(request, playlist_id):
     """ Add a comment to the specified playlist.
@@ -27,10 +28,16 @@ def new(request, playlist_id):
     # HACK
     args = json.loads(request.body.decode('utf-8'))
 
+    print('New Comment received as args...')
+    print(args)
+    print('New Comment received csrftoken:' + request.META['HTTP_X_CSRFTOKEN'])
+    print('Heres the token found via middleware:' + get_token(request))
+    print('New Comment Received as headers...')
+    for key in sorted(request.META.keys()):
+        print(key + (' '*(24 - len(key))) + str(request.META[key]))
+
     # Get text and instantiate comment
     text = args['text']
-
-    print(text)
     comment = Comment(text=text, playlist=playlist)
 
     # Associate the proper entry if applicable
