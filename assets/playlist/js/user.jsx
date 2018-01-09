@@ -10,7 +10,7 @@ class user extends React.Component {
         };
 
         this.toggle = this.toggle.bind(this);
-    }   
+    }
 
     toggle() {
         this.setState((state, props) => {
@@ -45,9 +45,9 @@ class user extends React.Component {
                     <div className="userid-menu-element">
                         <a href="/playlist" className="user-link">My Playlists</a>
                     </div>
-                    
+
                     <div className="userid-menu-element">
-                        <a href="/logout">Logout</a>
+                        <a href="/playlist/logout">Logout</a>
                     </div>
                 </div>
             );

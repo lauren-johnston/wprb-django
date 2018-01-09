@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Moment from 'moment';
 
+import {getCookie} from './common.js'
+
 /**
  * Component to render the comment panel for the DJs.
  * Receives a list of comment objects as props.comments, and renders
@@ -25,6 +27,8 @@ export default class CollabsibleCommentPanel extends React.Component {
 		this.setState((state, props) => {
 			return { show: !state.show };
 		});
+
+		console.log(document.cookie);
 	}
 
 	addComment(comment) {
