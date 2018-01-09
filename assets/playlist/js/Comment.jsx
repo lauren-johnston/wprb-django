@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Moment from 'moment';
 
-import {getCookie} from './common.js';
+import {domCsrfToken} from './common.js';
 import Cookies from 'js-cookie';
 
 /**
@@ -28,7 +28,8 @@ export default class CollabsibleCommentPanel extends React.Component {
 		this.setState((state, props) => {
 			return { show: !state.show };
 		});
-		console.log(`CSRF Cookie: ${Cookies.get('csrftoken')}`);
+		console.log(`CSRF in Dom: ${domCsrfToken()}`);
+		console.log(`CSRF in Cookie: ${Cookies.get('csrftoken')}`)
 	}
 
 	addComment(comment) {
@@ -148,7 +149,7 @@ class NewCommentForm extends React.Component {
 			headers: {
 				"Content-Type": "application/json",
 				"Accept": "application/json",
-				"X-CSRFToken": Cookies.get('csrftoken')
+				"X-CSRFToken": domCsrfToken()
 			},
 			body: body,
 			mode: 'cors',

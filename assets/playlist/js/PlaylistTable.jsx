@@ -199,36 +199,32 @@ class PlaylistEntry extends React.Component {
 				<DragHandle />
 				<div className="playlist-numbering"> {this.props.spindex} </div>
 				<span className="playlist-text-cell">
-					<span className="playlist-text editable clickable">
-						<RIEInput
-							propName='title'
-							value={this.props.title}
-							change={this.props.update} />
-					</span>
+					<RIEInput
+						propName='title'
+						value={this.props.title}
+						change={this.props.update}
+						className="playlist-text editable clickable" />
 				</span>
 				<span className="playlist-text-cell">
-					<span className="playlist-text editable clickable">
-						<RIEInput
-							propName='artist'
-							value={this.props.artist}
-							change={this.props.update} />
-					</span>
+					<RIEInput
+						propName='artist'
+						value={this.props.artist}
+						change={this.props.update}
+						className="playlist-text editable clickable" />
 				</span>
 				<span className="playlist-text-cell">
-					<span className="playlist-text editable clickable">
-						<RIEInput
-							propName='album'
-							value={this.props.album}
-							change={this.props.update} />
-					</span>
+					<RIEInput
+						propName='album'
+						value={this.props.album}
+						change={this.props.update}
+						className="playlist-text editable clickable" />
 				</span>
 				<span className="playlist-text-cell">
-					<span className="playlist-text editable clickable">
 						<RIEInput
 							propName='label'
 							value={this.props.label}
-							change={this.props.update} />
-					</span>
+							change={this.props.update}
+							className="playlist-text editable clickable" />
 				</span>
 				<div className="playlist-minus clickable" onClick={this.props.delete}> </div>
 			</div>

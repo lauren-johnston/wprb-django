@@ -13,7 +13,7 @@ from django.http import QueryDict, JsonResponse
 from ..models import Spin, Comment, Playlist
 import json, time, datetime
 
-#@csrf_exempt
+@csrf_exempt
 @require_http_methods(['POST'])
 def new(request, playlist_id):
     """ Add a comment to the specified playlist.
@@ -30,11 +30,10 @@ def new(request, playlist_id):
 
     print('New Comment received as args...')
     print(args)
-    print('New Comment received csrftoken:' + request.META['HTTP_X_CSRFTOKEN'])
-    print('Heres the token found via middleware:' + get_token(request))
-    print('New Comment Received as headers...')
-    for key in sorted(request.META.keys()):
-        print(key + (' '*(24 - len(key))) + str(request.META[key]))
+    print('New Comment received csrftoken: \n' + request.META['HTTP_X_CSRFTOKEN'])
+    # print('New Comment Received as headers...')
+    # for key in sorted(request.META.keys()):
+    #     print(key + (' '*(24 - len(key))) + str(request.META[key]))
 
     # Get text and instantiate comment
     text = args['text']
