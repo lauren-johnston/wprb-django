@@ -39,7 +39,7 @@ class Landing extends React.Component {
 
                 <div id="welcome-box">
                     <div className="welcome-text-dj">Welcome {this.props.dj}!</div>
-                    <div className="welcome-text-prompt">What would you like to work on today?</div>
+                    <div className="welcome-text-prompt">Select a playlist to edit or create a new one!</div>
                 </div>
                 <div id="playlist-list-box">
                     <ExploreShows playlists={this.props.playlists} />
