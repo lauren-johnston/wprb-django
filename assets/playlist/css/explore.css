@@ -401,3 +401,7 @@ a:hover {
 	color: rgb(170, 247, 205) !important;
 	cursor: pointer;
 }
+
+a.now-playing-dj:hover, a.now-playing-show:hover {
+	text-decoration: underline !important;
+}
