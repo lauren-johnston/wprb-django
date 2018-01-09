@@ -103,8 +103,11 @@ class PlaylistEntryFormInput extends React.Component {
         this.handleKeyUp = this.handleKeyUp.bind(this);
 
         this.shouldRenderSuggestions = this.shouldRenderSuggestions.bind(this);
-        this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
+        this.onSuggestionsFetchRequested = debounce(this.onSuggestionsFetchRequested.bind(this), 1000);
         this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
+
+        //console.log(this.onSuggestionsFetchRequested);
+        //console.log(debounce);
     }
 
     handleKeyUp(evt) {
@@ -176,7 +179,7 @@ class PlaylistEntryFormInput extends React.Component {
                 <Autosuggest
                     id={this.props.identifier}
                     suggestions={suggestions}
-                    onSuggestionsFetchRequested={debounce(this.onSuggestionsFetchRequested, 100)}
+                    onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                     onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                     shouldRenderSuggestions={this.shouldRenderSuggestions}
                     getSuggestionValue={s => getSuggestionValue(s, this.props.identifier)}
