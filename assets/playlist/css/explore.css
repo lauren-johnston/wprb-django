@@ -5,6 +5,7 @@ a:link, a:visited {
 }
 
 a:hover {
+	color: pink;
     text-decoration: none;
 }
 
