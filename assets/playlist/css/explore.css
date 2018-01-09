@@ -352,6 +352,14 @@ a:hover {
 	color: #000;
 }
 
+.comment-author {
+	font-weight: bold;
+}
+
+.comment-timestamp {
+	font-style: italic;
+}
+
 #new-comment-text {
 	width: 100%;
 	border-radius: 0.25em;
@@ -384,10 +392,10 @@ a:hover {
 }
 
 .now-playing-show {
-	color: rgb(170, 247, 205);
 	font-weight: bold;
 }
 
-.now-playing-dj {
+.now-playing-dj, .now-playing-show {
 	color: rgb(170, 247, 205);
+	cursor: pointer;
 }

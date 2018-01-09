@@ -214,6 +214,7 @@ def explore_landing(request):
         'id'        : playlist.id,
         'title'     : playlist.show.name,
         'dj'        : playlist.show.dj.all().first().name,
+        'djId'      : playlist.show.dj.all().first().id,
         'subtitle'  : playlist.subtitle,
         'date'      : playlist.datetime.timestamp()
     } for playlist in Playlist.objects.all().order_by('-id')[:n_recent]]

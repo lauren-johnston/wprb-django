@@ -29,6 +29,7 @@ urlpatterns = [
 		url(r'^(?P<field>[a-zA-Z]+)/(?P<field_id>[0-9]+)/$', views.explore, name='explore'),
 		url(r'^charts/$', charts.charts, name='charts'),
 	])),
+	
 	url(r'^playlist/', include([
 		# playlist edit
 		url(playlist_id + '$', views.edit_playlist, name='edit-playlist'),

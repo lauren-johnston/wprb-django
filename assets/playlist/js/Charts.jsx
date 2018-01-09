@@ -8,7 +8,7 @@ export default class Charts extends React.Component {
 	}
 
 	componentDidMount() {
-		fetch(`/explore/charts?dj=${this.props.dj}&after=${this.props.after}`, {
+		fetch(`/explore/charts/?dj=${this.props.dj}&after=${this.props.after}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -39,7 +39,7 @@ export default class Charts extends React.Component {
 						id={item.id} 
 						index={index+1}
 						plays={item.plays} />
-				) : <div className="charts-loading">Loading charts...<br />
+				) : <div className="charts-loading">Generating charts...<br />
 						<img src="/static/playlist/css/media/loading.gif" height="50" width="50"/>
 					</div>}
 				</div>

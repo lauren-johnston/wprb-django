@@ -104,7 +104,7 @@ class SingleComment extends React.Component {
 
 	render() {
 		// Convert timestamp to time string
-		let time = Moment(this.props.timestamp, 'X').format('@h:mma');
+		let time = Moment(this.props.timestamp, 'X').fromNow();
 
 		return (
 			<div className="comment-box">

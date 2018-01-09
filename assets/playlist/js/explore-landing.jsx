@@ -15,7 +15,6 @@ class ExploreLandingPage extends React.Component {
 	}
 
 	render() {
-		console.log(END_OF_TIME);
 		return (
 			<div className="explore">
 				<div id="content-main">
@@ -40,9 +39,9 @@ const NowPlaying = ({playlist}) => {
 		<div className="now-playing">
 			<h1>Now Playing:</h1>
 			<h2 className="now-playing-title">
-				<span className="now-playing-show">{playlist.title}</span><br/>
+				<a href={`/explore/playlist/${playlist.id}`} className="now-playing-show">{playlist.title}</a><br/>
 				<span className="now-playing-with"> with </span> 
-				<span className="now-playing-dj">{playlist.dj}</span>
+				<a href={`/explore/dj/${playlist.djId}`} className="now-playing-dj">{playlist.dj}</a>
 			</h2>
 			<div className="now-playing-link"><a href={`/explore/playlist/${playlist.id}`}>view playlist!</a></div>
 		</div>
