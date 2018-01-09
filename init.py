@@ -114,7 +114,7 @@ def main():
 	print('Adding songs to playlist...')
 	for i, s in enumerate(TEST_SONGS):
 		# Create artist if they don't exist
-		_, _, song = get_or_create(s['artist'], s['album'], s['title'])
+		_, _, song, label = get_or_create(s['artist'], s['album'], s['title'])
 		print('\tAdding %s by %s' % (s['title'], s['artist']))
 		spin = Spin(song=song, playlist=test_playlist, index=i+1)
 

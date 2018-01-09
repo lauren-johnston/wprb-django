@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Moment from 'moment';
 
-import {getCookie} from './common.js'
+import {domCsrfToken} from './common.js';
+import Cookies from 'js-cookie';
 
 /**
  * Component to render the comment panel for the DJs.
@@ -27,8 +28,8 @@ export default class CollabsibleCommentPanel extends React.Component {
 		this.setState((state, props) => {
 			return { show: !state.show };
 		});
-
-		console.log(document.cookie);
+		console.log(`CSRF in Dom: ${domCsrfToken()}`);
+		console.log(`CSRF in Cookie: ${Cookies.get('csrftoken')}`)
 	}
 
 	addComment(comment) {
@@ -147,7 +148,8 @@ class NewCommentForm extends React.Component {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				"Accept": "application/json"
+				"Accept": "application/json",
+				"X-CSRFToken": domCsrfToken()
 			},
 			body: body,
 			mode: 'cors',

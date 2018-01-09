@@ -24,7 +24,7 @@ h3 {
 
 #header {
 	top: 0;
-	height: 2em;
+	height: 2.5em;
 	left: 0;
 	right:0;
 	background-color: #2a2a2a
@@ -50,8 +50,8 @@ h3 {
 }
 
 #content {
-	top: 4em;
-	height: calc(100% - 4em);
+	top: 4.5em;
+	height: calc(100% - 4.5em);
 }
 
 .page-section {

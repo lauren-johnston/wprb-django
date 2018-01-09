@@ -118,10 +118,17 @@
 	padding-left: .1em;
     padding-right: .1em;
     display: inline-block;
+    min-width: 2em;
+    min-height: 1em;
 }
 
 /* For editable hovering */
 .editable:hover {
+	border: 1px solid rgba(221, 221, 221, 1);
+	box-sizing: border-box;
+}
+
+.playlist-text-cell:hover .editable {
 	border: 1px solid rgba(221, 221, 221, 1);
 	box-sizing: border-box;
 }

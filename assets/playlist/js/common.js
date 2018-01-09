@@ -4,6 +4,7 @@
 // Check https://docs.djangoproject.com/en/1.11/ref/csrf/
 //------------------------------------------------------------------
 
+var Cookie = require('js-cookie');
 /** 
 *   A helper function to transform String arrays
 *   into arrays usable by the TagBox component.
@@ -36,23 +37,13 @@ export function autocompleteFilter(array, value, type) {
     })
 }
 
-/** 
- * Return a cookie by name
- */
-export function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
+
+/* Find csrf token using our beautiful hack. */
+export function domCsrfToken() {
+    let inputs = document.getElementsByTagName('input');
+    let csrfs  = Array.from(inputs).filter(i => i.name == 'csrfmiddlewaretoken');
+    if(csrfs.length == 0) return false;
+    return csrfs[0].value;
 }
 
 /**

@@ -40,7 +40,7 @@ def landing(request):
 
     return render(request, "component.html", context=context)
 
-
+@ensure_csrf_cookie
 @login_required
 def new_playlist(request):
     """ Create a new playlist object, and then redirect to the

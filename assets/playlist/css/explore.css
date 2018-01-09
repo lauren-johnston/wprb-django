@@ -5,6 +5,7 @@ a:link, a:visited {
 }
 
 a:hover {
+	color: pink;
     text-decoration: none;
 }
 
@@ -287,6 +288,7 @@ a:hover {
 
 .details-title {
 	margin: 0.25em;
+	color: rgb(170, 247, 205);
 }
 
 .details-subtitle {

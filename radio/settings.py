@@ -26,7 +26,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', 'ec2-34-235-131-208.compute-1.amazonaws.com']
 
-
 # Application definition
 
 INSTALLED_APPS = [
