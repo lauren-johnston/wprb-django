@@ -1,20 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import Select from 'react-select';
 
-//import Select from 'react-virtualized-select'
 import Select from 'react-select-plus';
 import 'react-select-plus/dist/react-select-plus.css';
-//import 'react-select/dist/react-select.css';
-//import 'react-virtualized/styles.css';
-//import 'react-virtualized-select/styles.css';
+
+/* A search bar component to search for songs, artists, albums, djs,
+    shows, and labels. Uses the react-select-plus component*/
 
 export default class Search extends React.Component {
     constructor (props) {
         super(props)
+        /* The category display orders in the search bar */
         this.displayOrder = ['songs', 'artists', 'albums', 'djs', 'shows', 'labels'];
         this.state = {
-            query: '',
+            query: '', // the string in the search bar
             options: [],
             redirect: false
         };
@@ -22,6 +21,7 @@ export default class Search extends React.Component {
         this.explore = this.explore.bind(this);
   }
 
+  /* send an ajax request to the search api to get results */
   makeQuery(query) {
       // don't search on empty query
       this.state.query = query
@@ -45,18 +45,24 @@ export default class Search extends React.Component {
       }).then(response => {
           return response.json();
       }).then(data => {
+          // superresults contains the headers (songs, albums), and nests
+          // respective results in each header */
           let superresults = [];
 
           for (let i = 0; i < this.displayOrder.length; i++) {
 
               let results = [];
               let category = this.displayOrder[i]
-              let upperBound = 3;
-              if (data[category].length < 3) {
+
+              /* only display upperBound results; arbitrary choice */
+              let upperBound = 4;
+              if (data[category].length < upperBound) {
                   upperBound = data[category].length;
               }
 
+
               for (let j = 0; j < upperBound; j++) {
+                  /* create options for each header */
                   results.push({
                       label: data[category][j]['name'],
                       value: category + data[category][j]['id'],
@@ -68,7 +74,7 @@ export default class Search extends React.Component {
                                 options: results})
           }
 
-          //console.log(superresults)
+          // save superresults into state
           this.setState({
               query: query,
               options: superresults,
@@ -77,11 +83,16 @@ export default class Search extends React.Component {
       });
   }
 
+  /* if user clicks on an option in teh dropdown, direct them to the correct
+    explore page */
   explore(selection) {
 
       let category = selection.selectValue.category;
+      /* HACK: categories may be "songs" but we want "song" singular when
+        we are creating the redirect url */
       category = category.substring(0, category.length-1);
       let id = selection.selectValue.value.substring(category.length+1);
+      /* remember, theres no actual show explore page */
       if (category === "show") {
           category = "dj";
       }
@@ -90,8 +101,6 @@ export default class Search extends React.Component {
 
   render () {
 
-      //value={this.state.selectValue}
-
       return (
           <div id="search-bar" >
               <Select
@@ -99,7 +108,6 @@ export default class Search extends React.Component {
                   onChange={(selectValue) => this.explore({selectValue})}
                   onInputChange={(selectValue) => {this.makeQuery(selectValue)}}
                   valueKey={this.state.selectValue}
-
                   noResultsText = {this.state.query == "" ? "" : "No results"}
                   placeholder="Search songs, artists, djs, shows, labels" />
           </div>
