@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import debounce from 'debounce';
 import Select from 'react-select-plus';
 import 'react-select-plus/dist/react-select-plus.css';
 
@@ -31,7 +32,8 @@ export default class Search extends React.Component {
               options: [],
               redirect: false
           })
-          return;}
+          return;
+      }
 
       // make ajax request
       fetch('/playlist/search/?query=' + query, {
@@ -106,7 +108,7 @@ export default class Search extends React.Component {
               <Select
                   options={this.state.options}
                   onChange={(selectValue) => this.explore({selectValue})}
-                  onInputChange={(selectValue) => {this.makeQuery(selectValue)}}
+                  onInputChange={debounce((selectValue) => this.makeQuery(selectValue), 100)}
                   valueKey={this.state.selectValue}
                   noResultsText = {this.state.query == "" ? "" : "No results"}
                   placeholder="Search songs, artists, djs, shows, labels" />

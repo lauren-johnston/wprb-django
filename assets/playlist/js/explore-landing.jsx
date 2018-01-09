@@ -26,7 +26,7 @@ class ExploreLandingPage extends React.Component {
 						<Search />
 						<Charts 
 							after={END_OF_TIME.subtract(1, 'months').format('X')} 
-							for="WPRB" />
+							for="WPRB this month" />
 					</div>
 				</div>
 			</div>

@@ -396,6 +396,6 @@ a:hover {
 }
 
 .now-playing-dj, .now-playing-show {
-	color: rgb(170, 247, 205);
+	color: rgb(170, 247, 205) !important;
 	cursor: pointer;
 }
