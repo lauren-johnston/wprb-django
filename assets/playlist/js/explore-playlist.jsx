@@ -17,7 +17,7 @@ class ExplorePlaylistPage extends React.Component {
 		let start = time.format('ddd MMM D, Y h:mm');
 		let end = time.add(this.props.show.length, 'h').format('h:mma');
 		let details = {
-			title: `${this.props.show.title} w/${this.props.show.dj.join(' & ')}`,
+			title: `${this.props.show.title} with ${this.props.show.dj.join(' & ')}`,
 			subtitle: `${start}-${end}`,
 			desc: this.props.show.desc
 		};
