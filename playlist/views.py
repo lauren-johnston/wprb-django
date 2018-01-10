@@ -77,6 +77,7 @@ def edit_playlist(request, playlist_id):
         'title' : spin.song.name,
         'artist': spin.song.artist.all()[0].name,
         'album' : spin.song.album.name,
+        'label' : spin.song.album.label.name if spin.song.album.label != None else '',
         'index' : spin.index,
     } for spin in playlist.spin_set.all()], key=lambda x: x['index'])
 

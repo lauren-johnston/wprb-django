@@ -44,7 +44,7 @@ def add(request, playlist_id):
 
 
 	# Get the artist, album, and song objects, creating each if necessary
-	artist, album, song, label = get_or_create(artist_name, album_name, song_title)
+	artist, album, song, label = get_or_create(artist_name, album_name, song_title, label_name)
 
 	# Add the medium if it's provided
 	new_spin = Spin(song=song, index=spin_index, playlist=playlist)
@@ -192,7 +192,8 @@ def update(request, playlist_id):
 		return error('No matching spin')
 
 	try:
-		artist, album, song, label = get_or_create(args['artist'], args['album'], args['title'])
+		label_name = args.get('label', '')
+		artist, album, song, label = get_or_create(args['artist'], args['album'], args['title'], label_name)
 	except (KeyError, ValueError):
 		return error('Invalid request')
 
