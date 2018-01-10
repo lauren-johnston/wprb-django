@@ -220,11 +220,11 @@ class PlaylistEntry extends React.Component {
 						className="playlist-text editable clickable" />
 				</span>
 				<span className="playlist-text-cell">
-						<RIEInput
-							propName='label'
-							value={this.props.label}
-							change={this.props.update}
-							className="playlist-text editable clickable" />
+					<RIEInput
+						propName='label'
+						value={this.props.label}
+						change={this.props.update}
+						className="playlist-text editable clickable" />
 				</span>
 				<div className="playlist-minus clickable" onClick={this.props.delete}> </div>
 			</div>
