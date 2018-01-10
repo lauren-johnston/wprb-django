@@ -13,6 +13,7 @@ export default class PlaylistEntryForm extends React.Component {
 
         this.inputs = {};
         this.submit = this.submit.bind(this);
+        this.suggestionFill = this.suggestionFill.bind(this);
     }
 
     submit() {
@@ -45,6 +46,17 @@ export default class PlaylistEntryForm extends React.Component {
 
     }
 
+    suggestionFill(s, type) {
+        if(!s.song) 
+            this.inputs[type].setState({value: s});
+        else {
+            this.inputs['title'].setState({value: s.name})
+            this.inputs['artist'].setState({value: s.artist})
+            this.inputs['album'].setState({value: s.album})
+            this.inputs['label'].setState({value: s.label})
+        }
+    }
+
     render() {
         let inputs = this.inputs;
 
@@ -58,6 +70,7 @@ export default class PlaylistEntryForm extends React.Component {
                         placeholder="song title"
                         value={''}
                         submit={this.submit}
+                        suggestionFill={this.suggestionFill}
                         autoFocus={true}
                         ref={el => this.inputs['title'] = el} />
                     <PlaylistEntryFormInput
@@ -65,6 +78,7 @@ export default class PlaylistEntryForm extends React.Component {
                         placeholder="artist"
                         value={''}
                         submit={this.submit}
+                        suggestionFill={this.suggestionFill}
                         autoFocus={false}
                         ref={el => this.inputs['artist'] = el}  />
                     <PlaylistEntryFormInput
@@ -72,6 +86,7 @@ export default class PlaylistEntryForm extends React.Component {
                         placeholder="album"
                         value={''}
                         submit={this.submit}
+                        suggestionFill={this.suggestionFill}
                         autoFocus={false} 
                         ref={el => this.inputs['album'] = el}/>
                     <PlaylistEntryFormInput
@@ -79,6 +94,7 @@ export default class PlaylistEntryForm extends React.Component {
                         placeholder="record label"
                         value={''}
                         submit={this.submit}
+                        suggestionFill={this.suggestionFill}
                         autoFocus={false}
                         ref={el => this.inputs['label'] = el} />
                     <div onClick={this.submit} className="playlist-plus clickable" id="add-entry-button"/>
@@ -88,7 +104,7 @@ export default class PlaylistEntryForm extends React.Component {
     }
 }
 
-// Pass submit and autocomplete
+// Pass submit and autocomplete and suggestionPull
 class PlaylistEntryFormInput extends React.Component {
     constructor(props) {
         super(props);
@@ -182,7 +198,7 @@ class PlaylistEntryFormInput extends React.Component {
                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                     onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                     shouldRenderSuggestions={this.shouldRenderSuggestions}
-                    getSuggestionValue={s => getSuggestionValue(s, this.props.identifier)}
+                    getSuggestionValue={s => this.props.suggestionFill(s, this.props.identifier)}
                     renderSuggestion={renderSuggestion}
                     inputProps={inputProps} />
             </div>

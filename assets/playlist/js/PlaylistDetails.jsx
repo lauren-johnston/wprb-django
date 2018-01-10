@@ -70,11 +70,12 @@ export default class PlaylistDetails extends React.Component {
 					<h2 className="show-title-text">
 						{this.props.title}
 					</h2>
-					<h3 className="show-subtitle-text editable clickable">
+					<h3 className="show-subtitle-text">
 						<RIEInput
-							value={this.state.subtitle || 'write your own subtitle!'}
+							value={this.state.subtitle.trim() || 'write your own subtitle!'}
 							change={this.update}
-							propName="subtitle" />
+							propName="subtitle"
+							className="editable clickable" />
 					</h3>
 				</div>
 				<div className="show-dj-name show-section">
@@ -83,21 +84,23 @@ export default class PlaylistDetails extends React.Component {
 				<div className="show-desc show-section">
 				<div className="desc-heading">Description</div>
 				<div className="section-title-underline"></div>
-					<div className="show-desc-text editable clickable">
+					<div className="show-desc-text">
 						<RIETextArea
-							value={this.state.desc || 'write your own description!'}
+							value={this.state.desc.trim() || 'write your own description!'}
 							change={this.update}
-							propName="desc" />
+							propName="desc"
+							className="editable clickable" />
 					</div>
 				</div>
 				<div className="show-genre show-section">
 					<div className="genre-heading">Genre</div>
 					<div className="section-title-underline"></div>
-						<div className="show-genre-text editable clickable">
+						<div className="show-genre-text">
 							<RIEInput
-								value={this.state.genre || 'write your own genre!'}
+								value={this.state.genre.trim() || 'write your own genre!'}
 								change={this.update} 
-								propName="genre" />
+								propName="genre" 
+								className="editable clickable"/>
 						</div>
 					</div>
 				<div className="show-subgenre show-section">

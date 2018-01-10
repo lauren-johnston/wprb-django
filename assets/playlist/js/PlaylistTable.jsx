@@ -145,9 +145,18 @@ class PlaylistEntryContainer extends React.Component {
 	}
 
 	updateSpin(value) {
-		// Set spindex to identify the spin
-		// TODO: replace with spin ID
 		let request = Object.assign({}, this.state, value, {id: this.props.spinId});
+		for(let field of ['title', 'artist', 'album', 'label']) {
+			if(request[field] == '') {
+				this.setState({
+					title: this.props.title,
+					artist: this.props.artist,
+					album: this.props.album,
+					label: this.props.label
+				})
+				return
+			}
+		}
 
 		console.log(request);
 
@@ -220,11 +229,11 @@ class PlaylistEntry extends React.Component {
 						className="playlist-text editable clickable" />
 				</span>
 				<span className="playlist-text-cell">
-						<RIEInput
-							propName='label'
-							value={this.props.label}
-							change={this.props.update}
-							className="playlist-text editable clickable" />
+					<RIEInput
+						propName='label'
+						value={this.props.label}
+						change={this.props.update}
+						className="playlist-text editable clickable" />
 				</span>
 				<div className="playlist-minus clickable" onClick={this.props.delete}> </div>
 			</div>

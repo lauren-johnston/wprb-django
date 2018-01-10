@@ -21,11 +21,13 @@ def get_or_create(artist_name, album_name, song_title, label_name=''):
 		album = Album(name=album_name, artist=artist)
 		album.save()
 
-	if album.label is None and label_name != '':
+	if label_name != '':
 		label, _ = Label.objects.get_or_create(name=label_name)
 		album.label = label
 		album.save()
-	else: 
+	elif album.label == None:
+		label = ''
+	else:
 		label = album.label
 
 	song = Song.objects.filter(name__iexact=song_title, album=album, artist=artist).first()
