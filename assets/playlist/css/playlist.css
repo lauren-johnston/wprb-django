@@ -130,9 +130,13 @@
 	box-sizing: border-box;
 }
 
+.show-subtitle-text:hover ,
+.show-desc-text:hover ,
+.show-genre-text:hover ,
 .playlist-text-cell:hover span.editable {
 	background: rgba(221, 221, 221, .3);
 }
+
 
 .show-dj-name {
 	font: bold;
