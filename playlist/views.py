@@ -84,7 +84,8 @@ def edit_playlist(request, playlist_id):
         'id'        : comment.id,
         'text'      : comment.text,
         'timestamp' : time.mktime(comment.timestamp.timetuple()),
-        'author'    : comment.author.username if comment.author else 'anonymous'
+        'author'    : comment.author.username if comment.author else 'anonymous',
+        'authorId'  : comment.author.id if comment.author else 0
     } for comment in Comment.objects.filter(playlist=playlist_id)]
 
     context = {
@@ -191,7 +192,8 @@ def explore_playlist(request, playlist_id):
         'id'        : comment.id,
         'text'      : comment.text,
         'timestamp' : time.mktime(comment.timestamp.timetuple()),
-        'author'    : comment.author.username if comment.author else 'anonymous'
+        'author'    : comment.author.username if comment.author else 'anonymous',
+        'authorId'  : comment.author.id if comment.author else 0
     } for comment in Comment.objects.filter(playlist=playlist_id)]
 
     context = {

@@ -31,7 +31,10 @@ class ExplorePlaylistPage extends React.Component {
 					</div>
 					<div id="content-right">
 						<Search />
-						<EmbeddedCommentPanel playlistId={this.props.show.id} comments={this.props.comments} />
+						<EmbeddedCommentPanel 
+							playlistId={this.props.show.id} 
+							comments={this.props.comments} 
+							userId={this.props.userinfo.id} />
 					</div>
 				</div>
 			</div>

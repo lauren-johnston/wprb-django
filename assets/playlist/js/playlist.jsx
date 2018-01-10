@@ -25,7 +25,10 @@ class Playlist extends React.Component {
 				<div id="col-right" className="col">
 					<PlaylistTable spins={this.props.spins} />
 				</div>
-				<CollapsibleCommentPanel playlistId={this.props.show.id} comments={this.props.comments} />
+				<CollapsibleCommentPanel 
+					playlistId={this.props.show.id} 
+					comments={this.props.comments}
+					userId={this.props.userinfo.id} />
 			</div>
 		);
 	}

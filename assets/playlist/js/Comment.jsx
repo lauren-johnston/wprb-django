@@ -85,40 +85,46 @@ export class EmbeddedCommentPanel extends React.Component {
 				<h2 className="comment-title">comments</h2>
 				<div className="comment-contents">
 				{this.state.comments.map((comment) => 
-					<SingleComment 
-						text={comment.text} 
-						author={comment.author} 
-						timestamp={comment.timestamp} 
-						id={comment.id}
-						key={comment.id} />
+					<SingleComment {...comment}
+						key={comment.id}
+						userId={this.props.userId} />
 				)}
 				</div>
-				<NewCommentForm playlistId={this.props.playlistId} addComment={this.addComment} />
+				<NewCommentForm 
+					playlistId={this.props.playlistId} 
+					addComment={this.addComment} />
 			</div>
 		);
 	}
 }
 
 
-class SingleComment extends React.Component {
-	constructor(props) {
-		super(props);
-	}
+const SingleComment = ({timestamp, author, authorId, userId, text}) => {
+	// Convert timestamp to time string
+	let time = Moment(timestamp, 'X').subtract(5, 'seconds').fromNow();
 
-	render() {
-		// Convert timestamp to time string
-		let time = Moment(this.props.timestamp, 'X').fromNow();
+	let bubble = {
+		backgroundColor: userId === authorId ? '#fdf' : '#eee',
+		margin: userId === authorId ? '0.5em 0.5em 0.5em 7%' : '0.5em 7% 0.5em 0.5em'
+	};
 
-		return (
-			<div className="comment-box">
-				<div className="comment-meta">
-					<span className="comment-author">{this.props.author} </span>
-					<span className="comment-timestamp">{time}</span>
-				</div>
-				<div className="comment-text">{this.props.text}</div>
+	let alignment = {
+		textAlign: userId === authorId ? 'right' : 'left',
+		margin: userId === authorId ? '0 5% 0 0' : '0 0 0 5%'
+	};
+
+	if (userId === authorId) 
+		author = 'you';
+
+	return (
+		<div className="comment-box">
+			<div style={bubble} className="comment-text">{text}</div>
+			<div style={alignment} className="comment-meta">
+				<span className="comment-author">{author} </span>
+				<span className="comment-timestamp">{time}</span>
 			</div>
-		);
-	}
+		</div>
+	);
 }
 
 class NewCommentForm extends React.Component {
@@ -157,7 +163,7 @@ class NewCommentForm extends React.Component {
 			return response.json();
 		}).then(data => {
 			this.props.addComment(data);
-		}).catch(() => alert('rejected'));
+		});
 	}
 
 	render() {

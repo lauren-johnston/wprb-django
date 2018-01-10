@@ -335,7 +335,6 @@ a:hover {
 }
 
 .comment-meta {
-	text-align: right;
 	font-size: 0.75em;
 }
 
@@ -344,10 +343,14 @@ a:hover {
 	overflow-y: auto;
 }
 
+.comment-box {
+	margin: 1em 0;
+}
+
 .comment-text {
 	padding: 0.5em;
 	margin: 0.5em;
-	width: 90%;
+	width: 85%;
 	border-radius: 0.5em;
 
 	background-color: #fef;
