@@ -25,6 +25,7 @@ export default class PlaylistDetails extends React.Component {
 		fetch(`meta/${endpoint}/`, {
 			method: "PUT",
 			body: JSON.stringify(value),
+			credentials: 'include',
 			headers: {
 				"Content-Type": "application/json",
 				"Accept": "application/json"
@@ -37,7 +38,6 @@ export default class PlaylistDetails extends React.Component {
 	}
 
 	addSubgenre(value) {
-		console.log('TRYNA ADD BROH');
 		fetch(`meta/add_subgenre/`, {
 			method: "PUT",
 			body: JSON.stringify({subgenre: value}),

@@ -28,8 +28,6 @@ export default class CollabsibleCommentPanel extends React.Component {
 		this.setState((state, props) => {
 			return { show: !state.show };
 		});
-		console.log(`CSRF in Dom: ${domCsrfToken()}`);
-		console.log(`CSRF in Cookie: ${Cookies.get('csrftoken')}`)
 	}
 
 	addComment(comment) {
@@ -146,6 +144,7 @@ class NewCommentForm extends React.Component {
 
 		fetch(`/playlist/${this.props.playlistId}/comment/new/`, {
 			method: "POST",
+			credentials: 'include',
 			headers: {
 				"Content-Type": "application/json",
 				"Accept": "application/json",
@@ -158,7 +157,7 @@ class NewCommentForm extends React.Component {
 			return response.json();
 		}).then(data => {
 			this.props.addComment(data);
-		});
+		}).catch(() => alert('rejected'));
 	}
 
 	render() {

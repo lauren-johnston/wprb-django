@@ -13,7 +13,6 @@ from django.http import QueryDict, JsonResponse
 from ..models import Spin, Comment, Playlist
 import json, time, datetime
 
-@csrf_exempt
 @require_http_methods(['POST'])
 def new(request, playlist_id):
     """ Add a comment to the specified playlist.
@@ -28,13 +27,6 @@ def new(request, playlist_id):
     # HACK
     args = json.loads(request.body.decode('utf-8'))
 
-    print('New Comment received as args...')
-    print(args)
-    print('New Comment received csrftoken: \n' + request.META['HTTP_X_CSRFTOKEN'])
-    # print('New Comment Received as headers...')
-    # for key in sorted(request.META.keys()):
-    #     print(key + (' '*(24 - len(key))) + str(request.META[key]))
-
     # Get text and instantiate comment
     text = args['text']
     comment = Comment(text=text, playlist=playlist)
@@ -46,7 +38,6 @@ def new(request, playlist_id):
             comment.spin = Spin.objects.get(pk=entry_id)
 
     # Associate user with comment if applicable
-    print(request.user)
     if not request.user.is_anonymous():
         comment.author = request.user
 
@@ -58,7 +49,6 @@ def new(request, playlist_id):
         'timestamp' : time.mktime(comment.timestamp.timetuple()),
         'author'    : comment.author.username if comment.author else 'anonymous'
     }
-    print(response)
 
     return JsonResponse(response)
 

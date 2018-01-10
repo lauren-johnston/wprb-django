@@ -19,7 +19,7 @@ export default class PlaylistEntryForm extends React.Component {
         let form = document.forms['add-form']
         let inputs = form.elements;
         let requiredFields = ['title', 'artist', 'album'];
-        for(let field of requiredFields) { 
+        for (let field of requiredFields) { 
             if(!inputs[field].value) 
                 return document.getElementById(`add-form-${field}`).focus(); 
         }
