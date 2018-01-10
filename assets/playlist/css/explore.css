@@ -44,7 +44,7 @@ a:hover {
 .play-container, .show-container {
 	background-color: rgb(42, 42, 42);
 	border: 2px solid #959595;
-	border-radius: 0.15em;
+	border-radius: 0.5em;
 
 	margin: 0 0.5em 1em 1em;
 	width: calc(100% - 3em);
@@ -400,4 +400,8 @@ a:hover {
 .now-playing-dj, .now-playing-show {
 	color: rgb(170, 247, 205) !important;
 	cursor: pointer;
+}
+
+a.now-playing-dj:hover, a.now-playing-show:hover {
+	text-decoration: underline !important;
 }
