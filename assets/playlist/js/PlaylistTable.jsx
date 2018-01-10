@@ -146,7 +146,7 @@ class PlaylistEntryContainer extends React.Component {
 
 	updateSpin(value) {
 		let request = Object.assign({}, this.state, value, {id: this.props.spinId});
-		for(let field of ['title', 'artist', 'album']) {
+		for(let field of ['title', 'artist', 'album', 'label']) {
 			if(request[field] == '') {
 				this.setState({
 					title: this.props.title,
