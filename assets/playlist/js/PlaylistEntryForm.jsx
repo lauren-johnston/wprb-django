@@ -17,6 +17,7 @@ export default class PlaylistEntryForm extends React.Component {
     }
 
     submit() {
+        console.log('submitted');
         let form = document.forms['add-form']
         let inputs = form.elements;
         let requiredFields = ['title', 'artist', 'album'];
@@ -129,14 +130,12 @@ class PlaylistEntryFormInput extends React.Component {
         //console.log(debounce);
     }
 
-    handleKeyUp(evt) {
-         if (evt.key == 'Enter') 
+    handleKeyUp(evt) {  
+        if (evt.key == 'Enter') 
             this.props.submit();
-    }
+     }
 
-    onChange(evt, {newValue}) {
-        this.setState({value: newValue});
-    }
+    onChange(evt, {newValue}) { this.setState({value: newValue}); }
 
     // Autosuggest will call this function every time you need to update suggestions.
     // You already implemented this logic above, so just use it.
@@ -191,7 +190,8 @@ class PlaylistEntryFormInput extends React.Component {
             value: value || '',
             placeholder: this.props.placeholder,
             autoFocus: this.props.autoFocus,
-            onChange: this.onChange
+            onChange: this.onChange,
+            onKeyUp: this.handleKeyUp
         };
 
         return (
