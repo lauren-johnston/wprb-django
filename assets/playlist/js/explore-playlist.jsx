@@ -19,7 +19,7 @@ class ExplorePlaylistPage extends React.Component {
 		let details = {
 			title: `${this.props.show.title} with ${this.props.show.dj.join(' & ')}`,
 			subtitle: `${start}-${end}`,
-			desc: this.props.show.desc
+			desc: this.props.show.subtitle + (this.props.show.desc ? `: ${this.props.show.desc}` : '')
 		};
 
 		return (
