@@ -243,6 +243,7 @@ def complete(request, playlist_id):
 		suggestions = [{
 			'song'   : s.name,
 			'album'  : s.album.name,
+			'label'  : s.album.label.name if s.album.label else '',
 			'artist' : ' & '.join([a.name for a in s.artist.all()])
 		} for s in Song.objects.filter(name__startswith=value)]
 	elif identifier == 'artist':

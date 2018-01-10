@@ -20,7 +20,10 @@ export default class PlaylistEntryForm extends React.Component {
         let form = document.forms['add-form']
         let inputs = form.elements;
         let requiredFields = ['title', 'artist', 'album'];
-        for (let field of requiredFields) { 
+
+        for (let field of requiredFields) {
+            console.log(field);
+            console.log(inputs[field].value);
             if(!inputs[field].value) 
                 return document.getElementById(`add-form-${field}`).focus(); 
         }
@@ -47,13 +50,13 @@ export default class PlaylistEntryForm extends React.Component {
     }
 
     suggestionFill(s, type) {
-        if(!s.song) 
-            this.inputs[type].setState({value: s});
+        if (!s.song) 
+            return s;
         else {
-            this.inputs['title'].setState({value: s.name})
             this.inputs['artist'].setState({value: s.artist})
             this.inputs['album'].setState({value: s.album})
             this.inputs['label'].setState({value: s.label})
+            return s.song;
         }
     }
 
@@ -127,7 +130,8 @@ class PlaylistEntryFormInput extends React.Component {
     }
 
     handleKeyUp(evt) {
-         if (evt.key == 'Enter') this.props.submit();
+         if (evt.key == 'Enter') 
+            this.props.submit();
     }
 
     onChange(evt, {newValue}) {
@@ -137,12 +141,12 @@ class PlaylistEntryFormInput extends React.Component {
     // Autosuggest will call this function every time you need to update suggestions.
     // You already implemented this logic above, so just use it.
     onSuggestionsFetchRequested({ value }) {
-        if (value.length == 0 || value.length < 3) {
+        if (value.length < 3) {
             this.setState({suggestions: []});
             return;
         }
 
-        if(value.substring(0, 3) == this.state.prevSearch.substring(0, 3)) {
+        if (value.substring(0, 3) == this.state.prevSearch.substring(0, 3)) {
             this.setState(state => {
                 return ({
                     suggestions: autocompleteFilter(state.cachedSuggestions, value, this.props.identifier)
@@ -213,8 +217,8 @@ const getSuggestionValue = (s, type) => {
     let fields = ['title', 'artist', 'album', 'label'];
     fields.splice(fields.indexOf(type), 1);
 
-    for(let field of fields) {
-        let name = (field == 'title'? 'song': field);
+    for (let field of fields) {
+        let name = (field == 'title' ? 'song' : field);
         document.getElementById(`add-form-${field}`).value = s[name] || '';
     }
 
