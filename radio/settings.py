@@ -24,11 +24,12 @@ SECRET_KEY = 'pzimhen+)9(jxa5y^^+r87ci^@9^kawwk@lr*1j%r(nou4vst)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'ec2-34-235-131-208.compute-1.amazonaws.com']
+ALLOWED_HOSTS = []
 
 # Application definition
 
 INSTALLED_APPS = [
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,7 +39,21 @@ INSTALLED_APPS = [
     'webpack_loader',
     'music',
     'playlist',
+    'wag',
     'django_extensions',
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail.core',
+    'modelcluster',
+    'taggit',
 #    'social_django',
 ]
 
@@ -50,6 +65,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'wagtail.core.middleware.SiteMiddleware',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 #    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
@@ -144,6 +161,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, STATIC_URL.strip("/"))
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'assets'),)
+
+WAGTAIL_SITE_NAME = 'WPRB'
 
 WEBPACK_LOADER = {
     'DEFAULT': {

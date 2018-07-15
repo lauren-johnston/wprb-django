@@ -18,6 +18,12 @@ def progress_bar(count, total, size=50):
     bar = ("#" * filled) + (" " * (size-filled))
     print(' [%s] %.2f%% complete\r' % (bar, 100*(count/total)), end='')
 
+def add_shows():
+    # Create "show" object
+    print('Creating Show %s' % entry['deftitle'])
+    show = Show(name=(entry['deftitle'] if entry['deftitle'] else entry['defgenre']))
+    show.save()
+    show.dj.add(dj)
 def add_djs(djs, logins):
     """ Iterate through a list of DJ objects and add them to the database
     along with their show
@@ -27,13 +33,13 @@ def add_djs(djs, logins):
         if User.objects.filter(username=logins[entry['loginsID']]['login']).exists(): continue
         # create user object
         usr = User.objects.create_user(
-            username=logins[entry['loginsID']]['login'], 
+            username=logins[entry['loginsID']]['login'],
             password='default')
 
         # Create dj object
         print('Creating DJ %d: %s' % (int(entry['ID']), entry['defdjname']))
         dj = DJ(
-            name=entry['defdjname'], 
+            name=entry['defdjname'],
             user=usr,
             first_name=entry['firstname'],
             last_name=entry['lastname'])
@@ -49,7 +55,7 @@ def add_djs(djs, logins):
 
 
 def add_playlists(playlists):
-    """ Iterate through a list of playlist objects (from old WPRB db) 
+    """ Iterate through a list of playlist objects (from old WPRB db)
     and create each one in the new database
     """
     count = 0
@@ -62,7 +68,7 @@ def add_playlists(playlists):
 
         # Get playlist and show
         try: dj = DJ.objects.get(pk=int(playlistdata['userID']))
-        except DJ.DoesNotExist: continue 
+        except DJ.DoesNotExist: continue
 
         show = Show.objects.filter(dj=dj).first()
 
@@ -75,7 +81,7 @@ def add_playlists(playlists):
 
         # Create playlist object
         playlist = Playlist(
-            show=show, 
+            show=show,
             datetime=datetime.fromtimestamp(int(playlistdata['starttime'])),
             subtitle=playlistdata['subtitle'],
             genre=genre,
@@ -92,7 +98,7 @@ def add_spins(spins, min_id=0):
     count = 0
     total = len(spins)
 
-    try: 
+    try:
         for spin_id, spin in spins.items():
             # keep count
             progress_bar(count, total)
@@ -116,13 +122,13 @@ def add_spins(spins, min_id=0):
             artist.save()
             album.save()
             song.save()
-            
+
             index = Spin.objects.filter(playlist=playlist).count() + 1
             spin = Spin(song=song, playlist=playlist, index=index)
             spin.save()
     except KeyboardInterrupt as e:
         print('Last spin: %d' % spin_id)
-        raise e 
+        raise e
 
 def main(filename, min_id=0):
     print('loading file...', end='')
@@ -165,4 +171,3 @@ if __name__=="__main__":
         main(sys.argv[1], int(sys.argv[2]))
     else:
         main(sys.argv[1])
-
