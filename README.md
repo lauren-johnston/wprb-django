@@ -31,7 +31,7 @@ Check out what features need to be implemented by going to the Projects tab.  Th
 
 To contribute to the project, pull the latest, then make a new branch.  Be sure to assign the card for the feature to yourself an move it into the "in-progress" column.  Make your edits on this new branch and commit your changes incrementally and only as needed to satisfy the task at hand.  Push the changes to a remote branch on github, and initiate a pull request frm github.  Ideally your pull request will include unit tests (using Django's test framework for python, or Jest for JS). Anyone else on the team can merge a branch, but first review the submitted code.  Go over the changes that were made, understand them, make sure they do what they should.  Pull the branch to your local and make sure the tests work, nothing else has broken, and _style conforms to our style guides_.  If there are any questions or further changes needed before merging, address them in the corresponding github issue.  When the branch is merged, close the issue.
 
-``` 
+```
 (pyenv) $ git pull
 (pyenv) $ git checkout -b <featurename>
  ...
@@ -42,7 +42,3 @@ To contribute to the project, pull the latest, then make a new branch.  Be sure 
 
 ## Project Structure
 We will organize the project into a few distinct Django "apps."  Each app is a collection of python modules, including a models.py database schema, that serve a single clearly defined purpose.  Currently there are two: _music_, which defines relationships between artists, songs, genres, record labels, etc.; and _playlist_ which defines DJs, plays, shows, etc.
-
-=======
-# wprb-django
->>>>>>> 50ad26c6db8a74fb57aad01d1b681da940bc8d63
