@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # HumanMuse.ic: A Playlist Manager for Listener Engagement
 
 ## Setting up
