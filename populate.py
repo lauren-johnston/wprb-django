@@ -24,6 +24,7 @@ def add_shows():
     show = Show(name=(entry['deftitle'] if entry['deftitle'] else entry['defgenre']))
     show.save()
     show.dj.add(dj)
+    
 def add_djs(djs, logins):
     """ Iterate through a list of DJ objects and add them to the database
     along with their show

@@ -26,3 +26,6 @@ class DJPage(Page):
         MultiFieldPanel(Page.promote_panels, "Common page configuration"),
         ImageChooserPanel('feed_image'),
     ]
+
+    def get_template(self, request):
+        return 'dj_page.html'
