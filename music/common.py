@@ -12,12 +12,12 @@ def get_or_create(artist_name, album_name, song_title, label_name=''):
 	"""
 
 	artist = Artist.objects.filter(name__iexact=artist_name).first()
-	if not artist: 
+	if not artist:
 		artist = Artist(name=artist_name)
 		artist.save()
 
 	album = Album.objects.filter(name__iexact=album_name, artist=artist).first()
-	if not album: 
+	if not album:
 		album = Album(name=album_name, artist=artist)
 		album.save()
 
@@ -31,7 +31,7 @@ def get_or_create(artist_name, album_name, song_title, label_name=''):
 		label = album.label
 
 	song = Song.objects.filter(name__iexact=song_title, album=album, artist=artist).first()
-	if not song: 
+	if not song:
 		song = Song(name=song_title, album=album)
 		song.save()
 		# Song must be saved before it can be associated with an artist
