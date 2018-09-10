@@ -80,7 +80,7 @@ class BlogPage(Page):
 
     # Parent page / subpage type rules
 
-    parent_page_types = ['blog.BlogIndex']
+    parent_page_types = []
     subpage_types = []
 
 

@@ -108,12 +108,12 @@ class DJ(models.Model):
 class Show(models.Model):
     """ A show is a recurring time slot on the radio, held by one or more DJs.
 
-    Playlists usually belong to shows rather than DJs, but I'm not sure if 
-    this abstraction is necessary.  It would be helpful if we wanted to 
-    also incorporate the idea of a schedule into the app, or otherwise 
+    Playlists usually belong to shows rather than DJs, but I'm not sure if
+    this abstraction is necessary.  It would be helpful if we wanted to
+    also incorporate the idea of a schedule into the app, or otherwise
     allow for DJs to have distinct shows, but might not be worth the complexity.
     """
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, default="Default Name")
     dj = models.ManyToManyField('DJ')
     genre = models.ManyToManyField('music.Genre', blank=True)
     subgenre = models.ManyToManyField('music.Subgenre', blank=True)
@@ -143,7 +143,7 @@ class Comment(models.Model):
 class Settings(models.Model):
     """ A collection of options that the DJ can set.
 
-    Unsure exactly what these might be, but it could be useful to keep 
+    Unsure exactly what these might be, but it could be useful to keep
     track of some sort of DJ-specific behavior.  Examples could include
     customizing layout options/names (as classical DJs prefer different layouts)
     """
