@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -110,6 +111,9 @@ DATABASES = {
     }
 }
 
+# Custom user model
+#AUTH_USER_MODEL = 'users.User'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -167,7 +171,8 @@ PROJECT_ROOT = BASE_DIR = os.path.dirname(PROJECT_APP_PATH)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, STATIC_URL.strip("/"))
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'assets'),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'assets'),
+                    os.path.join(BASE_DIR, '/wag/', STATIC_URL.strip("/")))
 
 WAGTAIL_SITE_NAME = 'WPRB'
 
@@ -179,5 +184,5 @@ WEBPACK_LOADER = {
 }
 
 LOGIN_URL = '/playlist/login/'
-LOGIN_REDIRECT_URL = '/playlist/'
+LOGIN_REDIRECT_URL = '/cms/'
 LOGOUT_REDIRECT_URL = '/explore/'

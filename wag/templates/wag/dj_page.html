@@ -6,4 +6,4 @@ template-djpage
 {{ page.body|richtext }}
 {% endblock %}
 =======
-{% extends "base.html" %} {% load wagtailcore_tags %} {% block body_class %}template-homepage{% endblock %} {% block content %} {{ page.body|richtext }} {% endblock %}
+{% extends "wag/templates/base.html" %} {% load wagtailcore_tags %} {% block body_class %}template-homepage{% endblock %} {% block content %} {{ page.body|richtext }} {% endblock %}

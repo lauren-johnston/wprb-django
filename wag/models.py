@@ -4,10 +4,22 @@ from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import RichTextField
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, InlinePanel
 from wagtail.images.edit_handlers import ImageChooserPanel
+from django.contrib import admin
+#from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
+#from django.contrib.auth.models import AbstractUser
 from playlist.models import Spin, Playlist, DJ, Show, Settings, Comment
 from modelcluster.fields import ParentalKey
 from wagtail.search import index
+'''
+class DJInline(admin.StackedInline):
+    model = DJ
+
+
+class UserAdmin(BaseUserAdmin):
+    inlines = (DJInline,)
+'''
+
 
 class DJPage(Page):
     body = RichTextField()
@@ -15,8 +27,7 @@ class DJPage(Page):
     dj = models.OneToOneField(
         'playlist.DJ',
          null = True,
-        on_delete=models.SET_NULL,
-
+         on_delete=models.SET_NULL,
     )
     feed_image = models.ForeignKey(
         'wagtailimages.Image',

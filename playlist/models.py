@@ -7,6 +7,7 @@ DJs, who play the music at particular times.
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 
 from datetime import datetime
@@ -29,6 +30,8 @@ def now_to_half_hour():
 
     return now.replace(microsecond=0, second=0, minute=rounded)
 
+#class User(AbstractUser):
+    #is_dj = models.BooleanField( default=False, help_text='Is the user you are creating also a DJ?')
 
 class Spin(models.Model):
     """ An instance of a single song being played; an entry in a playlist.
